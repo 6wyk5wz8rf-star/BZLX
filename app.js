@@ -1,10 +1,10 @@
 const STAGES = [
-  "Orient",
+  "Understand",
   "5-minute starter",
-  "Learn",
-  "Practise",
-  "Use",
-  "Reflect",
+  "Learn signs",
+  "Build BSL",
+  "Watch & respond",
+  "Review",
   "Show Mum",
 ];
 const RATINGS = {
@@ -32,7 +32,7 @@ const esc = (value) =>
   );
 function fresh() {
   return {
-    schema: 6,
+    schema: 7,
     selected: 1,
     stage: 0,
     completed: {},
@@ -52,6 +52,7 @@ function fresh() {
     mumRatings: {},
     mumIndex: {},
     mumFollowups: {},
+    knowledgeAnswers: {},
     reviewQueue: [],
     resourceOpened: {},
     timerLeft: {},
@@ -62,6 +63,8 @@ function fresh() {
 function mergeState(raw) {
   const base = fresh(),
     legacy = raw && (!raw.schema || raw.schema < 5),
+    deepContentMigration =
+      raw && Object.keys(raw).length > 0 && Number(raw.schema || 0) < 7,
     s = { ...base, ...raw };
   for (const k of [
     "completed",
@@ -81,6 +84,7 @@ function mergeState(raw) {
     "mumRatings",
     "mumIndex",
     "mumFollowups",
+    "knowledgeAnswers",
     "resourceOpened",
     "timerLeft",
   ])
@@ -132,7 +136,32 @@ function mergeState(raw) {
     });
     s.migratedFrom = 4;
   }
-  s.schema = 6;
+  if (deepContentMigration) {
+    const activeDay = Number(raw.selected || 1);
+    s.reviewQueue = [];
+    s.itemIndex = {};
+    s.learnOrder = {};
+    s.learnAttempts = {};
+    s.itemRatings = {};
+    s.retrieval = {};
+    s.recallIndex = {};
+    s.starterPlans = {};
+    s.resourceOpened = {};
+    s.knowledgeAnswers = {};
+    s.stage = 0;
+    if (!s.completed[activeDay]) s.lastOpen[activeDay] = 0;
+    Object.keys(s.stageDone).forEach((key) => {
+      const day = Number(key.split("-")[0]);
+      if (!s.completed[day]) delete s.stageDone[key];
+    });
+    Object.keys(s.checks).forEach((key) => {
+      const day = Number(key.split("-")[0]);
+      if (!s.completed[day]) delete s.checks[key];
+    });
+    s.migrationNotice = true;
+    s.migratedFrom = Number(raw.schema || 4);
+  }
+  s.schema = 7;
   return s;
 }
 function load() {
@@ -242,10 +271,12 @@ function totalTime(value) {
 }
 function lessonPath(l) {
   return [
+    "in-app BSL knowledge + two understanding checks",
     "5-minute adaptive starter",
-    `learn ${l.items.length} ${l.items.length === 1 ? "item" : "items"}`,
-    "guided production drill",
-    "communication challenge",
+    `learn ${l.items.length} signed ${l.items.length === 1 ? "model" : "models"} in context`,
+    "build two BSL meaning sequences",
+    "receptive viewing and response",
+    "record, review and decide what returns",
     "20-minute Show Mum finale",
   ];
 }
@@ -278,6 +309,7 @@ function renderHome() {
     state.lastOpen[n.day] !== undefined
       ? `Continue Day ${n.day}: ${position}`
       : `Start Day ${n.day}`;
+  $("contentUpdate").hidden = !state.migrationNotice;
   renderCourseMap();
   renderReviewSummary();
 }
@@ -387,14 +419,53 @@ function resourceCard(r, index) {
 function nav(ready, message, last = false) {
   return `<div class="stageNav"><div><button class="btn secondary" id="backStage" type="button" ${state.stage === 0 ? "disabled" : ""}>Back</button><button class="btn ghost" id="saveExit" type="button">Save and leave</button></div><div>${last ? `<button class="btn good" id="finishLesson" type="button" ${ready ? "" : "disabled"}>Finish Day ${state.selected}</button>` : `<button class="btn" id="nextStage" type="button" ${ready ? "" : "disabled"}>Continue to ${STAGES[state.stage + 1]}</button>`}</div></div><p class="gateMessage" role="status">${esc(message)}</p>`;
 }
+function knowledgeKey(day, index) {
+  return `${day}-${index}`;
+}
+function knowledgeReady(l) {
+  return (
+    getCheck(l.day, 0, 0) &&
+    l.knowledgeChecks.every(
+      (check, index) =>
+        Number(state.knowledgeAnswers[knowledgeKey(l.day, index)]) ===
+        check.answer,
+    )
+  );
+}
+function evidenceLink(source) {
+  return `<a class="evidenceLink" href="${esc(source.url)}" target="_blank" rel="noopener"><strong>${esc(source.label)} ↗</strong><span>${esc(source.note)}</span></a>`;
+}
 function orientStage(l) {
-  const items = [
-    `Read why today’s lesson matters: ${l.purpose}`,
-    `Check the prerequisite: ${l.prior}`,
-    "Place the device so your face, shoulders and hands remain visible",
-  ];
-  const ready = items.every((_, i) => getCheck(l.day, 0, i));
-  return `<div class="stageLabel">Step 1 of 7 · Orient</div>${actionBox("Read today’s purpose, then complete the three setup actions.", "Orientation connects today to earlier learning and prevents practice becoming disconnected copying.", l.mastery)}<div class="orientationGrid"><div><p class="eyebrow">REAL-WORLD USE</p><p>${esc(l.use)}</p></div><div><p class="eyebrow">LANGUAGE & CULTURE</p><p>${esc(l.culture)}</p></div></div>${checklist(items, 0)}<h4 class="sectionTitle">Open only what today needs</h4>${l.resources.map(resourceCard).join("")}${helpBox(l.stuck)}${nav(ready, ready ? "Setup complete. Begin the five-minute adaptive starter." : `Complete ${items.filter((_, i) => !getCheck(l.day, 0, i)).length} setup action(s).`)}`;
+  const ready = knowledgeReady(l);
+  return `<div class="stageLabel">Step 1 of 7 · Understand</div>${actionBox(
+    `Learn the answer to today’s question: ${l.enquiry}`,
+    "The app now teaches the language idea before asking you to retrieve or perform it. The signed form still comes from a real BSL model; the English label never stands in for the sign.",
+    `Both understanding checks are correct and your face, shoulders and hands are visible.`,
+  )}<section class="lessonQuestion"><p class="eyebrow">TODAY’S LANGUAGE QUESTION</p><h3>${esc(l.enquiry)}</h3><p>${esc(l.purpose)}</p></section><div class="knowledgeGrid">${l.knowledge
+    .map(
+      (note, index) =>
+        `<article class="knowledgeCard"><span>${String(index + 1).padStart(2, "0")}</span><h4>${esc(note.title)}</h4><p>${esc(note.body)}</p><div class="knowledgeExample"><strong>See it in practice</strong><p>${esc(note.example)}</p></div><p class="misconception"><strong>Avoid:</strong> ${esc(note.avoid)}</p></article>`,
+    )
+    .join("")}</div><section class="conceptChecks"><div class="sectionIntro"><p class="eyebrow">CHECK THE IDEA</p><h3>Two decisions before your hands move</h3><p>Choose an answer. If it is wrong, read the explanation and try again—this is teaching, not a score.</p></div>${l.knowledgeChecks
+    .map((check, checkIndex) => {
+      const selected = state.knowledgeAnswers[knowledgeKey(l.day, checkIndex)],
+        answered = Number.isInteger(Number(selected)),
+        correct = Number(selected) === check.answer;
+      return `<fieldset class="conceptCheck"><legend>${checkIndex + 1}. ${esc(check.q)}</legend><div class="answerOptions">${check.options
+        .map(
+          (option, optionIndex) =>
+            `<button type="button" data-knowledge-check="${checkIndex}" data-knowledge-answer="${optionIndex}" class="answerOption ${Number(selected) === optionIndex ? (correct ? "correct" : "wrong") : ""}">${esc(option)}</button>`,
+        )
+        .join("")}</div>${answered ? `<p class="answerFeedback ${correct ? "correct" : "wrong"}"><strong>${correct ? "Yes." : "Not yet."}</strong> ${esc(check.explain)}</p>` : ""}</fieldset>`;
+    })
+    .join("")}</section><section class="setupCheck"><div><p class="eyebrow">PRACTICE POSITION</p><h3>Make the full language visible</h3><p>Set the device upright. Your face, shoulders, elbows and both hands should remain inside the frame without leaning away.</p></div>${checklist(["I checked the complete signing window and can see my face, shoulders and both hands."], 0)}</section><details class="evidencePanel"><summary>Evidence and learning limits</summary><p>This lesson is grounded in recognised UK BSL and Deaf-education sources. These links are for verification and deeper study; you do not need to leave the app to understand today’s teaching.</p><div>${l.evidenceSources.map(evidenceLink).join("")}</div><p class="evidenceLimit"><strong>Important:</strong> A dictionary documents signs; it does not replace sustained Deaf-led teaching, feedback or real conversation.</p></details>${helpBox(
+    `Re-read only the card connected to the incorrect answer. Say the distinction in your own words, answer again, then stop. For the physical setup, move the device rather than shrinking your signing.`,
+  )}${nav(
+    ready,
+    ready
+      ? "The language idea and practice position are secure enough to begin the starter."
+      : "Answer both checks correctly and confirm the full signing window.",
+  )}`;
 }
 function mumKey(day, index) {
   return `${day}-${index}`;
@@ -409,36 +480,33 @@ function showMumPrompts(l) {
       name: "Signs from memory",
       ask: `Show me ${termList} one at a time, without opening an example.`,
       learner:
-        "Pause for five seconds before beginning. Sign each item once, leave a clear space, then repeat only the least certain item.",
-      lookFor:
-        "I can see where one sign ends and the next begins; the hands stay in a readable area; the pace remains calm.",
+        `Pause for five seconds before beginning. Use each item for today’s intended meaning, not as a disconnected hand movement.`,
+      lookFor: `I can see three separate meanings and a calm boundary between them. Today’s observation focus was: ${l.items[0]?.watch || l.observe}`,
       starter: `Produce ${terms.join(", ")} from memory with a clear pause between each item.`,
     },
     {
-      name: "Today’s focused skill",
-      ask: `Show me this practice without speaking: ${l.drill}`,
+      name: "Teach the language idea",
+      ask: `First tell me the answer to “${l.enquiry}” in one sentence. Then show me the contrast using BSL or visual communication.`,
       learner:
-        "Complete one uninterrupted attempt. If a sign disappears, pause, use a repair, and continue instead of restarting everything.",
-      lookFor: `I can see a deliberate attempt at today’s focus: ${l.observe}`,
-      starter: `Repeat the core drill from Day ${l.day}: ${l.drill}`,
+        `Use your own words for the knowledge, then demonstrate the practical example from “${l.knowledge[0].title}”.`,
+      lookFor: `I can hear a clear distinction and then see an example. The key idea is: ${l.knowledge[0].body}`,
+      starter: `Explain and demonstrate the Day ${l.day} idea: ${l.knowledge[0].title}.`,
     },
     {
-      name: "Use it for meaning",
-      ask: `Use today’s learning to communicate this: ${l.use}`,
+      name: "Build a BSL meaning sequence",
+      ask: `Communicate this without speaking: ${l.phrases[0].meaning}`,
       learner:
-        "Set up the meaning before you begin, make eye contact, and complete the whole message in BSL before discussing it in English.",
-      lookFor: `I can follow the beginning, middle and end. ${l.review}`,
-      starter: `Rebuild the communication challenge from Day ${l.day}: ${l.use}`,
+        `Use the visual plan “${l.phrases[0].build}”. Do not show Mum the gloss until after the attempt.`,
+      lookFor: `I can follow the intended beginning, middle and end. Specifically: ${l.phrases[0].focus}`,
+      starter: `Rebuild this meaning sequence from Day ${l.day}: ${l.phrases[0].meaning}`,
     },
     {
-      name: "Explain and repair",
-      ask:
-        "Show me the part you found hardest. Pause. Show it once more with one visible improvement.",
+      name: "Receive, repair and improve",
+      ask: `Show me your hardest part, then ask for or make one repair. Finish by communicating: ${l.phrases[1].meaning}`,
       learner:
-        "Choose one genuine difficulty. Make the first attempt, silently choose one change, then make the second attempt.",
-      lookFor:
-        "The second attempt contains one change I can notice—clearer position, steadier pace, stronger expression or a cleaner pause.",
-      starter: `Revisit the hardest part of Day ${l.day} and make one visible improvement.`,
+        "Make one honest first attempt. Name the exact visual change, then attempt again and continue into the second meaning sequence.",
+      lookFor: `The second attempt contains one visible change, and this focus is present: ${l.phrases[1].focus}`,
+      starter: `Repair the hardest part of Day ${l.day}, then rebuild: ${l.phrases[1].meaning}`,
     },
   ];
 }
@@ -477,58 +545,79 @@ function adaptiveMumPrompts(l) {
       .sort((a, b) => a.day - b.day)
       .slice(0, 1);
   return [...weak, ...nearly, ...secure].map((item) => ({
-    term: item.prompt.starter,
+    term: item.prompt.name,
     source: `Mum’s check · Day ${item.day} · ${MUM_RATINGS[item.rating]}`,
     kind: "mum",
     mumKey: item.key,
     sourceDay: item.day,
     promptIndex: item.index,
+    prompt: item.prompt.starter,
+    clue: `Reduce the earlier display to its first meaning block. The original prompt was: ${item.prompt.ask}`,
+    check: item.prompt.lookFor,
   }));
+}
+function starterFromItem(day, index, source) {
+  const item = COURSE[day - 1]?.items[index];
+  if (!item) return null;
+  return {
+    term: item.term,
+    source,
+    sourceDay: day,
+    itemIndex: index,
+    prompt: `Without opening a model, express “${item.term}” in this earlier context: ${item.use}`,
+    clue: item.clue,
+    check: `The meaning is recognisable in context. ${item.contrast}`,
+    model: item.resource,
+  };
 }
 function retrievalPrompts(l) {
   if (Array.isArray(state.starterPlans[l.day]) && state.starterPlans[l.day].length)
     return state.starterPlans[l.day];
+  if (l.day === 1) {
+    state.starterPlans[l.day] = FIRST_DAY_STARTER;
+    save();
+    return FIRST_DAY_STARTER;
+  }
   const mum = adaptiveMumPrompts(l);
   const due = state.reviewQueue
     .filter((q) => q.day < l.day && q.rating < 2)
     .sort((a, b) => (a.due || 0) - (b.due || 0))
     .slice(0, 3)
-    .map((q) => ({
-      term: COURSE[q.day - 1]?.items[q.index]?.term || "Earlier item",
-      source: `Day ${q.day}`,
-      sourceDay: q.day,
-      itemIndex: q.index,
-    }));
+    .map((q) => starterFromItem(q.day, q.index, `Review due · Day ${q.day}`))
+    .filter(Boolean);
   const prev =
     l.day > 1
       ? COURSE[l.day - 2].items
           .slice(0, 2)
-          .map((x, index) => ({
-            term: x.term,
-            source: `Day ${l.day - 1}`,
-            sourceDay: l.day - 1,
-            itemIndex: index,
-          }))
+          .map((x, index) =>
+            starterFromItem(l.day - 1, index, `Yesterday · Day ${l.day - 1}`),
+          )
+          .filter(Boolean)
       : [];
   const foundation =
     l.day > 4
-      ? [
-          {
-            term: l.day % 2 ? "fingerspell your name" : "hello",
-            source: "Foundation",
-          },
-        ]
+      ? l.day % 2
+        ? [
+            {
+              term: "Your name",
+              source: "Older foundation · fingerspelling",
+              kind: "foundation",
+              prompt:
+                "Fingerspell your full first name once at a pace another beginner could follow.",
+              clue:
+                "Hold the first letter, then think in one whole-word rhythm instead of isolated letter names.",
+              check:
+                "One dominant hand stays consistent and the full word occupies a stable signing window.",
+            },
+          ]
+        : [starterFromItem(1, 0, "Older foundation · Day 1")].filter(Boolean)
       : [];
   const unique = [];
   [...mum, ...due, ...prev, ...foundation].forEach((x) => {
     if (x.term && !unique.some((y) => y.term === x.term)) unique.push(x);
   });
   const plan = (
-    unique.length
-      ? unique
-      : l.items
-          .slice(0, 3)
-          .map((x) => ({ term: x.term, source: "Today’s preview" }))
+    unique.length ? unique : FIRST_DAY_STARTER
   ).slice(0, 5);
   state.starterPlans[l.day] = plan;
   save();
@@ -540,7 +629,22 @@ function retrievalStage(l) {
     results = state.retrieval[l.day] || {},
     done = Object.keys(results).length >= prompts.length,
     p = prompts[idx];
-  return `<div class="stageLabel">Step 2 of 7 · Adaptive starter</div>${actionBox(`Attempt today’s ${prompts.length} short prompts for five minutes. Start with the visible prompt below.`, `This starter is assembled from your mum’s last ratings, hesitant signs and one older secure item. It changes with the evidence you create.`, `You have honestly attempted all ${prompts.length} prompts. Correct answers are not required.`)}${timerWidget("FIVE-MINUTE STARTER", 300, "Attempt the visible prompt, rate it honestly, then move straight to the next. When time ends, finish only the prompt already in progress.")}<div class="promptCard starterPrompt"><small>${esc(p.source)} · Prompt ${idx + 1} of ${prompts.length}</small><strong>${esc(p.term)}</strong><button class="miniBtn" id="showRetrievalClue" type="button">Show one clue</button><p id="retrievalClue" hidden>Make only the first position or first meaning block. If nothing returns, mark “Not remembered”; the app will bring it back.</p></div><div class="ratingRow"><button class="btn good" data-retrieval="2">Remembered clearly</button><button class="btn warn" data-retrieval="1">Remembered with hesitation</button><button class="btn secondary" data-retrieval="0">Not remembered</button></div>${helpBox("Pause for five seconds. If nothing returns, show the clue, attempt only the first position, then record ‘Not remembered’. The item will return later.")}${nav(done, done ? "Starter complete. The next review plan has already adapted." : `${Object.keys(results).length} of ${prompts.length} starter prompts attempted.`)}`;
+  return `<div class="stageLabel">Step 2 of 7 · Adaptive starter</div>${actionBox(
+    `Attempt ${prompts.length} previously taught actions. Read the complete context before moving your hands.`,
+    "Retrieval should begin from meaning, not a floating English label. Day 1 practises the visual foundations instead of pretending untaught signs can be recalled.",
+    `You have honestly attempted all ${prompts.length} prompts. Correct answers are not required.`,
+  )}${timerWidget(
+    "FIVE-MINUTE STARTER",
+    300,
+    "Read the complete scenario, wait five quiet seconds, attempt it, rate it, then move on. Finish the current prompt when time ends.",
+  )}<section class="starterCard"><div class="starterMeta"><span>${esc(p.source)}</span><span>Prompt ${idx + 1} of ${prompts.length}</span></div><p class="starterTerm">${esc(p.term)}</p><h3>${esc(p.prompt || `Produce “${p.term}” in a meaningful context.`)}</h3><div class="starterReady"><strong>Judge this—not confidence</strong><p>${esc(p.check || "The meaning is visible without spoken English carrying it.")}</p></div><button class="miniBtn" id="showRetrievalClue" type="button">I need one precise clue</button><div id="retrievalClue" class="retrievalClue" hidden><strong>Use this, then attempt once</strong><p>${esc(p.clue || "Rebuild the first meaning block, pause, then add one piece.")}</p>${p.model ? `<a class="miniBtn" data-resource="starter-model" href="${esc(p.model.url)}" target="_blank" rel="noopener">Reopen the exact signed model ↗</a>` : ""}</div></section><div class="ratingRow starterRatings"><button class="btn good" data-retrieval="2">Clear from memory</button><button class="btn warn" data-retrieval="1">Meaning clear, form hesitant</button><button class="btn secondary" data-retrieval="0">Could not retrieve it</button></div>${helpBox(
+    "Wait five seconds. Use the precise clue once. If the sign still does not return, choose ‘Could not retrieve it’; that honest result schedules useful review.",
+  )}${nav(
+    done,
+    done
+      ? "Starter complete. The next review plan has already adapted."
+      : `${Object.keys(results).length} of ${prompts.length} starter prompts attempted.`,
+  )}`;
 }
 function learnOrder(l) {
   if (
@@ -559,35 +663,112 @@ function learnStage(l) {
     rating = state.itemRatings[itemKey(l.day, index)],
     opened = !!state.resourceOpened[`${l.day}-2-0`];
   if (finished)
-    return `<div class="stageLabel">Step 3 of 7 · Learn</div>${actionBox("Review the learning results below, then continue.", "Every item has moved through observe, copy, compare and recall. Items needing support are already queued.", "Each item has an honest result recorded.")}<div class="summaryList">${l.items.map((x, i) => `<div><strong>${esc(x.term)}</strong><span>${esc(RATINGS[state.itemRatings[itemKey(l.day, i)]] || "Attempted")}</span></div>`).join("")}</div>${helpBox(l.stuck)}${nav(true, "Learning cycle complete. Hesitant signs will return in a later starter.")}`;
-  return `<div class="stageLabel">Step 3 of 7 · Learn</div>${actionBox(`Learn “${item.term}”. The app will carry the full practice after one short model.`, `Working with one item at a time removes decision fatigue and forces observation before imitation.`, `You have recalled the item with the example closed and chosen an honest result.`)}<div class="itemProgress"><span>Sign ${pos + 1} of ${order.length}</span><progress value="${pos}" max="${order.length}" aria-label="Sign ${pos + 1} of ${order.length}"></progress></div><div class="learningSequence"><section><span>01</span><div><strong>See the meaning</strong><p>Say the meaning to yourself, then open the BSL model.</p></div></section><section><span>02</span><div><strong>Watch with purpose</strong><p>Watch once without moving. Watch again and ${esc(l.observe)}</p></div></section><section><span>03</span><div><strong>Shape and compare</strong><p>Copy slowly three times. Compare location, movement and what the face contributes.</p></div></section><section><span>04</span><div><strong>Close, recall, use</strong><p>Close the model, wait five seconds, recall once, then place the sign in today’s smallest useful phrase.</p></div></section></div>${resourceCard(item.resource, 0)}${opened ? "" : `<p class="gateMessage">Use the short model once. After that, the whole learning cycle stays here.</p>`}<div class="ratingRow"><button class="btn good" data-item-rating="2" ${opened ? "" : "disabled"}>Clear from memory</button><button class="btn warn" data-item-rating="1" ${opened ? "" : "disabled"}>Correct but hesitant</button><button class="btn secondary" data-item-rating="0" ${opened ? "" : "disabled"}>Needs another model</button></div>${helpBox(l.stuck)}${nav(false, `Complete the four learning moves for “${item.term}”.`)}`;
+    return `<div class="stageLabel">Step 3 of 7 · Learn signed models</div>${actionBox(
+      "Read the learning record, then move into BSL structure.",
+      "Every sign was linked to an exact signed model, a contextual meaning and a specific observation target. Weak forms are already scheduled to return.",
+      "Every model has an honest production result.",
+    )}<div class="summaryList learningSummary">${l.items
+      .map(
+        (x, i) =>
+          `<div><span><strong>${esc(x.term)}</strong><small>${esc(x.meaning)}</small></span><em>${esc(RATINGS[state.itemRatings[itemKey(l.day, i)]] || "Attempted")}</em></div>`,
+      )
+      .join("")}</div><div class="nextTeaching"><p class="eyebrow">NEXT: LANGUAGE, NOT A LIST</p><h3>You will now combine these forms into two visual meaning sequences.</h3><p>A sign remembered in isolation is not yet communicative BSL.</p></div>${helpBox(l.stuck)}${nav(true, "Signed-model cycle complete. Continue to Build BSL.")}`;
+  return `<div class="stageLabel">Step 3 of 7 · Learn signed models</div>${actionBox(
+    `Learn the BSL model for “${item.term}” in today’s exact meaning.`,
+    "The written label only identifies the intended sense. The recorded BSL model supplies the form; the app teaches you how to observe, retrieve and use it.",
+    "The model is closed, the sign has been recalled in context, and one honest result is recorded.",
+  )}<div class="itemProgress"><span>Signed model ${pos + 1} of ${order.length}</span><progress value="${pos}" max="${order.length}" aria-label="Signed model ${pos + 1} of ${order.length}"></progress></div><section class="signTutor"><div class="signIdentity"><p class="eyebrow">ENGLISH ROUTE LABEL</p><h3>${esc(item.term)}</h3><p><strong>Meaning in this lesson:</strong> ${esc(item.meaning)}</p></div><div class="signContext"><div><strong>Use it for meaning</strong><p>${esc(item.use)}</p></div><div><strong>Do not confuse the task</strong><p>${esc(item.contrast)}</p></div></div></section><div class="learningSequence deep"><section><span>01</span><div><strong>Watch the whole model twice</strong><p>First viewing: do not move. Second viewing: ${esc(item.watch)}</p></div></section><section><span>02</span><div><strong>Rebuild one component</strong><p>${esc(item.clue)} Do only that piece once before copying the whole sign.</p></div></section><section><span>03</span><div><strong>Copy, pause, compare</strong><p>Copy slowly three times. Reopen the model and compare handshape, orientation, location, movement and the relevant non-manual feature.</p></div></section><section><span>04</span><div><strong>Close, wait, communicate</strong><p>Close the model. Wait five seconds. Produce the sign inside today’s context; do not merely repeat the English label.</p></div></section></div>${resourceCard(item.resource, 0)}${opened ? `<p class="modelReturn"><strong>Now keep the page closed.</strong> Complete the recall and context use before choosing a result.</p>` : `<p class="gateMessage">Open this exact model before rating. The app will not pretend a written description can replace signed input.</p>`}<div class="ratingRow"><button class="btn good" data-item-rating="2" ${opened ? "" : "disabled"}>Form and meaning clear from memory</button><button class="btn warn" data-item-rating="1" ${opened ? "" : "disabled"}>Meaning clear, form hesitant</button><button class="btn secondary" data-item-rating="0" ${opened ? "" : "disabled"}>Need the model again</button></div>${helpBox(
+    `Use only this recovery: ${item.clue} Reopen the model once, close it, and reproduce the first component before rebuilding the full sign.`,
+  )}${nav(false, `Complete the observe–rebuild–compare–recall cycle for “${item.term}”.`)}`;
 }
 function timerWidget(label, seconds, instruction) {
   return `<section class="timerBox" data-timer-seconds="${seconds}"><div><p class="eyebrow">${esc(label)}</p><strong id="timerReadout">${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}</strong><p>${esc(instruction)}</p></div><div><button class="miniBtn" id="timerToggle" type="button">Start timer</button><button class="miniBtn" id="timerRestart" type="button">Restart</button></div></section>`;
 }
 function practiseStage(l) {
   const items = [
-      l.drill,
-      `Focus on: ${l.observe}`,
-      `Record one short attempt in the device camera, return here, and watch it once with sound muted. If you prefer not to record, use a mirror and complete the same visual check.`,
+      `Build “${l.phrases[0].meaning}” in meaning blocks, then remove the written gloss and produce it once from memory.`,
+      `Build “${l.phrases[1].meaning}” in meaning blocks, then change one real detail without returning to English word-by-word order.`,
+      "Record both sequences or use a mirror. Check that time, people, topic, facial grammar and pauses are visible without spoken English carrying the message.",
     ],
     ready = items.every((_, i) => getCheck(l.day, 3, i));
-  return `<div class="stageLabel">Step 4 of 7 · Practise</div>${actionBox(l.drill, "A deliberate drill isolates today’s coordination before you use it in communication.", l.mastery)}${timerWidget("OPTIONAL ONE-MINUTE ROUND", 60, "Repeat today’s drill calmly. When time ends, stop, rest your hands and complete the self-check.")}${checklist(items, 3)}<div class="reviewPanel"><p class="eyebrow">COMMON ERRORS TO CHECK</p><ul>${l.errors.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>${helpBox(l.stuck)}${nav(ready, ready ? "Practice evidence complete." : `Complete ${items.filter((_, i) => !getCheck(l.day, 3, i)).length} practice action(s).`)}`;
+  return `<div class="stageLabel">Step 4 of 7 · Build BSL</div>${actionBox(
+    "Build both visual meaning sequences, then change one detail without rebuilding them from English.",
+    "Vocabulary becomes language when meaning, order, space, gaze, face and turn-taking are organised together.",
+    "Both sequences work without the planning gloss and the silent review shows their structure.",
+  )}<div class="glossNotice"><strong>Planning gloss is not a translation.</strong><p>Upper-case gloss labels help you remember a sequence. They do not capture the full BSL, its non-manual features or all valid ordering.</p></div><div class="phraseGrid">${l.phrases
+    .map(
+      (phrase, index) =>
+        `<article class="phraseCard"><p class="eyebrow">MEANING SEQUENCE ${index + 1}</p><h3>${esc(phrase.meaning)}</h3><details><summary>Reveal the temporary planning gloss</summary><code>${esc(phrase.gloss)}</code></details><div><strong>Build it</strong><p>${esc(phrase.build)}</p></div><div><strong>Watch for</strong><p>${esc(phrase.focus)}</p></div></article>`,
+    )
+    .join("")}</div>${timerWidget(
+    "OPTIONAL THREE-MINUTE BUILD",
+    180,
+    "Build sequence 1, rest your hands, build sequence 2, then repeat the weaker one without the gloss.",
+  )}${checklist(items, 3)}<div class="reviewPanel"><p class="eyebrow">LANGUAGE ERRORS TO CATCH</p><ul>${l.errors.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>${helpBox(
+    `Reduce the sequence to two meaning blocks. Use the ‘Build it’ line, not the English sentence, then add only one block at a time. ${l.stuck}`,
+  )}${nav(
+    ready,
+    ready
+      ? "Both meaning sequences were built and reviewed."
+      : `Complete ${items.filter((_, i) => !getCheck(l.day, 3, i)).length} BSL-building action(s).`,
+  )}`;
 }
 function useStage(l) {
+  const lab = l.receptionLab;
   const items = [
-      `Receptive check: ${l.receptive}`,
-      `Communication challenge: ${l.use}`,
-      `Self-review: ${l.review}`,
+      lab.setup,
+      `Complete the three viewing passes in order: ${lab.passes.join(" ")}`,
+      `Create the evidence: ${lab.evidence} Then respond with today’s communication challenge: ${l.use}`,
     ],
     ready = items.every((_, i) => getCheck(l.day, 4, i));
-  return `<div class="stageLabel">Step 5 of 7 · Use</div>${actionBox(l.use, "Communication combines vocabulary, visual grammar, watching and repair. It is the purpose of the separate drills.", l.mastery)}${checklist(items, 4)}<div class="schoolBox"><p class="eyebrow">USE THIS IN SCHOOL — OPTIONAL</p><p>${esc(l.school)}</p><small>Remain clear that you are a learner. Continue through Deaf-led teaching and real interaction.</small></div>${helpBox(l.stuck)}${nav(ready, ready ? "You completed the communication attempt and review." : `Complete ${items.filter((_, i) => !getCheck(l.day, 4, i)).length} evidence action(s). Success is not required—an honest attempt is.`)}`;
+  return `<div class="stageLabel">Step 5 of 7 · Watch & respond</div>${actionBox(
+    lab.setup,
+    "Reception is a separate BSL skill. Written English prompts can test production, but only signed input can test whether you recognise signed language.",
+    lab.evidence,
+  )}<section class="receptionLab"><div class="receptionHead"><span aria-hidden="true">◉</span><div><p class="eyebrow">RECEPTIVE LAB</p><h3>${esc(lab.title)}</h3></div></div><ol>${lab.passes.map((pass) => `<li>${esc(pass)}</li>`).join("")}</ol><div class="receptionEvidence"><strong>Evidence to create</strong><p>${esc(lab.evidence)}</p></div><div class="receptionSources"><p class="eyebrow">SIGNED INPUT OPTIONS</p>${l.items
+    .slice(0, 2)
+    .map(
+      (item) =>
+        `<a href="${esc(item.resource.url)}" target="_blank" rel="noopener">Signed model: ${esc(item.term)} ↗</a>`,
+    )
+    .join("")}${l.evidenceSources
+    .slice(0, 1)
+    .map((source) => `<a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.label)} ↗</a>`)
+    .join("")}</div><p class="receptionTruth"><strong>What does not count:</strong> looking at “${esc(l.items[0]?.term || "the English label")}” and producing the sign. That is production recall, not BSL reception.</p></section>${checklist(items, 4)}<section class="communicationReply"><p class="eyebrow">RESPOND WITH MEANING</p><h3>${esc(l.use)}</h3><p>${esc(l.review)}</p></section><div class="schoolBox"><p class="eyebrow">USE THIS IN SCHOOL — OPTIONAL</p><p>${esc(l.school)}</p><small>Remain clear that you are a learner. Continue through Deaf-led teaching and real interaction.</small></div>${helpBox(
+    `If natural signed input feels too fast, do not replace it with English. Watch once for gist, choose one missing detail, then replay only for that detail or use a specific repair request.`,
+  )}${nav(
+    ready,
+    ready
+      ? "Signed input was watched, interpreted and answered."
+      : `Complete ${items.filter((_, i) => !getCheck(l.day, 4, i)).length} receptive action(s).`,
+  )}`;
 }
 function closeStage(l) {
   const note = state.notes[l.day] || "",
     conf = state.confidence[l.day],
-    ready = note.trim().length >= 20 && !!conf;
-  return `<div class="stageLabel">Step 6 of 7 · Reflect</div>${actionBox("Read the mastery statement, make an honest decision, then write one next action.", "A precise reflection prepares you to display today’s learning and tells tomorrow’s starter what matters.", l.mastery)}<div class="masteryBox"><p class="eyebrow">TODAY’S MASTERY DECISION</p><p>${esc(l.mastery)}</p><p><strong>Reflection:</strong> ${esc(l.reflect)}</p></div><label class="fieldLabel" for="notes">Write what was clear and what should return</label><textarea id="notes" placeholder="Clear today…\nBring back tomorrow…">${esc(note)}</textarea><div class="confidence"><button data-confidence="1" class="${conf === 1 ? "active" : ""}">Needs support</button><button data-confidence="2" class="${conf === 2 ? "active" : ""}">Hesitant but usable</button><button data-confidence="3" class="${conf === 3 ? "active" : ""}">Clear today</button></div><div class="previewBox"><p class="eyebrow">AFTER SHOW MUM</p><p>${esc(l.preview)}</p></div>${helpBox(l.stuck)}${nav(ready, ready ? "Reflection saved. Continue to the 20-minute Show Mum finale." : "Write at least 20 characters and choose one confidence level.")}`;
+    reviewItems = [
+      l.drill,
+      "Record one uninterrupted attempt or use a mirror. Watch once with sound muted so spoken English cannot hide missing visual information.",
+      l.review,
+    ],
+    practiceReady = reviewItems.every((_, i) => getCheck(l.day, 5, i)),
+    ready = practiceReady && note.trim().length >= 20 && !!conf;
+  return `<div class="stageLabel">Step 6 of 7 · Review</div>${actionBox(
+    l.drill,
+    "The final self-review turns today’s knowledge into visible performance evidence before Mum sees it.",
+    l.mastery,
+  )}${timerWidget(
+    "ONE-MINUTE INTEGRATION",
+    60,
+    "Complete the full drill without restarting. If a form disappears, pause and use repair; continuity matters more than pretending perfection.",
+  )}${checklist(reviewItems, 5)}<div class="masteryBox"><p class="eyebrow">TODAY’S MASTERY DECISION</p><p>${esc(l.mastery)}</p><p><strong>Reflect on:</strong> ${esc(l.reflect)}</p></div><div class="reviewPanel"><p class="eyebrow">CHECK THE RECORDING, NOT THE FEELING</p><ul>${l.errors.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div><label class="fieldLabel" for="notes">Write one visible success and one exact item to bring back</label><textarea id="notes" placeholder="Visible today…\nBring back tomorrow…">${esc(note)}</textarea><div class="confidence"><button data-confidence="1" class="${conf === 1 ? "active" : ""}">Needs a model</button><button data-confidence="2" class="${conf === 2 ? "active" : ""}">Meaning clear, form hesitant</button><button data-confidence="3" class="${conf === 3 ? "active" : ""}">Clear from memory today</button></div><div class="previewBox"><p class="eyebrow">AFTER SHOW MUM</p><p>${esc(l.preview)}</p></div>${helpBox(
+    `Do one reduced attempt: ${l.stuck} Then record the honest confidence level; you are not required to claim mastery.`,
+  )}${nav(
+    ready,
+    ready
+      ? "Practice evidence and reflection are saved. Continue to Show Mum."
+      : "Complete the three review actions, write at least 20 characters and choose one confidence level.",
+  )}`;
 }
 function mumRating(day, index) {
   const value = state.mumRatings[mumKey(day, index)];
@@ -621,7 +802,7 @@ function renderStage() {
   bindStage(l);
 }
 function stageReady(l, stage) {
-  if (stage === 0) return [0, 1, 2].every((i) => getCheck(l.day, 0, i));
+  if (stage === 0) return knowledgeReady(l);
   if (stage === 1)
     return (
       Object.keys(state.retrieval[l.day] || {}).length >=
@@ -632,6 +813,7 @@ function stageReady(l, stage) {
     return [0, 1, 2].every((i) => getCheck(l.day, stage, i));
   if (stage === 5)
     return (
+      [0, 1, 2].every((i) => getCheck(l.day, 5, i)) &&
       (state.notes[l.day] || "").trim().length >= 20 &&
       !!state.confidence[l.day]
     );
@@ -651,6 +833,16 @@ function enqueue(day, index, rating, due) {
   } else state.reviewQueue.push({ day, index, rating, due });
 }
 function bindStage(l) {
+  document.querySelectorAll("[data-knowledge-answer]").forEach(
+    (button) =>
+      (button.onclick = () => {
+        const checkIndex = Number(button.dataset.knowledgeCheck),
+          answerIndex = Number(button.dataset.knowledgeAnswer);
+        state.knowledgeAnswers[knowledgeKey(l.day, checkIndex)] = answerIndex;
+        save();
+        renderStage();
+      }),
+  );
   document.querySelectorAll("[data-check-item]").forEach(
     (c) =>
       (c.onchange = () => {
@@ -764,8 +956,8 @@ function bindStage(l) {
       if (action) action.disabled = !ready;
       if (message)
         message.textContent = ready
-          ? "Reflection saved. Continue to the 20-minute Show Mum finale."
-          : "Write at least 20 characters and choose one confidence level.";
+          ? "Practice evidence and reflection are saved. Continue to Show Mum."
+          : "Complete the review actions, write at least 20 characters and choose one confidence level.";
     };
   document.querySelectorAll("[data-confidence]").forEach(
     (b) =>
@@ -916,6 +1108,11 @@ function undoShift() {
 $("beginBtn").onclick = () => openLesson(firstOpen().day);
 $("exitBtn").onclick = exitSession;
 $("printBtn").onclick = () => window.print();
+$("dismissUpdate").onclick = () => {
+  state.migrationNotice = false;
+  save();
+  $("contentUpdate").hidden = true;
+};
 $("moveDayBtn").onclick = moveTodayForward;
 $("undoShift").onclick = undoShift;
 $("resetBtn").onclick = () => {

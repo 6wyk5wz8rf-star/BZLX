@@ -12,7 +12,7 @@
       content="A calm, guided 35-day British Sign Language learning companion."
     />
     <title>BSL Learner Companion</title>
-    <link rel="stylesheet" href="style.css?v=7" />
+    <link rel="stylesheet" href="style.css?v=8" />
   </head>
   <body>
     <a class="skipLink" href="#main">Skip to learning</a>
@@ -71,6 +71,14 @@
               <small>The companion will lead each action. You do not need to plan the session.</small>
             </aside>
           </div>
+        </section>
+
+        <section class="contentUpdate" id="contentUpdate" hidden aria-live="polite">
+          <div>
+            <strong>Your completed days are safe.</strong>
+            <span>The active lesson has restarted at Understand because its teaching content and sign sequence have been substantially rebuilt.</span>
+          </div>
+          <button class="miniBtn" id="dismissUpdate" type="button">Understood</button>
         </section>
 
         <section class="homeGrid">
@@ -152,7 +160,8 @@
       </div>
     </main>
     <div class="toast" id="toast" aria-live="polite"></div>
-    <script src="course.js?v=7"></script>
-    <script src="app.js?v=7"></script>
+    <script src="course.js?v=8"></script>
+    <script src="knowledge.js?v=8"></script>
+    <script src="app.js?v=8"></script>
   </body>
 </html>
