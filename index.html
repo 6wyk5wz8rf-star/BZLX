@@ -2,329 +2,79 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BSL Learner Companion</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#183b3b">
+<title>BSL Learning Companion</title>
 <style>
-:root{
-  --bg:#f7f6f2;
-  --paper:#ffffff;
-  --paper2:#f1efe8;
-  --ink:#24303b;
-  --muted:#6e7b84;
-  --accent:#456b78;
-  --accentLight:#dfe9ed;
-  --success:#4d7d5b;
-  --warning:#b88434;
-  --border:#d8ddd8;
-  --radius:18px;
-  --shadow:0 10px 30px rgba(0,0,0,.08);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);
-  color:var(--ink);
-  display:grid;
-  grid-template-columns:320px 1fr;
-  min-height:100vh;
-}
-aside{
-  background:var(--paper);
-  border-right:1px solid var(--border);
-  padding:28px;
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:auto;
-}
-.logo{font-size:28px;font-weight:700;letter-spacing:.05em}
-.subtitle{font-size:14px;color:var(--muted);line-height:1.6}
-.card{background:var(--paper2);padding:18px;border-radius:16px}
-.progressRing{
-  width:120px;height:120px;border-radius:50%;
-  display:grid;place-items:center;margin:auto;
-  background:conic-gradient(var(--accent) 0deg,#d9d9d9 0deg);
-}
-.progressInner{
-  width:88px;height:88px;background:white;border-radius:50%;
-  display:grid;place-items:center;font-weight:700;
-}
-.stat{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
-main{padding:42px;overflow:auto}
-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:36px;gap:20px;
-}
-h1{font-size:34px;font-weight:700}
-button{
-  padding:12px 18px;border:none;border-radius:12px;
-  background:var(--accent);color:white;cursor:pointer;font-size:15px;
-}
-button.secondary{background:#e6ecef;color:var(--ink)}
-button.success{background:var(--success)}
-button.warning{background:var(--warning)}
-button:disabled{opacity:.45;cursor:not-allowed}
-.studyCard{
-  background:white;border-radius:22px;box-shadow:var(--shadow);
-  padding:28px;margin-bottom:28px;
-}
-.studyCard.is-complete{outline:2px solid rgba(77,125,91,.35)}
-.studyCard.is-skipped{outline:2px solid rgba(184,132,52,.35)}
-.dayNumber{
-  font-size:14px;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--muted);margin-bottom:8px;
-}
-.dayTitle{font-size:30px;font-weight:700;margin-bottom:12px}
-.dateLabel{color:var(--accent);font-weight:600;margin-bottom:24px}
-.meta{color:var(--muted);margin-bottom:22px}
-.studyCard h3{margin-top:20px}
-.studyCard ul,.studyCard ol{margin:12px 0 24px 24px;line-height:1.8}
-.studyCard p{line-height:1.75}
-.statusBar{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
-.statusBtn{flex:1;min-width:150px}
-.note{
-  width:100%;min-height:88px;border:1px solid var(--border);
-  border-radius:12px;padding:12px;font:inherit;margin-top:12px;resize:vertical;
-}
-.statusPill{
-  display:inline-block;padding:6px 10px;border-radius:999px;
-  background:var(--accentLight);font-size:13px;margin-bottom:16px;
-}
-.topActions{display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:900px){
-  body{grid-template-columns:1fr}
-  aside{position:relative;height:auto;border-right:none;border-bottom:1px solid var(--border)}
-  main{padding:22px}
-  header{align-items:flex-start;flex-direction:column}
-}
+:root{--ink:#173131;--muted:#607071;--paper:#fffefa;--wash:#eef3ef;--line:#d7e0db;--deep:#183b3b;--teal:#2f6662;--mint:#dcebe3;--sun:#f2cb74;--ok:#356b4a;--warn:#9a6825;--shadow:0 18px 50px rgba(22,49,49,.12);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#f6f8f4,#edf2ef);color:var(--ink);min-height:100vh}button,input,textarea{font:inherit}a{color:inherit}.app{display:grid;grid-template-columns:285px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:rgba(255,254,250,.97);border-right:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:18px;z-index:10}.brand{display:flex;align-items:center;gap:12px}.mark{width:46px;height:46px;border-radius:15px;background:var(--deep);color:white;display:grid;place-items:center;font-weight:800;letter-spacing:.08em}.brand h1{font-size:18px;margin:0}.brand p,.mini{font-size:12px;color:var(--muted);line-height:1.5;margin:3px 0 0}.progressCard{background:var(--wash);border:1px solid var(--line);border-radius:20px;padding:17px}.progressTop{display:flex;justify-content:space-between;align-items:end}.progressTop strong{font-size:28px}.progressBar{height:9px;background:#d9e2dd;border-radius:999px;overflow:hidden;margin:12px 0 8px}.progressBar span{display:block;height:100%;width:0;background:var(--teal);transition:.3s}.navTitle{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}.nav{display:grid;gap:6px}.nav button,.mobileNav button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:12px;color:var(--muted);cursor:pointer}.nav button.active,.nav button:hover{background:var(--mint);color:var(--deep);font-weight:750}.sideNote{margin-top:auto;background:var(--deep);color:white;padding:16px;border-radius:18px;font-size:13px;line-height:1.55}.sideNote strong{display:block;margin-bottom:5px}.main{min-width:0;padding:28px 34px 70px}.topbar{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:24px}.eyebrow{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:var(--teal)}.topbar h2{margin:5px 0 0;font-size:clamp(28px,4vw,46px);line-height:1.04}.topActions,.resume,.toolRow{display:flex;gap:9px;flex-wrap:wrap}.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:750;cursor:pointer;background:var(--deep);color:#fff;text-decoration:none}.btn.secondary{background:white;color:var(--deep);border:1px solid var(--line)}.btn.ghost{background:transparent;color:var(--muted)}.btn.good{background:var(--ok)}.btn.warn{background:var(--warn)}.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.7fr);gap:18px;margin-bottom:22px}.panel{background:rgba(255,254,250,.95);border:1px solid var(--line);border-radius:25px;box-shadow:var(--shadow)}.today{padding:28px;background:linear-gradient(145deg,#fffefa 15%,#e6f0e9)}.phase{display:inline-flex;padding:7px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--teal)}.today h3{font-size:clamp(28px,4vw,45px);line-height:1.06;margin:16px 0 10px}.focus{font-size:18px;color:var(--muted);line-height:1.5}.todayMeta{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.metaPill{background:#fff;border:1px solid var(--line);padding:10px 12px;border-radius:12px;font-size:13px;font-weight:700}.dash{padding:23px;display:flex;flex-direction:column;justify-content:space-between}.dash h4{margin:0 0 14px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px;border-radius:16px;background:var(--wash)}.stat strong{display:block;font-size:24px}.stat span{font-size:12px;color:var(--muted)}.streak{margin-top:12px;padding:15px;border-radius:16px;background:#f8edd2;font-size:13px;line-height:1.5}.section{display:none}.section.active{display:block}.sectionTitle{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:28px 0 14px}.sectionTitle h3{margin:0;font-size:27px}.sectionTitle p{margin:0;color:var(--muted)}.lessonGrid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:18px;align-items:start}.lessonBody{padding:26px}.lessonAside{display:grid;gap:14px;position:sticky;top:20px}.subcard{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:19px}.subcard h4{margin:0 0 11px;font-size:17px}.subcard p,.subcard li{color:var(--muted);line-height:1.62}.stepList{display:grid;gap:11px;margin-top:14px}.step{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fff}.stepNum{width:32px;height:32px;border-radius:10px;background:var(--deep);color:white;display:grid;place-items:center;font-weight:800}.step label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;line-height:1.5}.step input{margin-top:4px;transform:scale(1.15)}.step.done{background:#edf5ef;opacity:.75}.vocab{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:8px 10px;border-radius:999px;background:var(--mint);font-size:13px;font-weight:750}.chip a{text-decoration:none}.resourceGrid{display:grid;gap:10px}.resource{display:block;text-decoration:none;padding:14px;border:1px solid var(--line);border-radius:15px;background:white}.resource strong{display:block;margin-bottom:4px}.resource span{font-size:12px;color:var(--muted);line-height:1.45}.notes{width:100%;min-height:120px;border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff;resize:vertical}.checkRow{display:grid;grid-template-columns:1fr;gap:8px}.confidence{border:1px solid var(--line);background:white;border-radius:12px;padding:11px 8px;cursor:pointer;font-weight:700;color:var(--muted)}.confidence.active{background:var(--deep);color:white}.dayList{display:grid;gap:10px}.dayRow{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:center;background:white;border:1px solid var(--line);border-radius:17px;padding:14px;cursor:pointer}.dayNum{font-weight:850;color:var(--teal)}.dayRow h4{margin:0 0 3px}.dayRow p{margin:0;color:var(--muted);font-size:13px}.status{font-size:12px;font-weight:800;padding:7px 9px;border-radius:999px;background:var(--wash)}.status.complete{background:#ddefe2;color:var(--ok)}.status.skipped{background:#f6e7cf;color:var(--warn)}.libraryGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.libraryCard{padding:20px}.libraryCard h4{margin:0 0 9px}.libraryCard p{color:var(--muted);line-height:1.55;font-size:14px}.libraryCard a{display:inline-block;margin-top:8px;font-weight:800;color:var(--teal)}.promptBox{padding:17px;background:var(--deep);color:white;border-radius:17px;min-height:94px;display:flex;align-items:center;font-size:18px}.timer{font-size:44px;font-variant-numeric:tabular-nums;font-weight:850;margin:10px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:var(--deep);color:white;padding:11px 16px;border-radius:999px;transition:.25s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}.mobileNav{display:none}
+@media(max-width:980px){.app{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px 18px 90px}.hero,.lessonGrid{grid-template-columns:1fr}.lessonAside{position:static}.libraryGrid{grid-template-columns:1fr 1fr}.mobileNav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;background:rgba(255,254,250,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:40}.mobileNav button{text-align:center;font-size:11px}.mobileNav button.active{color:var(--deep);font-weight:800}}
+@media(max-width:640px){.topbar{align-items:flex-start}.topActions .ghost{display:none}.today,.dash,.lessonBody{padding:20px}.libraryGrid{grid-template-columns:1fr}.dayRow{grid-template-columns:55px 1fr}.dayRow .status{grid-column:2;justify-self:start}}
+@media print{.sidebar,.mobileNav,.topActions,.resume,.lessonAside button{display:none!important}.app{display:block}.main{padding:0}.panel{box-shadow:none}body{background:white}}
 </style>
 </head>
 <body>
-<aside>
-  <div>
-    <div class="logo">BSL</div>
-    <div class="subtitle">35 Day Learner Companion</div>
-  </div>
-
-  <div class="card">
-    <div class="progressRing">
-      <div class="progressInner"><span id="percentLabel">0%</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="stat"><span>Completed</span><span id="completeCount">0</span></div>
-    <div class="stat"><span>Skipped</span><span id="skipCount">0</span></div>
-    <div class="stat"><span>Remaining</span><span id="remainingCount">35</span></div>
-  </div>
-
-  <div class="card">
-    <strong>Study Principle</strong>
-    <p style="margin-top:12px;line-height:1.6;color:var(--muted)">
-      Do every day once. If life interrupts, the course calmly shifts forward. Nothing is lost.
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Learning Summary</h3>
-    <div class="stat"><span>Total Days</span><span>35</span></div>
-    <div class="stat"><span>Estimated Study</span><span>≈100 hrs</span></div>
-    <div class="stat"><span>Vocabulary</span><span>300+ signs</span></div>
-    <div class="stat"><span>Status</span><span id="statusText">In Progress</span></div>
-  </div>
-</aside>
-
-<main>
-<header>
-  <div>
-    <h1>British Sign Language</h1>
-    <div style="margin-top:8px;color:var(--muted)">
-      Day 1 begins Monday, 3 August 2026. Skipped days shift all unfinished lessons forward.
-    </div>
-  </div>
-  <div class="topActions">
-    <button id="certificateButton" class="secondary">Certificate</button>
-    <button id="resetProgress">Reset Progress</button>
-  </div>
-</header>
-
-<section id="lessonContainer"></section>
-</main>
-
+<div class="app">
+<aside class="sidebar"><div class="brand"><div class="mark">BSL</div><div><h1>Learning Companion</h1><p>35 guided sessions</p></div></div><div class="progressCard"><div class="progressTop"><div><div class="mini">Course progress</div><strong id="sidePercent">0%</strong></div><div class="mini" id="sideCount">0 of 35</div></div><div class="progressBar"><span id="sideBar"></span></div><div class="mini" id="nextDate"></div></div><div><div class="navTitle">Companion</div><div class="nav"><button data-view="today" class="active">Today</button><button data-view="journey">Journey</button><button data-view="practice">Practice studio</button><button data-view="library">Resource library</button></div></div><div class="sideNote"><strong>Learning rule</strong>See it. Copy it. Receive it. Use it. Reflect. A missed day shifts the path, not your worth.</div></aside>
+<main class="main"><div class="topbar"><div><div class="eyebrow">British Sign Language</div><h2>Your calm daily guide</h2></div><div class="topActions"><button class="btn ghost" id="printBtn">Print today</button><button class="btn secondary" id="settingsBtn">Reset</button></div></div>
+<section class="hero"><div class="panel today"><span class="phase" id="heroPhase"></span><h3 id="heroTitle"></h3><div class="focus" id="heroFocus"></div><div class="todayMeta"><span class="metaPill" id="heroDay"></span><span class="metaPill" id="heroDate"></span><span class="metaPill">45–70 min</span></div><div class="resume"><button class="btn" id="openToday">Begin today’s session</button><button class="btn secondary" data-view="practice">5-minute practice</button></div></div><div class="panel dash"><div><h4>Your learning rhythm</h4><div class="stats"><div class="stat"><strong id="doneStat">0</strong><span>completed</span></div><div class="stat"><strong id="remainStat">35</strong><span>remaining</span></div><div class="stat"><strong id="minutesStat">0</strong><span>minutes logged</span></div><div class="stat"><strong id="confidenceStat">—</strong><span>latest confidence</span></div></div></div><div class="streak" id="rhythmText"></div></div></section>
+<section id="view-today" class="section active"><div class="sectionTitle"><div><h3 id="lessonHeading"></h3><p id="lessonSub"></p></div></div><div class="lessonGrid"><div class="panel lessonBody"><div class="subcard"><h4>What you are learning</h4><div class="vocab" id="vocabChips"></div></div><div class="subcard" style="margin-top:14px"><h4>Guided session</h4><p class="mini">Tick each stage as you work. Progress saves automatically on this device.</p><div class="stepList" id="stepList"></div></div><div class="subcard" style="margin-top:14px"><h4>Today’s challenge</h4><p id="challengeText"></p></div><div class="subcard" style="margin-top:14px"><h4>Reflection notes</h4><p>What became clearer today, and what deserves a five-minute revisit tomorrow?</p><textarea class="notes" id="lessonNotes" placeholder="A few honest lines are enough…"></textarea></div></div><aside class="lessonAside"><div class="subcard"><h4>Open alongside this lesson</h4><div class="resourceGrid" id="lessonResources"></div></div><div class="subcard"><h4>Coach’s cue</h4><p>Keep your hands relaxed, your gaze present, and your pace slow enough to remain readable. Learn by seeing, doing, receiving and reflecting.</p></div><div class="subcard"><h4>Confidence check</h4><div class="checkRow"><button class="confidence" data-confidence="1">Needs work</button><button class="confidence" data-confidence="2">Getting there</button><button class="confidence" data-confidence="3">Usable</button></div></div><div class="subcard"><h4>Finish the day</h4><div class="toolRow"><button class="btn good" id="completeDay">Mark complete</button><button class="btn warn" id="skipDay">Skip and shift</button></div><button class="btn secondary" id="undoDay">Clear status</button></div></aside></div></section>
+<section id="view-journey" class="section"><div class="sectionTitle"><div><h3>Your 35-day journey</h3><p>Open any lesson. A skipped day shifts all unfinished sessions forward.</p></div></div><div class="dayList" id="dayList"></div></section>
+<section id="view-practice" class="section"><div class="sectionTitle"><div><h3>Practice studio</h3><p>Small tools for retrieval, fluency and receptive attention.</p></div></div><div class="libraryGrid"><div class="panel libraryCard"><h4>Fingerspelling prompt</h4><div class="promptBox" id="wordPrompt">READY</div><div class="toolRow"><button class="btn" id="newWord">New word</button><a class="btn secondary" href="https://www.signature.org.uk/students/learning-support/fingerspelling/" target="_blank" rel="noopener">Alphabet help ↗</a></div></div><div class="panel libraryCard"><h4>Number flash</h4><div class="promptBox" id="numberPrompt">12</div><div class="toolRow"><button class="btn" id="newNumber">New number</button></div></div><div class="panel libraryCard"><h4>Focused timer</h4><div class="timer" id="timer">05:00</div><div class="toolRow"><button class="btn" id="timerStart">Start</button><button class="btn secondary" id="timerReset">Reset</button></div><p>Five minutes is deliberately small. Stop while the practice still feels clean.</p></div></div></section>
+<section id="view-library" class="section"><div class="sectionTitle"><div><h3>Resource library</h3><p>Use video-first sources. Compare regional variants rather than assuming one universal sign.</p></div></div><div class="libraryGrid" id="libraryGrid"></div></section></main>
+<nav class="mobileNav"><button data-view="today" class="active">Today</button><button data-view="journey">Journey</button><button data-view="practice">Practice</button><button data-view="library">Resources</button></nav></div><div class="toast" id="toast"></div>
 <script>
-const STORAGE_KEY="bslLearnerCompanionMonday3August2026";
-
-function courseStartDate(){
-  const d=new Date(2026,7,3);
-  d.setHours(0,0,0,0);
-  return d;
-}
-function formatDate(d){
-  return d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-}
-function loadState(){
-  const saved=localStorage.getItem(STORAGE_KEY);
-  if(saved){
-    try{
-      const parsed=JSON.parse(saved);
-      return {
-        startDate:parsed.startDate || courseStartDate().toISOString(),
-        statuses:parsed.statuses || {},
-        notes:parsed.notes || {}
-      };
-    }catch(e){}
-  }
-  return {startDate:courseStartDate().toISOString(),statuses:{},notes:{}};
-}
-let state=loadState();
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
-
-const course=[
-{title:"What is BSL?",focus:"Language, culture and fingerspelling",time:"≈3 hours",objectives:["Understand what British Sign Language actually is.","Learn how BSL differs from English.","Recognise regional variation.","Meet the Deaf community respectfully."],study:["Read an introduction to BSL.","Watch the manual alphabet twice.","Practise A–Z slowly.","Finger spell your own name.","Finger spell five family names.","Finger spell ten classroom objects."],teacher:"Today is about confidence, not speed. Pause after every letter. Imagine every handshape becoming familiar rather than memorised.",reflection:"What felt easiest? Which letters looked similar?"},
-{title:"Alphabet Fluency",focus:"Manual alphabet",time:"≈3 hours",objectives:["Increase recognition speed.","Reduce hesitation.","Build muscle memory."],study:["Alphabet forwards five times.","Alphabet backwards twice.","Finger spell 20 random words.","Read fingerspelling from video.","Spell classroom pupil names."],teacher:"Keep movements economical. Your hands should feel relaxed rather than tense.",reflection:"Which letters slow you down?"},
-{title:"Greetings",focus:"Everyday conversation",time:"≈3 hours",objectives:["Hello","Good morning","Goodbye","Please","Thank you","How are you?"],study:["Practise greeting exchanges.","Record yourself.","Repeat until movements feel natural."],teacher:"Facial expression matters just as much as the hands.",reflection:"Could somebody understand your greeting without sound?"},
-{title:"People",focus:"Pronouns and introductions",time:"≈3 hours",objectives:["I","You","He","She","They","We"],study:["Introduce yourself.","Introduce imaginary pupils.","Describe your family."],teacher:"Use natural eye contact.",reflection:"What felt most conversational?"},
-{title:"Numbers",focus:"0–20",time:"≈3 hours",objectives:["Read numbers.","Produce numbers.","Recognise quickly."],study:["Count forwards.","Count backwards.","Practise ages.","Practise dates."],teacher:"Accuracy first. Speed always comes later.",reflection:"Which numbers still require thinking?"},
-{title:"Colours",focus:"Core vocabulary",time:"≈3 hours",objectives:["Red","Blue","Green","Yellow","Black","White"],study:["Walk around your home signing colours.","Label objects aloud and in BSL."],teacher:"Attach signs to real objects. Memory grows through context.",reflection:"Which colours became automatic?"},
-{title:"Family",focus:"Relationships",time:"≈3 hours",objectives:["Mum","Dad","Brother","Sister","Friend","Teacher"],study:["Describe your own family.","Describe fictional families.","Mix previous vocabulary."],teacher:"Today's goal is joining signs together naturally.",reflection:"What conversation could you now have?"},
-{title:"Classroom Essentials",focus:"Immediate signs for everyday teaching",time:"≈3 hours",objectives:["Learn ten high-frequency classroom signs.","Give simple visual instructions.","Use signs alongside natural facial expression.","Recall signs without relying on written prompts."],study:["Learn: sit, stand, stop, wait and look.","Learn: listen, work, finished, again and help.","Practise each sign slowly ten times.","Give yourself a sequence of five signed instructions.","Practise the sequence while standing in different parts of the room.","Record one minute of silent classroom instructions.","Watch the recording and check clarity, posture and expression."],teacher:"Keep instructions visually distinct. Pause briefly between signs so each idea has room to land.",reflection:"Which three signs could you confidently use with a class tomorrow?"},
-{title:"Questions",focus:"Who, what, where, when and why",time:"≈3 hours",objectives:["Recognise five common question signs.","Use appropriate questioning facial expression.","Place question signs naturally within short phrases.","Understand that BSL word order may differ from spoken English."],study:["Learn: who, what, where, when and why.","Practise each question with an inquisitive facial expression.","Sign ten simple questions about objects around you.","Ask where five familiar objects are.","Ask who five imaginary people are.","Combine greetings and questions into short exchanges.","Replay your recordings without sound and judge whether the question is obvious."],teacher:"In BSL, your face carries grammar. Slightly raised or lowered eyebrows can turn a sequence of signs into a clear question.",reflection:"Did your face clearly show that you were asking rather than telling?"},
-{title:"Time and Daily Routine",focus:"Talking about the shape of a day",time:"≈3 hours",objectives:["Learn signs connected to morning, afternoon and evening.","Describe a simple daily routine.","Use now, later, today and tomorrow.","Link time signs with familiar actions."],study:["Learn: morning, afternoon, evening and night.","Learn: today, tomorrow, yesterday, now and later.","Practise signing the sequence of a normal school day.","Describe your morning routine using at least five signs.","Describe what you will do tomorrow.","Mix time vocabulary with numbers and classroom signs.","Create a thirty-second signed daily schedule."],teacher:"Place time information early in the signed sentence. Establish when something happens, then show the action.",reflection:"Could another learner follow the order of your day?"},
-{title:"Feelings",focus:"Emotional vocabulary and expression",time:"≈3 hours",objectives:["Learn signs for six common feelings.","Use facial expression accurately.","Recognise emotional intensity.","Ask and answer how someone feels."],study:["Learn: happy, sad, angry, worried, tired and excited.","Practise each feeling first with your face only.","Add the sign while keeping the expression natural.","Ask yourself, 'How are you?' and answer six different ways.","Describe how imaginary pupils might feel in different situations.","Combine feelings with today, yesterday and tomorrow.","Record a silent feelings sequence and identify each emotion on playback."],teacher:"Do not bolt an expression onto the sign. Let the feeling begin in the face and move through the whole upper body.",reflection:"Which feeling looked least convincing, and what needs to change?"},
-{title:"School Subjects",focus:"Talking about learning",time:"≈3 hours",objectives:["Learn signs for common primary school subjects.","Express likes and dislikes.","Describe a simple timetable.","Combine subjects with days and time."],study:["Learn: English, maths, science, art and music.","Learn: reading, writing and physical education.","Practise signing the subjects in your weekly timetable.","Sign which subjects you like and dislike.","Describe what subject happens first, next and last.","Create a signed timetable for an imaginary school day.","Review all classroom instruction signs from Day 8."],teacher:"Group related vocabulary together. Learning signs in families creates stronger memory pathways than isolated repetition.",reflection:"Can you describe a school day without looking at your notes?"},
-{title:"Food and Drink",focus:"Everyday choices and simple requests",time:"≈3 hours",objectives:["Learn common food and drink vocabulary.","Make polite requests.","Express preferences.","Ask simple choice questions."],study:["Learn: food, drink, water, tea, coffee and milk.","Learn: bread, fruit, apple, banana and lunch.","Practise: 'I want water, please.'","Practise asking whether someone wants tea or coffee.","Sign the foods you ate today.","Create five imaginary lunch orders.","Combine numbers with food vocabulary.","Review please, thank you, want and like."],teacher:"Use real objects where possible. Signing beside the object strengthens recognition and makes the learning less abstract.",reflection:"Which food signs can you now recall instantly?"},
-{title:"Week Two Review",focus:"Retrieval, fluency and short conversations",time:"≈3 hours",objectives:["Retrieve vocabulary from Days 1–13.","Join signs into meaningful sequences.","Identify weak areas.","Complete a short silent conversation."],study:["Warm up with the full fingerspelling alphabet.","Finger spell ten names and ten classroom objects.","Review numbers, colours, family and greetings.","Review questions, feelings, subjects and food.","Choose twenty signs randomly and produce them without prompts.","Create a one-minute signed introduction about yourself.","Create a second one-minute sequence describing your day.","Perform a short conversation containing a greeting, question, feeling, preference and goodbye.","Write down ten signs that still need further practice."],teacher:"Review is not a test of worth. It is a map. Hesitation simply shows you where tomorrow's practice should begin.",reflection:"Which vocabulary has become automatic, and which five signs need deliberate review?"},
-{title:"Places Around School",focus:"Navigating familiar spaces",time:"≈3 hours",objectives:["Learn signs for common places in and around school.","Ask and answer where something is.","Use simple directional language.","Describe movement between locations."],study:["Learn: classroom, hall, office, playground and toilet.","Learn: library, outside, inside, here and there.","Practise pointing and signing locations naturally.","Ask ten questions using 'where'.","Describe how to move from the classroom to the playground.","Create a signed tour of an imaginary school.","Review time signs by explaining when different places are used."],teacher:"BSL makes strong use of space. Place locations clearly around you, then refer back to those same positions consistently.",reflection:"Did your use of space make the route easy to follow?"},
-{title:"Directions and Position",focus:"Giving clear spatial instructions",time:"≈3 hours",objectives:["Learn basic directional signs.","Describe where objects are placed.","Follow and give short signed directions.","Use consistent spatial referencing."],study:["Learn: left, right, straight, up and down.","Learn: near, far, front, behind and next to.","Place five objects around the room.","Describe each object's position.","Give yourself a route using three directional signs.","Practise directing an imaginary pupil around the classroom.","Record a short set of directions and check whether each movement is clear."],teacher:"Choose a viewpoint and keep it stable. Changing perspective halfway through can make an otherwise accurate description confusing.",reflection:"Which position signs were easiest to confuse?"},
-{title:"Weather",focus:"Talking about the world outside",time:"≈3 hours",objectives:["Learn common weather vocabulary.","Describe today's weather.","Compare different days.","Combine weather with feelings and clothing."],study:["Learn: weather, sun, rain, wind, cloud and snow.","Learn: hot, cold, warm and wet.","Look outside and describe the weather in BSL.","Describe yesterday's weather and tomorrow's likely weather.","Match five feelings to different weather conditions.","Create a thirty-second signed weather forecast.","Review colours by describing the sky and clothing."],teacher:"Let the movement quality echo the weather. Rain, wind and heavy cloud should not all feel physically identical.",reflection:"Could someone recognise the weather before you finished the sequence?"},
-{title:"Clothes",focus:"Describing what people wear",time:"≈3 hours",objectives:["Learn common clothing signs.","Describe colour and clothing together.","Use possession and person references.","Ask simple questions about clothing."],study:["Learn: shirt, trousers, jumper, coat, shoes and hat.","Learn: wear, mine, yours and whose.","Describe what you are wearing.","Describe three imaginary people using colours and clothing.","Ask and answer 'Whose coat?' and similar questions.","Create a lost-property conversation.","Review family and people signs while describing different outfits."],teacher:"Set the person in space first, then describe their clothing. This gives the viewer a clear visual anchor.",reflection:"Could you describe someone clearly enough for another person to identify them?"},
-{title:"Actions",focus:"High-frequency verbs",time:"≈3 hours",objectives:["Learn common action signs.","Combine actions with people and places.","Build short event sequences.","Use movement direction clearly."],study:["Learn: go, come, sit, stand, walk and run.","Learn: read, write, eat, drink and sleep.","Create ten two-sign combinations.","Describe your morning using at least six actions.","Describe what pupils do during a school day.","Act out a silent sequence, then add the signs.","Review time vocabulary by placing each action in the day."],teacher:"Think in visual events rather than English sentences. See the action first, then sign the clearest version of that event.",reflection:"Which action signs flowed together naturally?"},
-{title:"Likes, Dislikes and Choices",focus:"Expressing preference",time:"≈3 hours",objectives:["Use like, dislike, want and prefer.","Ask simple preference questions.","Give choices clearly.","Respond with short reasons."],study:["Learn: like, dislike, love, want, prefer and choose.","Practise asking about food, colours and school subjects.","Give yourself pairs of choices and answer quickly.","Create ten sentences about your preferences.","Ask an imaginary pupil what they want.","Add simple reasons using good, bad, easy and difficult.","Record a short conversation about favourite subjects."],teacher:"Preference signs become clearer when your facial expression matches the strength of the opinion.",reflection:"Did your expression distinguish between like, love and dislike?"},
-{title:"Week Three Review",focus:"Accuracy, recall and connected signing",time:"≈3 hours",objectives:["Review vocabulary from Days 15–20.","Strengthen weak signs from earlier weeks.","Use space more confidently.","Complete a longer signed sequence."],study:["Review all school place signs.","Review directions and positions.","Review weather, clothes and actions.","Review likes, dislikes and choices.","Choose thirty signs and retrieve them without notes.","Create a signed route through a school.","Describe today's weather and what you are wearing.","Perform a two-minute sequence about your normal day.","Watch your recording once for handshape and once for facial expression.","List five signs to revisit tomorrow."],teacher:"Fluency grows from clean repetition, not rushed repetition. Slow down wherever clarity begins to fray.",reflection:"What has improved most since Day 14: recall, expression, space or confidence?"},
-{title:"Describing People",focus:"Appearance, character and identity",time:"≈3 hours",objectives:["Learn signs for common physical descriptions.","Describe personality using simple vocabulary.","Use space to compare two people.","Build clear person-first descriptions."],study:["Learn: tall, short, young, old, hair and glasses.","Learn: kind, funny, quiet, confident and shy.","Choose five people you know and describe them silently.","Place two imaginary people on opposite sides of your signing space.","Compare their height, age, clothing and personality.","Describe a fictional new pupil to a colleague.","Review family, clothing, colours and feelings vocabulary."],teacher:"Establish the person first, then layer detail onto them. A clear visual anchor keeps the description from becoming a cloud of disconnected signs.",reflection:"Could another signer tell which details belonged to which person?"},
-{title:"Classroom Problems",focus:"Explaining when something is wrong",time:"≈3 hours",objectives:["Learn signs for common classroom difficulties.","Ask for clarification or support.","Respond calmly to simple problems.","Use repair phrases instead of abandoning the conversation."],study:["Learn: understand, don't understand, know and don't know.","Learn: lost, broken, wrong, problem and need.","Practise signing 'Again, please' and 'Show me'.","Create five situations where a pupil needs help.","Practise responding with wait, help, look and together.","Role-play a missing pencil, unclear instruction and broken object.","Review question signs and classroom essentials."],teacher:"Repair phrases are communication tools, not signs of failure. Knowing how to recover keeps a conversation alive.",reflection:"Which repair phrase would be most useful in your classroom?"},
-{title:"Safety and Wellbeing",focus:"Simple safeguarding and care language",time:"≈3 hours",objectives:["Learn high-frequency signs connected to safety.","Ask whether someone is okay.","Understand simple statements of need.","Respond with calm, clear visual language."],study:["Learn: safe, danger, hurt, pain and ill.","Learn: okay, calm, stop, wait and adult.","Practise asking 'You okay?' with appropriate expression.","Create five short wellbeing check-ins.","Practise showing where something hurts using body placement.","Role-play asking for an adult or a quiet space.","Review feelings and classroom problem vocabulary."],teacher:"Keep safety language direct and uncluttered. In urgent moments, clear signs and steady eye contact matter more than perfect sentence structure.",reflection:"Which signs must become automatic before you use them in a real situation?"},
-{title:"Past, Present and Future",focus:"Building a simple timeline",time:"≈3 hours",objectives:["Use time markers to place events clearly.","Describe something that already happened.","Explain what is happening now.","Describe a simple future plan."],study:["Review: yesterday, today, tomorrow, before, now and later.","Learn: last week, next week and future.","Create a physical timeline across your signing space.","Describe three things you did yesterday.","Describe what you are doing today.","Describe three plans for tomorrow or next week.","Combine weather, school subjects and actions across the timeline."],teacher:"Set the time before the action. Once the viewer knows when an event belongs, the rest of the sequence becomes easier to follow.",reflection:"Did your timeline remain spatially consistent?"},
-{title:"Conversation Flow",focus:"Starting, maintaining and ending interaction",time:"≈3 hours",objectives:["Open a conversation naturally.","Use visual turn-taking.","Show that you are following.","Close a conversation clearly."],study:["Review greetings, names and how-are-you questions.","Learn conversational responses such as yes, no, maybe and really.","Practise nodding, pausing and maintaining eye contact.","Create a thirty-second exchange about the day.","Create a second exchange about food or school subjects.","Practise interrupting politely by gaining visual attention first.","End each exchange with thank you, see you or goodbye."],teacher:"Good signing is not only production. It is visible listening. Your face, gaze and pauses tell the other person that their message has landed.",reflection:"Did the conversation feel shared, or did it feel like two separate performances?"},
-{title:"Classroom Mini-Lesson",focus:"Using BSL while teaching",time:"≈3 hours",objectives:["Plan a short visually supported teaching sequence.","Use signs alongside objects and demonstration.","Give instructions in a logical order.","Check understanding without relying on speech."],study:["Choose a simple classroom task such as sorting colours or counting objects.","Select ten signs needed for the lesson.","Plan an opening, demonstration, pupil task and finish.","Practise the lesson once slowly with written prompts.","Practise again using only objects and signs.","Add checking questions such as 'Understand?' and 'Again?'.","Record the full two-minute mini-lesson.","Review whether your signs, gaze and object placement stayed visible."],teacher:"Do not sign while looking down at resources. Arrange the task so your hands, face and objects can all be seen without visual competition.",reflection:"What one change would make your teaching sequence easier to follow?"},
-{title:"Week Four Review",focus:"Functional communication and classroom readiness",time:"≈3 hours",objectives:["Retrieve vocabulary from Days 22–27.","Use repair and safety language confidently.","Maintain a short signed conversation.","Teach a simple task using visual structure."],study:["Review describing people and personality.","Review classroom problems and repair phrases.","Review safety and wellbeing vocabulary.","Review past, present and future time markers.","Choose forty signs and retrieve them without notes.","Perform a two-minute conversation containing a problem and repair.","Repeat the classroom mini-lesson from Day 27.","Watch the recording without sound and judge clarity.","Choose ten signs for focused revision during the final week."],teacher:"At this stage, depth matters more than collecting more vocabulary. Strengthen the signs that make real interaction possible.",reflection:"Which skill now feels most usable: conversation, classroom instruction, description or support?"},
-{title:"Real Conversations",focus:"Natural interaction",time:"≈3 hours",objectives:["Combine everything learnt so far.","Reduce hesitation.","Maintain eye contact.","Hold a simple conversation for 2–3 minutes."],study:["Introduce yourself.","Ask someone's name.","Ask how they are.","Talk about today's weather.","Discuss favourite school subjects.","Talk about family.","Close naturally.","Repeat three times with increasing fluency."],teacher:"Forget perfection. Today is about communication. If the message arrives, the conversation succeeds.",reflection:"What moment felt genuinely conversational?"},
-{title:"Working with Children",focus:"Primary classroom communication",time:"≈3 hours",objectives:["Deliver simple classroom routines.","Support understanding.","Use encouraging language.","Build confidence."],study:["Practise entering the classroom.","Give five classroom instructions.","Praise pupils.","Redirect behaviour positively.","Ask checking questions.","Finish with a goodbye routine."],teacher:"Children respond best to calm consistency. Keep movements deliberate and reassuring.",reflection:"Would your signs reduce anxiety for a deaf pupil?"},
-{title:"Fluency Day",focus:"Removing hesitation",time:"≈3 hours",objectives:["Increase automatic recall.","Reduce stopping.","Develop rhythm.","Think visually."],study:["Review the complete alphabet.","Random vocabulary retrieval.","One-minute silent signing.","Repeat without notes.","Repeat while standing.","Repeat at conversational speed."],teacher:"Fluency isn't speed. It's the absence of searching.",reflection:"When did your hands begin moving before your inner voice?"},
-{title:"Independent Practice",focus:"Your own interests",time:"≈3 hours",objectives:["Apply BSL personally.","Develop curiosity.","Practise sustained signing.","Identify future goals."],study:["Choose a favourite topic.","Find new vocabulary.","Build a two-minute presentation.","Record yourself.","Watch critically.","Repeat after corrections."],teacher:"This is where learning becomes ownership.",reflection:"What would you like to learn next?"},
-{title:"Master Review",focus:"Whole course consolidation",time:"≈3½ hours",objectives:["Review every topic.","Strengthen weak vocabulary.","Celebrate progress.","Prepare for continued learning."],study:["Alphabet.","Numbers.","Greetings.","People.","Questions.","Classroom.","Feelings.","Weather.","Food.","Directions.","Conversation.","Review weakest twenty signs.","Repeat favourite conversations."],teacher:"You are no longer collecting isolated signs. You are building another language.",reflection:"What surprised you most over the last month?"},
-{title:"Assessment Day",focus:"Self-assessment",time:"≈3 hours",objectives:["Measure current ability.","Reflect honestly.","Plan next steps.","Record evidence."],study:["Complete a five-minute recording.","Watch once for handshape.","Watch once for expression.","Watch once for clarity.","Write strengths.","Write priorities.","Set three goals."],teacher:"Assessment is simply another practice session viewed from a different angle.",reflection:"What single improvement would make the biggest difference?"},
-{title:"Celebration",focus:"Course Complete",time:"≈1 hour",objectives:["Celebrate consistency.","Recognise growth.","Plan lifelong learning.","Enjoy the achievement."],study:["Read back through your reflections.","Watch your Day 1 recording.","Watch today's recording.","Notice your improvement.","Download your certificate.","Choose your next learning goal."],teacher:"Thirty-five days is only the beginning. Languages are gardens. Keep returning and they continue growing.",reflection:"What kind of signer do you want to become over the next year?"}
-];
-
-function getCounts(){
-  const values=Object.values(state.statuses);
-  return {
-    completed:values.filter(v=>v==="complete").length,
-    skipped:values.filter(v=>v==="skipped").length
-  };
-}
-function lessonDate(index){
-  const start=new Date(state.startDate);
-  let shift=0;
-  for(let i=0;i<index;i++){
-    if(state.statuses[i]==="skipped") shift++;
-  }
-  start.setDate(start.getDate()+index+shift);
-  return start;
-}
-function setStatus(index,status){
-  if(state.statuses[index]===status) delete state.statuses[index];
-  else state.statuses[index]=status;
-  save();
-  renderCourse();
-  refreshDashboard();
-}
-function saveNote(index,value){
-  state.notes[index]=value;
-  save();
-}
-function renderCourse(){
-  const container=document.getElementById("lessonContainer");
-  container.innerHTML="";
-  course.forEach((lesson,index)=>{
-    const status=state.statuses[index] || "";
-    const article=document.createElement("article");
-    article.className="studyCard"+(status==="complete"?" is-complete":status==="skipped"?" is-skipped":"");
-    article.innerHTML=`
-      <div class="dayNumber">Day ${index+1}</div>
-      <div class="dayTitle">${lesson.title}</div>
-      <div class="dateLabel">${formatDate(lessonDate(index))}</div>
-      <div class="meta">${lesson.time}</div>
-      ${status?`<div class="statusPill">${status==="complete"?"Completed":"Skipped and shifted"}</div>`:""}
-      <h3>Today's Focus</h3>
-      <p>${lesson.focus}</p>
-      <h3>Learning Goals</h3>
-      <ul>${lesson.objectives.map(o=>`<li>${o}</li>`).join("")}</ul>
-      <h3>Study Session</h3>
-      <ol>${lesson.study.map(o=>`<li>${o}</li>`).join("")}</ol>
-      <div class="card">
-        <strong>Teacher's Companion</strong>
-        <p style="margin-top:12px">${lesson.teacher}</p>
-      </div>
-      <h3>Reflection</h3>
-      <p>${lesson.reflection}</p>
-      <textarea class="note" placeholder="Write a short reflection..." data-note="${index}">${state.notes[index]||""}</textarea>
-      <div class="statusBar">
-        <button class="statusBtn success" data-status="complete" data-index="${index}">${status==="complete"?"Undo Complete":"✓ Complete"}</button>
-        <button class="statusBtn warning" data-status="skipped" data-index="${index}">${status==="skipped"?"Undo Skip":"Skipped / Didn’t Do It"}</button>
-      </div>
-    `;
-    container.appendChild(article);
-  });
-  container.querySelectorAll("[data-status]").forEach(btn=>{
-    btn.addEventListener("click",()=>setStatus(Number(btn.dataset.index),btn.dataset.status));
-  });
-  container.querySelectorAll("[data-note]").forEach(area=>{
-    area.addEventListener("input",()=>saveNote(Number(area.dataset.note),area.value));
-  });
-}
-function refreshDashboard(){
-  const {completed,skipped}=getCounts();
-  const percent=Math.round((completed/course.length)*100);
-  document.getElementById("completeCount").textContent=completed;
-  document.getElementById("skipCount").textContent=skipped;
-  document.getElementById("remainingCount").textContent=Math.max(0,course.length-completed);
-  document.getElementById("percentLabel").textContent=percent+"%";
-  document.querySelector(".progressRing").style.background=
-    `conic-gradient(var(--accent) ${percent*3.6}deg,#d9d9d9 0deg)`;
-  document.getElementById("statusText").textContent=
-    completed>=course.length ? "Completed 🌿" : `Day ${Math.min(course.length,completed+1)}`;
-}
-function downloadCertificate(){
-  const {completed}=getCounts();
-  const percent=Math.round((completed/course.length)*100);
-  const win=window.open("","_blank");
-  win.document.write(`<!DOCTYPE html><html><head><title>BSL Certificate</title><style>
-  body{font-family:Georgia,serif;background:#f6f4ef;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
-  .cert{width:900px;max-width:90vw;padding:70px;background:white;border:8px solid #456b78;text-align:center}
-  h1{font-size:54px;margin-bottom:25px}.name{font-size:42px;margin:40px 0}.small{font-size:22px;line-height:1.7}
-  </style></head><body><div class="cert"><h1>British Sign Language<br>Learner Companion</h1>
-  <div class="small">Certificate of Completion</div><div class="name">Congratulations!</div>
-  <div class="small">You completed the 35 Day Independent Learning Companion.<br><br>
-  Completion: ${percent}%<br><br>${new Date().toLocaleDateString()}</div></div></body></html>`);
-  win.document.close();
-}
-document.getElementById("certificateButton").addEventListener("click",downloadCertificate);
-document.getElementById("resetProgress").addEventListener("click",()=>{
-  if(confirm("Reset all progress, skipped days and notes?")){
-    localStorage.removeItem(STORAGE_KEY);
-    state=loadState();
-    renderCourse();
-    refreshDashboard();
-  }
-});
-renderCourse();
-refreshDashboard();
-save();
-</script>
-</body>
-</html>
+const raw=[
+['Foundations','What BSL is','Visual language, Deaf culture and respectful learning','BSL as a visual language|Deaf culture|dominant hand|practice routine','Read the culture note|Watch an introduction to fingerspelling|Choose a consistent dominant hand|Write your reason for learning','Explain why facial expression matters in a visual language.'],
+['Foundations','Fingerspelling: A–M','Clear handshapes and recognition','A|B|C|D|E|F|G|H|I|J|K|L|M','Study the alphabet chart|Practise each letter five times|Spell your name slowly|Read five short words','Fingerspell your first name twice without checking.'],
+['Foundations','Fingerspelling: N–Z','Complete the alphabet','N|O|P|Q|R|S|T|U|V|W|X|Y|Z','Study N–Z|Practise difficult pairs|Spell five names|Complete a sixty-second alphabet flow','Fingerspell three classroom objects.'],
+['Foundations','Fingerspelling fluency','Move from letters to words','smooth transitions|chunking|names|places','Warm up A–Z|Use the word generator|Record ten words|Watch back without sound','Spell five words at a steady readable pace.'],
+['First conversations','Greetings and politeness','Open and close simple interactions','hello|good morning|goodbye|please|thank you|how are you','Look up each sign|Copy slowly|Practise a greeting exchange|Record a twenty-second conversation','Sign a greeting, question, answer and goodbye.'],
+['First conversations','Introducing yourself','Name, role and simple identity','my name|I|teacher|live|learn|BSL','Build a six-sign introduction|Practise eye gaze|Add fingerspelling for your name|Repeat from memory','Introduce yourself in thirty seconds.'],
+['First conversations','People and pronouns','Refer clearly to people','I|you|he|she|we|they|friend|family','Learn person reference|Practise pointing locations|Describe three imaginary people|Mix with greetings','Introduce two people and show who is who.'],
+['Number sense','Numbers 0–20','Produce and recognise core numbers','0–20|age|quantity|score|date','Learn in groups of five|Count up and down|Sign ages|Use random number practice','Recognise and produce ten random numbers.'],
+['Number sense','Numbers 21–100','Patterns and fluency','tens|compound numbers|prices|years|class totals','Study number patterns|Practise multiples of ten|Generate fifteen random numbers|Sign five real-life quantities','Sign your age, birth year and a class total.'],
+['Everyday language','Colours and descriptions','Describe visible objects','red|blue|green|yellow|black|white|light|dark','Look up colour signs|Label objects around you|Make colour-noun phrases|Play a silent colour hunt','Describe five objects by colour.'],
+['Everyday language','Family','Talk about relationships','mum|dad|brother|sister|partner|child|friend','Create a family map|Assign people locations in signing space|Describe three relationships|Ask who questions','Describe a small family without notes.'],
+['Everyday language','Feelings','Use face and body as grammar','happy|sad|worried|angry|tired|excited|fine','Practise face first|Add each sign|Ask and answer how are you|Record contrasting feelings','Make each feeling identifiable with no voice.'],
+['Questions','Question forms','Who, what, where, when, why and how','who|what|where|when|why|how|which','Study question signs|Notice eyebrow patterns|Ask ten object questions|Build mini exchanges','Ask five visibly different questions.'],
+['Time','Days and calendar','Place events in time','today|tomorrow|yesterday|Monday|weekend','Learn time markers|Sign the week in order|Describe yesterday and tomorrow|Build a weekly mini-plan','Sign three plans with clear time first.'],
+['Time','Daily routine','Describe the shape of a day','morning|afternoon|evening|wake|work|eat|sleep','Map your day|Learn routine verbs|Sign first next last|Record a forty-five-second routine','Describe your morning without notes.'],
+['School','Classroom essentials I','High-frequency visual instructions','sit|stand|stop|wait|look|listen|again|finished','Learn each instruction|Use clear pauses|Sign a five-step sequence|Practise from teacher positions','Deliver five instructions silently and clearly.'],
+['School','Classroom essentials II','Support and learning language','help|understand|do not understand|question|answer|work|read|write','Look up each sign|Build help exchanges|Practise checking understanding|Create a mini lesson opening','Check understanding and offer help in BSL.'],
+['School','Subjects and timetable','Talk about school learning','maths|English|science|art|music|PE|reading','Learn subject signs|Sign your timetable|Add likes and dislikes|Describe first next last','Describe one school day.'],
+['School','Praise and behaviour','Warm, clear classroom communication','good|well done|try again|careful|kind|share|turn|quiet','Learn positive feedback|Practise facial tone|Build three correction phrases|Use signs in a mock transition','Give praise and one calm correction.'],
+['Everyday life','Food and drink','Choices, wants and preferences','food|drink|water|tea|coffee|milk|fruit|lunch','Use real objects|Practise want and do not want|Ask choice questions|Create a lunch exchange','Order a drink and simple lunch.'],
+['Everyday life','Home and objects','Locate familiar things','home|room|door|table|chair|book|phone|key','Label a room|Use where questions|Place objects in signing space|Give a simple location','Explain where three objects are.'],
+['Everyday life','Places and travel','Navigate simple journeys','school|shop|park|hospital|bus|train|walk|go','Learn place signs|Describe your route|Ask where|Give a two-step direction','Describe a familiar journey.'],
+['Descriptions','People and appearance','Describe respectfully and clearly','tall|short|hair|glasses|clothes|young|old','Learn neutral descriptions|Use signing space|Describe fictional people|Practise a guessing game','Describe someone respectfully and clearly.'],
+['Descriptions','Clothing','Talk about what people wear','shirt|trousers|dress|shoes|coat|hat|colour','Look up clothing signs|Describe your outfit|Combine colour and clothing|Run a memory challenge','Describe two outfits.'],
+['Conversation','Likes, dislikes and hobbies','Build personal conversation','like|do not like|love|sport|run|read|music|cook','Choose real hobbies|Build preference statements|Ask a question|Expand with why','Have a forty-five-second hobby exchange.'],
+['Conversation','Weather and seasons','Talk about the day around you','weather|sun|rain|cold|hot|wind|summer|winter','Check today’s weather|Learn core signs|Describe two contrasting days|Add clothing choices','Give a signed weather report.'],
+['Grammar','BSL word order','Move away from English on the hands','topic-comment|time first|spatial reference|non-manual features','Compare English and BSL examples|Reorder five sentences|Sign meaning not every English word|Record two versions','Turn three English sentences into visual sequences.'],
+['Grammar','Facial grammar','Make questions, intensity and attitude visible','yes-no questions|wh questions|negation|intensity|mouth patterns','Practise face-only contrasts|Add short phrases|Film close-up and full frame|Review without audio','Show question, statement and negation distinctly.'],
+['Reception','Watching skills','Learn to understand, not only produce','whole-message watching|context clues|fingerspelling recognition|repair','Watch short clips once|Note gist only|Replay for details|Practise asking for repeat','Identify gist before individual signs.'],
+['Reception','Conversation repair','Stay in the interaction when lost','again|slower|do not understand|what sign|fingerspell please','Learn repair phrases|Practise a relaxed face|Run three breakdown scenarios|Recover and continue','Repair a missed message without switching to speech.'],
+['Fluency','One-minute personal story','Connect time, people and action','opening context|sequence|reference|expression|closing','Choose a true small story|Storyboard five beats|Sign without script|Review and refine','Tell a coherent one-minute story.'],
+['Fluency','Classroom micro-lesson','Teach something visually','attention|instruction|model|check understanding|feedback','Choose a tiny maths task|Plan key signs|Deliver silently|Review clarity and pacing','Teach a one-minute classroom routine.'],
+['Community','Deaf awareness in practice','Turn knowledge into respectful behaviour','getting attention|eye contact|lighting|interpreters|direct communication','Read Deaf awareness guidance|Audit a classroom space|Write five practical changes|Rehearse respectful interaction','Name five changes that improve visual access.'],
+['Review','Retrieval circuit','Find the edges of your memory','fingerspelling|numbers|conversation|school|daily life|grammar','Complete six timed stations|Mark easy effortful and not-yet|Relearn five weak signs|Repeat the hardest station','Recover thirty signs across six topics.'],
+['Review','Final conversation and next path','Consolidate and choose what follows','introduction|questions|story|classroom language|repair|reflection','Record a two-minute conversation|Complete a confidence check|Choose a continuing resource|Plan three weekly practices','Complete a two-minute signed sequence and set your next step.']];
+const COURSE=raw.map((x,i)=>({day:i+1,phase:x[0],title:x[1],focus:x[2],vocab:x[3].split('|'),steps:x[4].split('|'),challenge:x[5]}));
+const resources=[
+{title:'Signature learning support',desc:'Free learner guidance, posters, flashcards and study resources.',url:'https://www.signature.org.uk/students/learning-support/'},
+{title:'Signature fingerspelling',desc:'Beginner explanation plus right- and left-handed alphabet charts.',url:'https://www.signature.org.uk/students/learning-support/fingerspelling/'},
+{title:'SignBSL dictionary',desc:'Search and compare video examples and regional sign variants.',url:'https://www.signbsl.com/'},
+{title:'NDCS BSL resources',desc:'Fingerspelling and family-friendly British Sign Language resources.',url:'https://www.ndcs.org.uk/advice-and-support/language-and-communication/sign-language/british-sign-language-bsl-videos-and-resources'},
+{title:'Signature beginner course',desc:'Structured paid introduction created with Deaf teachers and language experts.',url:'https://www.signature.org.uk/students/british-sign-language-for-beginners/'},
+{title:'Signature qualifications',desc:'Find recognised BSL pathways and approved learning centres.',url:'https://www.signature.org.uk/qualifications/'}];
+const KEY='bsl_companion_v3',START=new Date(2026,7,3);let state=load(),timerLeft=300,timerId=null;
+function fresh(){return{selected:1,status:{},steps:{},notes:{},confidence:{},minutes:0,skips:0}}function load(){try{return Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){return fresh()}}function save(){localStorage.setItem(KEY,JSON.stringify(state))}function el(id){return document.getElementById(id)}function toast(m){el('toast').textContent=m;el('toast').classList.add('show');setTimeout(()=>el('toast').classList.remove('show'),1600)}function dateFor(day){const d=new Date(START);d.setDate(d.getDate()+day-1+(state.skips||0));return d}function fmt(d){return d.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}function active(){return COURSE.find(x=>x.day===state.selected)||COURSE[0]}function firstOpen(){return COURSE.find(x=>state.status[x.day]!=='complete')||COURSE[34]}function signLink(v){return'https://www.signbsl.com/sign/'+encodeURIComponent(v.toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,'-'))}
+function setView(v){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id==='view-'+v));document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='today')renderLesson();scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+function renderAll(){const done=COURSE.filter(x=>state.status[x.day]==='complete').length,pct=Math.round(done/35*100),n=firstOpen();el('sidePercent').textContent=pct+'%';el('sideCount').textContent=done+' of 35';el('sideBar').style.width=pct+'%';el('doneStat').textContent=done;el('remainStat').textContent=35-done;el('minutesStat').textContent=state.minutes||0;const c=Object.values(state.confidence).filter(Boolean).pop();el('confidenceStat').textContent=c?['','Needs work','Getting there','Usable'][c]:'—';el('heroPhase').textContent=n.phase;el('heroTitle').textContent=n.title;el('heroFocus').textContent=n.focus;el('heroDay').textContent='Day '+n.day+' of 35';el('heroDate').textContent=fmt(dateFor(n.day));el('nextDate').textContent='Next session: '+fmt(dateFor(n.day));el('rhythmText').textContent=done===0?'Begin gently. One clear session is enough.':done===35?'Course complete. Keep the language alive through people and practice.':done+' sessions complete. Continue with the next unfinished lesson.';renderJourney();renderLesson()}
+function resourceCards(l){let a=[resources[2],resources[0]];if(l.title.toLowerCase().includes('finger'))a.unshift(resources[1]);if(l.title.toLowerCase().includes('deaf'))a.unshift(resources[3]);return a.slice(0,3).map(r=>`<a class="resource" href="${r.url}" target="_blank" rel="noopener"><strong>${r.title} ↗</strong><span>${r.desc}</span></a>`).join('')}
+function renderLesson(){const l=active();el('lessonHeading').textContent='Day '+l.day+' · '+l.title;el('lessonSub').textContent=l.focus+' · '+fmt(dateFor(l.day));el('vocabChips').innerHTML=l.vocab.map(v=>`<span class="chip"><a href="${signLink(v)}" target="_blank" rel="noopener">${v} ↗</a></span>`).join('');el('stepList').innerHTML=l.steps.map((s,i)=>`<div class="step ${state.steps[l.day]?.[i]?'done':''}"><div class="stepNum">${i+1}</div><label><input type="checkbox" data-step="${i}" ${state.steps[l.day]?.[i]?'checked':''}><span>${s}</span></label></div>`).join('');document.querySelectorAll('[data-step]').forEach(c=>c.onchange=()=>{state.steps[l.day]=state.steps[l.day]||{};state.steps[l.day][c.dataset.step]=c.checked;save();renderLesson()});el('challengeText').textContent=l.challenge;el('lessonNotes').value=state.notes[l.day]||'';el('lessonResources').innerHTML=resourceCards(l);document.querySelectorAll('.confidence').forEach(b=>b.classList.toggle('active',+b.dataset.confidence===state.confidence[l.day]))}
+function renderJourney(){el('dayList').innerHTML=COURSE.map(l=>{const s=state.status[l.day]||'open';return`<div class="dayRow" data-day="${l.day}"><div class="dayNum">DAY ${l.day}</div><div><h4>${l.title}</h4><p>${l.phase} · ${l.focus} · ${fmt(dateFor(l.day))}</p></div><span class="status ${s}">${s==='complete'?'Complete':s==='skipped'?'Shifted':'Open'}</span></div>`}).join('');document.querySelectorAll('[data-day]').forEach(r=>r.onclick=()=>{state.selected=+r.dataset.day;save();setView('today')})}
+el('lessonNotes').oninput=e=>{state.notes[state.selected]=e.target.value;save()};document.querySelectorAll('.confidence').forEach(b=>b.onclick=()=>{state.confidence[state.selected]=+b.dataset.confidence;save();renderAll();toast('Confidence saved')});el('openToday').onclick=()=>{state.selected=firstOpen().day;save();setView('today')};el('completeDay').onclick=()=>{state.status[state.selected]='complete';state.minutes=(state.minutes||0)+50;const n=COURSE.find(x=>x.day>state.selected&&state.status[x.day]!=='complete');if(n)state.selected=n.day;save();renderAll();toast('Lesson complete')};el('skipDay').onclick=()=>{state.status[state.selected]='skipped';state.skips=(state.skips||0)+1;const n=COURSE.find(x=>x.day>state.selected&&state.status[x.day]!=='complete');if(n)state.selected=n.day;save();renderAll();toast('Course shifted forward by one day')};el('undoDay').onclick=()=>{if(state.status[state.selected]==='skipped')state.skips=Math.max(0,state.skips-1);delete state.status[state.selected];save();renderAll();toast('Status cleared')};el('printBtn').onclick=()=>print();el('settingsBtn').onclick=()=>{if(confirm('Reset all saved course progress on this device?')){localStorage.removeItem(KEY);state=fresh();renderAll();toast('Progress reset')}};
+const words=['TEACHER','SYDNEY','MORNING','RUNNING','CLASSROOM','FRIEND','MONDAY','PENCIL','WINDOW','GARDEN','PURPLE','LIBRARY','QUESTION','THANK YOU'];el('newWord').onclick=()=>el('wordPrompt').textContent=words[Math.floor(Math.random()*words.length)];el('newNumber').onclick=()=>el('numberPrompt').textContent=Math.floor(Math.random()*101);function draw(){el('timer').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':'+String(timerLeft%60).padStart(2,'0')}el('timerStart').onclick=()=>{if(timerId){clearInterval(timerId);timerId=null;el('timerStart').textContent='Start';return}el('timerStart').textContent='Pause';timerId=setInterval(()=>{timerLeft--;draw();if(timerLeft<=0){clearInterval(timerId);timerId=null;timerLeft=300;draw();el('timerStart').textContent='Start';toast('Five-minute practice complete')}},1000)};el('timerReset').onclick=()=>{clearInterval(timerId);timerId=null;timerLeft=300;draw();el('timerStart').textContent='Start'};el('libraryGrid').innerHTML=resources.map(r=>`<div class="panel libraryCard"><h4>${r.title}</h4><p>${r.desc}</p><a href="${r.url}" target="_blank" rel="noopener">Open resource ↗</a></div>`).join('');renderAll();draw();
+</script></body></html>
