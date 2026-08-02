@@ -1,32 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#143f3d">
-<title>BSL Guided Learning Companion</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173f3b">
+  <meta name="description" content="A calm, guided 35-day British Sign Language learning companion.">
+  <title>BSL Learner Companion</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="shell">
-<div class="top"><div class="brand"><small>British Sign Language</small><h1>Your guided learning companion</h1></div><div class="topActions"><button class="btn ghost" id="printBtn">Print lesson</button><button class="btn secondary" id="resetBtn">Reset progress</button></div></div>
+<a class="skipLink" href="#main">Skip to learning</a>
+<header class="top shell">
+  <div class="brand"><small>British Sign Language</small><h1>BSL Learner Companion</h1></div>
+  <details class="courseMenu">
+    <summary>Course controls</summary>
+    <div class="menuPanel">
+      <button class="btn secondary" id="moveDayBtn" type="button">Move today’s lesson forward</button>
+      <button class="btn ghost" id="undoShift" type="button">Undo last date shift</button>
+      <button class="btn ghost" id="printBtn" type="button">Print current lesson</button>
+      <button class="btn danger" id="resetBtn" type="button">Reset all progress</button>
+    </div>
+  </details>
+</header>
 
-<div class="home" id="home">
-<section class="dashboard">
-<div class="card next"><span class="phase" id="homePhase"></span><h2 id="homeTitle"></h2><p id="homeFocus"></p><div class="meta"><span class="pill" id="homeDay"></span><span class="pill" id="homeDate"></span><span class="pill">About 45–70 minutes</span></div><button class="btn" id="beginBtn">Continue guided session</button></div>
-<div class="card rhythm"><div><h3 style="margin-top:0">Your progress</h3><div class="stats"><div class="stat"><strong id="doneCount">0</strong><span>lessons complete</span></div><div class="stat"><strong id="remainCount">35</strong><span>remaining</span></div><div class="stat"><strong id="stageCount">0</strong><span>stages completed</span></div><div class="stat"><strong id="confidenceText">—</strong><span>latest confidence</span></div></div><div class="bar"><span id="progressBar"></span></div></div><p style="color:var(--muted);line-height:1.55;margin-bottom:0">The companion takes you through one small action at a time. You do not need to design the session yourself.</p></div>
-</section>
-<div class="sectionHead"><div><h3>Your course</h3><p>Open any day, or simply continue from the next unfinished session.</p></div></div>
-<div class="journey" id="journey"></div>
-</div>
+<main class="shell main" id="main">
+  <div class="home" id="home">
+    <section class="next card" aria-labelledby="homeTitle">
+      <div class="lessonTag"><span class="phase" id="homePhase"></span><span id="homeDay"></span><span id="homeDate"></span></div>
+      <h2 id="homeTitle"></h2>
+      <p class="homePurpose" id="homeFocus"></p>
+      <div class="homeMeta"><span id="homeTime"></span><span id="homeSaved"></span></div>
+      <div class="outcome"><p class="eyebrow">TODAY’S OBSERVABLE OUTCOME</p><p id="homeOutcome"></p></div>
+      <button class="btn primaryAction" id="beginBtn" type="button">Start lesson</button>
+    </section>
 
-<div class="session" id="session">
-<div class="sessionTop"><div><div class="stageLabel" id="sessionPhase"></div><h2 id="sessionTitle"></h2><p id="sessionFocus"></p></div><button class="btn secondary" id="exitBtn">Back to course</button></div>
-<div class="stageRail" id="stageRail"></div>
-<div class="card stageCard" id="stageCard"></div>
-</div>
-</div>
-<div class="toast" id="toast"></div>
+    <section class="homeGrid">
+      <article class="card pathCard">
+        <p class="eyebrow">TODAY’S PATH</p>
+        <ol id="todayPath"></ol>
+      </article>
+      <article class="card progressCard">
+        <p class="eyebrow">COURSE POSITION</p>
+        <p class="progressSentence"><strong id="doneCount">0</strong> complete · <strong id="remainCount">35</strong> remaining</p>
+        <div class="bar"><span id="progressBar"></span></div>
+        <p class="quiet">No streaks and no penalties. Return to the exact action where you stopped.</p>
+      </article>
+    </section>
+
+    <section class="reviewStrip" aria-labelledby="reviewHeading">
+      <div><p class="eyebrow">SPACED REVIEW</p><h3 id="reviewHeading">Signs that will return</h3></div>
+      <div id="reviewSummary"></div>
+    </section>
+
+    <section class="courseSection" aria-labelledby="courseHeading">
+      <div class="sectionHead"><div><p class="eyebrow">35-DAY COURSE</p><h3 id="courseHeading">Course map</h3><p>Open this only when you want the wider view. Future days stay grouped by phase.</p></div></div>
+      <div class="journey" id="journey"></div>
+    </section>
+  </div>
+
+  <div class="session" id="session">
+    <div class="sessionTop">
+      <div><div class="stageLabel" id="sessionPhase"></div><h2 id="sessionTitle"></h2><p id="sessionFocus"></p></div>
+      <button class="btn secondary" id="exitBtn" type="button">Save and leave lesson</button>
+    </div>
+    <nav class="stageRail" id="stageRail" aria-label="Lesson steps"></nav>
+    <article class="card stageCard" id="stageCard" aria-live="polite"></article>
+  </div>
+</main>
+<div class="toast" id="toast" aria-live="polite"></div>
 <script src="course.js"></script>
 <script src="app.js"></script>
 </body>
