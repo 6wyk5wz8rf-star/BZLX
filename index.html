@@ -6,13 +6,13 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
-    <meta name="theme-color" content="#102f2c" />
+    <meta name="theme-color" content="#343a70" />
     <meta
       name="description"
-      content="A calm, guided 35-day British Sign Language learning companion."
+      content="A calm, guided 36-day British Sign Language classroom-readiness companion."
     />
     <title>BSL Learner Companion</title>
-    <link rel="stylesheet" href="style.css?v=8" />
+    <link rel="stylesheet" href="style.css?v=10" />
   </head>
   <body>
     <a class="skipLink" href="#main">Skip to learning</a>
@@ -25,7 +25,7 @@
         </span>
       </div>
       <details class="courseMenu">
-        <summary><span aria-hidden="true">•••</span> Course</summary>
+        <summary><span aria-hidden="true">•••</span> Options</summary>
         <div class="menuPanel">
           <button class="btn secondary" id="moveDayBtn" type="button">
             Move today’s lesson forward
@@ -44,86 +44,119 @@
     </header>
 
     <main class="shell main" id="main">
+      <nav class="primaryNav" id="primaryNav" aria-label="Primary">
+        <button class="primaryNavButton active" type="button" data-view="today" aria-current="page">Today</button>
+        <button class="primaryNavButton" type="button" data-view="course">Course</button>
+        <button class="primaryNavButton" type="button" data-view="progress">Progress</button>
+      </nav>
       <div class="home" id="home">
-        <section class="next card" aria-labelledby="homeTitle">
-          <div class="nextInner">
-            <div class="nextCopy">
-              <div class="lessonTag">
-                <span class="phase" id="homePhase"></span><span id="homeDay"></span
-                ><span id="homeDate"></span>
+        <section class="appView active" id="todayView" data-view-panel="today">
+          <section class="next card" aria-labelledby="homeTitle">
+            <div class="nextInner">
+              <div class="nextCopy">
+                <div class="lessonTag">
+                  <span class="phase" id="homePhase"></span><span id="homeDay"></span
+                  ><span id="homeDate"></span>
+                </div>
+                <p class="heroKicker">YOUR NEXT GUIDED LESSON</p>
+                <h2 id="homeTitle"></h2>
+                <p class="homePurpose" id="homeFocus"></p>
+                <div class="homeMeta">
+                  <span id="homeTime"></span><span id="homeSaved"></span>
+                </div>
+                <button class="btn primaryAction" id="beginBtn" type="button">
+                  Start lesson
+                </button>
               </div>
-              <p class="heroKicker">YOUR NEXT GUIDED LESSON</p>
-              <h2 id="homeTitle"></h2>
-              <p class="homePurpose" id="homeFocus"></p>
-              <div class="homeMeta">
-                <span id="homeTime"></span><span id="homeSaved"></span>
-              </div>
-              <button class="btn primaryAction" id="beginBtn" type="button">
-                Start lesson
-              </button>
+              <aside class="lessonCompass" aria-label="Today’s learning destination">
+                <div class="compassMark" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+                <p class="eyebrow">BY THE END</p>
+                <p id="homeOutcome"></p>
+                <small>The companion will lead each action. You do not need to manage the three-hour session.</small>
+              </aside>
             </div>
-            <aside class="lessonCompass" aria-label="Today’s learning destination">
-              <div class="compassMark" aria-hidden="true">
-                <span></span><span></span><span></span>
-              </div>
-              <p class="eyebrow">BY THE END</p>
-              <p id="homeOutcome"></p>
-              <small>The companion will lead each action. You do not need to plan the session.</small>
-            </aside>
-          </div>
-        </section>
+          </section>
 
-        <section class="contentUpdate" id="contentUpdate" hidden aria-live="polite">
-          <div>
-            <strong>Your completed days are safe.</strong>
-            <span>The active lesson has restarted at Understand because its teaching content and sign sequence have been substantially rebuilt.</span>
-          </div>
-          <button class="miniBtn" id="dismissUpdate" type="button">Understood</button>
-        </section>
-
-        <section class="homeGrid">
-          <article class="card pathCard">
-            <div class="cardIcon pathIcon" aria-hidden="true">→</div>
-            <p class="eyebrow">TODAY’S SESSION</p>
-            <h3>One thing at a time</h3>
-            <ol id="todayPath"></ol>
-          </article>
-          <article class="card progressCard">
-            <div class="cardIcon progressIcon" aria-hidden="true">◒</div>
-            <p class="eyebrow">COURSE POSITION</p>
-            <p class="progressSentence">
-              <strong id="doneCount">0</strong> complete ·
-              <strong id="remainCount">35</strong> remaining
-            </p>
-            <div class="bar"><span id="progressBar"></span></div>
-            <p class="quiet">
-              No streaks or penalties. The companion remembers the exact action
-              where you stopped.
-            </p>
-          </article>
-        </section>
-
-        <section class="reviewStrip card" aria-labelledby="reviewHeading">
-          <div>
-            <span class="reviewGlyph" aria-hidden="true">↺</span>
-            <div><p class="eyebrow">SPACED REVIEW</p>
-            <h3 id="reviewHeading">The app brings hesitant signs back</h3></div>
-          </div>
-          <div id="reviewSummary"></div>
-        </section>
-
-        <section class="courseSection" aria-labelledby="courseHeading">
-          <div class="sectionHead">
+          <section class="contentUpdate" id="contentUpdate" hidden aria-live="polite">
             <div>
-              <p class="eyebrow">THE WIDER JOURNEY</p>
-              <h3 id="courseHeading">35 calm, cumulative days</h3>
-              <p>
-                Open this only when you want the wider view. Future days stay
-                grouped by phase.
-              </p>
+              <strong>Your earlier evidence is safe.</strong>
+              <span>Earlier completion dates, notes, ratings and review evidence remain in the migration archive. Rebuilt lessons restart at Arrive so new three-hour classroom-readiness teaching is not falsely marked complete.</span>
             </div>
-          </div>
-          <div class="journey" id="journey"></div>
+            <button class="miniBtn" id="dismissUpdate" type="button">Understood</button>
+          </section>
+
+          <section class="homeGrid single">
+            <article class="card pathCard">
+              <div class="cardIcon pathIcon" aria-hidden="true">→</div>
+              <p class="eyebrow">TODAY’S SESSION</p>
+              <h3>One block at a time</h3>
+              <ol id="todayPath"></ol>
+              <p class="nextBreak" id="homeNextBreak"></p>
+            </article>
+          </section>
+
+          <section class="reviewStrip card" aria-labelledby="reviewHeading">
+            <div>
+              <span class="reviewGlyph" aria-hidden="true">↺</span>
+              <div><p class="eyebrow">SPACED REVIEW</p>
+              <h3 id="reviewHeading">The app brings fragile learning back</h3></div>
+            </div>
+            <div id="reviewSummary"></div>
+          </section>
+        </section>
+
+        <section class="appView" id="courseView" data-view-panel="course" hidden>
+          <section class="courseSection" aria-labelledby="courseHeading">
+            <div class="sectionHead">
+              <div>
+                <p class="eyebrow">THE WIDER JOURNEY</p>
+                <h2 id="courseHeading">36 calm, cumulative days</h2>
+                <p>Six phases of six days. Every sixth day retrieves, integrates and simulates the phase.</p>
+              </div>
+            </div>
+            <div class="journey" id="journey"></div>
+          </section>
+        </section>
+
+        <section class="appView" id="progressView" data-view-panel="progress" hidden>
+          <header class="viewHeader">
+            <p class="eyebrow">MEANINGFUL EVIDENCE</p>
+            <h2>Progress without false precision</h2>
+            <p>Recognition, production, classroom use, repair and Mum’s observation stay separate.</p>
+          </header>
+          <section class="progressLayout">
+            <article class="card progressCard">
+              <div class="cardIcon progressIcon" aria-hidden="true">◒</div>
+              <p class="eyebrow">COURSE POSITION</p>
+              <p class="progressSentence">
+                <strong id="doneCount">0</strong> complete ·
+                <strong id="remainCount">36</strong> remaining
+              </p>
+              <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="36" aria-valuenow="0"><span id="progressBar"></span></div>
+              <p class="quiet">No streaks, penalties or invented mastery score.</p>
+            </article>
+            <article class="card capabilityCard">
+              <p class="eyebrow">DEVELOPING ABILITIES</p>
+              <div id="abilitySummary"></div>
+            </article>
+            <article class="card capabilityCard">
+              <p class="eyebrow">DUE FOR REVIEW</p>
+              <div id="dueReviewList"></div>
+            </article>
+            <article class="card capabilityCard">
+              <p class="eyebrow">NEXT MILESTONE</p>
+              <div id="nextMilestone"></div>
+            </article>
+          </section>
+          <section class="card schoolNote">
+            <p class="eyebrow">OPTIONAL SCHOOL-CONFIRMED NOTE</p>
+            <label for="schoolVariantNote">Record a brief non-identifying note confirmed with the support team</label>
+            <textarea id="schoolVariantNote" maxlength="240" placeholder="Example: School version confirmed with support team."></textarea>
+            <small>Do not enter the child’s name, health information, support plan or school details.</small>
+          </section>
+          <p class="legacyEvidence" id="legacyEvidence" hidden></p>
         </section>
       </div>
 
@@ -135,8 +168,9 @@
             <p id="sessionFocus"></p>
           </div>
           <div class="sessionMeta">
-            <span id="sessionStepCount">Step 1 of 7</span>
+            <span id="sessionStepCount">Block 1 of 11</span>
             <span id="sessionTime"></span>
+            <span id="sessionNextBreak"></span>
           </div>
           <button class="btn exitLesson" id="exitBtn" type="button">
             Save and leave lesson
@@ -160,8 +194,8 @@
       </div>
     </main>
     <div class="toast" id="toast" aria-live="polite"></div>
-    <script src="course.js?v=8"></script>
-    <script src="knowledge.js?v=8"></script>
-    <script src="app.js?v=8"></script>
+    <script src="course.js?v=10"></script>
+    <script src="knowledge.js?v=10"></script>
+    <script src="app.js?v=10"></script>
   </body>
 </html>

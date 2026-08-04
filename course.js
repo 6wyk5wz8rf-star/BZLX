@@ -1170,3 +1170,648 @@ const COURSE = [
 COURSE.forEach((l) => {
   l.items = l.vocab.map((v) => ({ term: v, resource: signResource(v) }));
 });
+
+/*
+ * Classroom-readiness reconstruction (36 days)
+ *
+ * The original 35 authored lessons remain above as a migration/content source.
+ * This blueprint reorganises that work around the actual professional mission:
+ * becoming a more communicatively useful primary teacher while remaining an
+ * honest beginner who works with, rather than replaces, qualified support.
+ */
+const LEGACY_COURSE = COURSE.map((lesson) => ({
+  ...lesson,
+  vocab: [...lesson.vocab],
+  resources: [...lesson.resources],
+}));
+
+const READINESS_PHASES = [
+  "Connection & communication foundations",
+  "Classroom routines & basic needs",
+  "Learning interactions",
+  "Wellbeing, friendship & participation",
+  "BSL structure & teaching language",
+  "Real classroom integration",
+];
+
+const READINESS_PLAN = [
+  {
+    source: 1,
+    sources: [1],
+    title: "How visual communication works",
+    purpose: "Build an honest baseline and learn to notice attention, handshape, location, orientation, movement, face and signing space.",
+    vocab: ["hello"],
+  },
+  {
+    source: 5,
+    sources: [5, 6],
+    title: "Greeting and welcoming",
+    purpose: "Welcome a child directly, introduce yourself and create a clear beginning and ending to a short visual interaction.",
+    vocab: ["hello", "my name is", "name", "how are you", "thank you", "goodbye"],
+  },
+  {
+    source: 4,
+    sources: [2, 3, 4],
+    title: "Fingerspelling and names",
+    purpose: "Fingerspell your own name clearly, recognise short name patterns and ask for a missed name to be repeated.",
+    vocab: ["own-name fingerspelling", "again", "slower"],
+  },
+  {
+    source: 5,
+    sources: [5],
+    title: "Essential everyday responses",
+    purpose: "Use a small set of polite, high-utility responses inside real interactions rather than reciting an isolated list.",
+    vocab: ["yes", "no", "please", "thank you", "sorry", "ready"],
+  },
+  {
+    source: 30,
+    sources: [17, 30],
+    title: "Understanding and repair",
+    purpose: "Keep a conversation open when meaning is missed by asking for repetition, a slower pace or a visible demonstration.",
+    vocab: ["not understand", "again", "slower", "show me", "what", "which"],
+  },
+  {
+    source: 6,
+    sources: [1, 4, 5, 6, 30],
+    title: "First integrated encounter",
+    purpose: "Combine attention, greeting, introduction, a simple choice, deliberate misunderstanding, repair and a clear close.",
+    vocab: ["hello", "name", "ready", "not understand", "again", "goodbye"],
+  },
+  {
+    source: 7,
+    sources: [7, 18, 21, 22],
+    title: "People and places in school",
+    purpose: "Refer to the people and places most likely to matter in an ordinary primary-school interaction without building a bloated glossary.",
+    vocab: ["teacher", "friend", "school", "classroom", "toilet"],
+  },
+  {
+    source: 16,
+    sources: [16],
+    title: "Attention, readiness and turn-taking",
+    purpose: "Gain visual attention respectfully, check readiness and make classroom turns visibly clear.",
+    vocab: ["look", "wait", "ready", "your turn", "my turn", "stop"],
+  },
+  {
+    source: 16,
+    sources: [16],
+    title: "Core classroom instructions",
+    purpose: "Give short visual classroom instructions with attention, context, pauses and a genuine check of understanding.",
+    vocab: ["sit", "stand", "look", "go", "stop", "finished"],
+  },
+  {
+    source: 21,
+    sources: [16, 21],
+    title: "Equipment and organisation",
+    purpose: "Find, offer, locate and put away common classroom equipment using objects and signing space.",
+    vocab: ["book", "pencil", "scissors", "table", "show me", "where"],
+  },
+  {
+    source: 17,
+    sources: [17, 20],
+    title: "Needs and requests",
+    purpose: "Recognise and respond to common classroom needs while protecting dignity and privacy.",
+    vocab: ["help", "finished", "break", "drink", "toilet", "different"],
+  },
+  {
+    source: 32,
+    sources: [5, 16, 17, 21, 32],
+    title: "Classroom arrival simulation",
+    purpose: "Run a miniature school morning: greet, settle, organise equipment, gain attention, respond to help and move to the next activity.",
+    vocab: ["hello", "ready", "book", "look", "help", "finished"],
+  },
+  {
+    source: 8,
+    sources: [8, 9],
+    title: "Numbers and quantity",
+    purpose: "Recognise and produce functional classroom numbers for quantities, pages, groups, turns and simple counting.",
+    vocab: ["numbers 0–10", "20"],
+  },
+  {
+    source: 14,
+    sources: [14, 15],
+    title: "Days, time and timetable language",
+    purpose: "Use time-first organisation and a small set of timetable markers to make classroom sequence clear.",
+    vocab: ["today", "tomorrow", "Monday", "Tuesday", "first", "next"],
+  },
+  {
+    source: 21,
+    sources: [10, 21, 23],
+    title: "Description and position",
+    purpose: "Describe visible colour, size, sameness, difference and location using real classroom objects and stable spatial anchors.",
+    vocab: ["red", "blue", "circle", "square", "tall", "short"],
+  },
+  {
+    source: 13,
+    sources: [13],
+    title: "Asking questions",
+    purpose: "Make beginner questions visibly recognisable through appropriate question signs, gaze, head position and non-manual marking.",
+    vocab: ["who", "what", "where", "which", "why", "how"],
+  },
+  {
+    source: 19,
+    sources: [19],
+    title: "Praise, effort and feedback",
+    purpose: "Give specific praise, invite another attempt and communicate useful instructional feedback without empty praise spam.",
+    vocab: ["good", "well done", "try", "try again", "correct", "different"],
+  },
+  {
+    source: 32,
+    sources: [13, 16, 17, 19, 32],
+    title: "Mini-lesson simulation",
+    purpose: "Gain attention, model a small task, ask a question, check understanding, give feedback and close the task.",
+    vocab: ["look", "question", "show me", "understand", "try again", "finished"],
+  },
+  {
+    source: 12,
+    sources: [12],
+    title: "Feelings and emotional check-in",
+    purpose: "Ask about wellbeing privately and recognise a small useful set of feeling responses without pressuring a public answer.",
+    vocab: ["happy", "sad", "worried", "tired", "fine", "how are you"],
+  },
+  {
+    source: 20,
+    sources: [12, 17, 20, 22],
+    title: "Health and basic physical needs",
+    purpose: "Recognise simple health and physical-need meanings while knowing when beginner communication must stop and qualified support must take over.",
+    vocab: ["pain", "ill", "tired", "hungry", "thirsty", "help"],
+  },
+  {
+    source: 25,
+    sources: [7, 12, 25],
+    title: "Friendship and joining in",
+    purpose: "Invite participation, join an activity and make turns visible in classroom and playground interaction.",
+    vocab: ["friend", "play", "join", "together", "your turn", "my turn"],
+  },
+  {
+    source: 30,
+    sources: [17, 30, 33],
+    title: "Boundaries and seeking support",
+    purpose: "Recognise a basic boundary or support request while remaining explicit that safeguarding communication needs school procedures and qualified support.",
+    vocab: ["stop", "worried", "help", "teacher", "tell", "wait"],
+  },
+  {
+    source: 32,
+    sources: [7, 19, 25, 32],
+    title: "Group work and contribution",
+    purpose: "Keep a child visually included while choosing, sharing, taking turns, showing an idea and responding to difference.",
+    vocab: ["choose", "share", "your turn", "my turn", "different", "together"],
+  },
+  {
+    source: 31,
+    sources: [17, 21, 24, 30, 31],
+    title: "Playground and lunchtime simulation",
+    purpose: "Link joining in, turn-taking, a small disagreement, help, wellbeing and the transition back to class.",
+    vocab: ["play", "join", "your turn", "stop", "help", "go"],
+  },
+  {
+    source: 27,
+    sources: [27, 28],
+    title: "Beginner BSL grammar",
+    purpose: "Organise meaning visually through topic, comment, time, space, direction and non-manual features instead of signing English word for word.",
+    vocab: ["today", "teacher", "book", "where", "not understand", "different"],
+  },
+  {
+    source: 23,
+    sources: [21, 23, 31],
+    title: "Describing people, objects and actions",
+    purpose: "Establish a referent, locate it consistently and show useful features or movement without repeatedly naming it.",
+    vocab: ["person", "book", "table", "go", "tall", "where"],
+  },
+  {
+    source: 15,
+    sources: [14, 15, 16],
+    title: "Sequencing and instructions",
+    purpose: "Use clear visual boundaries to organise first, next, before, after and finish in a short classroom process.",
+    vocab: ["first", "next", "before", "after", "finish", "show me"],
+  },
+  {
+    source: 13,
+    sources: [13, 19, 27, 32],
+    title: "Thinking and reasoning language",
+    purpose: "Use a tightly selected set of classroom intentions for choosing, comparing, showing thinking and explaining a visible reason.",
+    vocab: ["choose", "same", "different", "why", "think", "know"],
+  },
+  {
+    source: 30,
+    sources: [1, 17, 30, 33],
+    title: "Communication breakdown and variation",
+    purpose: "Repair meaning through repetition, slower signing, pointing, showing and fingerspelling while treating genuine regional or personal variation respectfully.",
+    vocab: ["again", "slower", "not understand", "which", "show me", "different"],
+  },
+  {
+    source: 32,
+    sources: [13, 16, 17, 19, 27, 30, 32],
+    title: "Teaching and checking understanding",
+    purpose: "Teach one short sequence with attention, modelling, thinking time, a visible check, repair, feedback and transition.",
+    vocab: ["attention", "look", "show me", "question", "understand", "finished"],
+  },
+  {
+    source: 33,
+    sources: [30, 32, 33],
+    title: "Working with the child’s support",
+    purpose: "Address the child directly, prepare vocabulary with their support team, allow processing time and know when to defer.",
+    vocab: ["teacher", "child", "look", "wait", "help", "understand"],
+  },
+  {
+    source: 33,
+    sources: [16, 33],
+    title: "Creating a visually accessible classroom",
+    purpose: "Improve sightlines, lighting, seating, board use, transitions and speaker visibility before expecting language skill to compensate.",
+    vocab: ["attention", "face", "look", "wait", "classroom", "ready"],
+  },
+  {
+    source: 31,
+    sources: [13, 14, 31],
+    title: "Reading, stories and classroom talk",
+    purpose: "Use a small visual interaction around a book: establish a story, track a character, sequence events, predict and ask why.",
+    vocab: ["book", "story", "character", "beginning", "end", "predict"],
+  },
+  {
+    source: 18,
+    sources: [18, 19, 32],
+    title: "Subject-specific classroom language",
+    purpose: "Prepare a small repeated set of high-value language for likely subjects and confirm school-specific variants with the support team.",
+    vocab: ["maths", "reading", "writing", "science", "art", "PE"],
+  },
+  {
+    source: 34,
+    sources: [5, 14, 16, 17, 19, 23, 30, 32, 33, 34],
+    title: "Full school-day simulation",
+    purpose: "Rehearse a connected day from the classroom door to goodbye, including learning, group participation, wellbeing and a repaired misunderstanding.",
+    vocab: ["hello", "today", "ready", "look", "help", "not understand"],
+  },
+  {
+    source: 35,
+    sources: [34, 35],
+    title: "Readiness showcase and continuation plan",
+    purpose: "Compare with the Day 1 baseline, identify secure and fragile communication, rehearse professional boundaries and choose the next 30 days of learning.",
+    vocab: ["hello", "teacher", "look", "question", "help", "again"],
+  },
+];
+
+/* Performance language is authored for the new classroom-readiness identity.
+ * It must not inherit an attractive but unrelated task from the former
+ * general-interest course. Honest attempts unlock progress; these observable
+ * targets decide what returns for review. */
+const READINESS_PERFORMANCE = {
+  1: {
+    drill: "Watch the verified HELLO model once for the whole meaning, then twice more to identify starting location, handshape or orientation, movement and what the face or body contributes. Record one uncoached baseline attempt; do not rate it as correct.",
+    use: "From three classroom positions, check whether a child could see your face and hands. Rehearse gaining visual attention in the agreed way, waiting for gaze, then offering one short visible message.",
+    review: "Compare the baseline with the model and record one visible strength, one exact feature to revisit and one classroom access change. Do not infer BSL accuracy from confidence.",
+    mastery: "Complete the baseline, identify at least four observable features in the model, and demonstrate a clear attention-before-message boundary from two positions.",
+  },
+  2: {
+    drill: "Using only today’s verified models, rehearse three short openings and closings. Each attempt must include established attention, a greeting, space for the other person to respond and a visibly separate ending.",
+    use: "Welcome Mum at a doorway, introduce yourself, invite a name response and close the exchange without speaking over the signed attempt.",
+    review: "Check whether attention came first, the social question was visibly marked from its model, the other person had response time, and the close could not be mistaken for the greeting.",
+    mastery: "Complete two unprompted doorway exchanges in which Mum can identify the greeting, invitation to respond and closing; queue any uncertain form for review rather than guessing.",
+  },
+  3: {
+    drill: "Use the UCL two-handed alphabet in small groups, then fingerspell your own name and fixed non-identifying sample names. Practise receiving first and last letters, then ask for repetition when a name is missed.",
+    use: "Introduce yourself, fingerspell your own name clearly, receive a short sample name from Mum and use a verified repair request if any part is unclear.",
+    review: "Check one consistent dominant hand, compact signing space, exact contact points, readable transitions and whole-word rhythm. Do not mouth individual letter names.",
+    mastery: "Fingerspell your own name readably twice, recognise at least three of five slow sample names, and complete one calm repetition request without restarting the whole interaction.",
+  },
+  4: {
+    drill: "Mum presents six brief social or readiness situations. Select and produce the verified response that fits the intended meaning, then compare the exact sense with the model before the next situation.",
+    use: "Complete a short readiness-and-choice exchange using polite responses in context; do not recite the items as a list or construct an unverified phrase.",
+    review: "Check that each response matched the situation and intended sense, was directed to the other person and left room for the interaction to continue.",
+    mastery: "Attempt all six situations, produce at least four responses independently, and place every hesitant or sense-ambiguous item into the next review queue.",
+  },
+  5: {
+    drill: "Rehearse three controlled breakdowns: a missed sign, signing that is too fast and an unclear meaning. For each, choose one verified repair, wait for the response and confirm whether meaning was recovered.",
+    use: "During a short classroom instruction from Mum, state honestly when you do not understand and request repetition, a slower model or a demonstration that matches the actual gap.",
+    review: "Check that you stayed visually engaged, named the specific repair needed, did not apologise for ordinary misunderstanding and confirmed the repaired meaning.",
+    mastery: "Complete all three repair loops without guessing or switching automatically to speech; Mum can identify what changed after each request.",
+  },
+  6: {
+    drill: "Run the encounter in seven observable beats: gain attention, greet, introduce yourself, offer a simple choice, encounter one planned misunderstanding, repair it and close. Use only forms already modelled.",
+    use: "Perform the complete encounter with Mum once without prompts, review one weak beat, then repeat the encounter with that one change visible.",
+    review: "Mark recognition, production, interaction and repair separately. Identify where Mum had genuine response space and whether the second attempt improved the chosen beat.",
+    mastery: "Complete both connected attempts, make one visible improvement and recover from the planned breakdown without pretending to understand.",
+  },
+  7: {
+    drill: "Place non-identifying person and school-place cards in stable locations. Establish each referent, hide the labels and answer five who-or-where prompts using verified forms and spatial reference.",
+    use: "Guide Mum to two relevant school people or places on a simple map, then ask or answer one location question. Treat school-confirmed variants as local, not universal.",
+    review: "Check that referent locations stayed fixed, pointing and gaze matched them, and no child name or identifying information was entered or recorded.",
+    mastery: "Mum reconstructs at least four of five people or place relationships, and you repair any unclear reference without moving the original anchors.",
+  },
+  8: {
+    drill: "Practise four cycles of agreed attention signal, wait for gaze, readiness check and visible turn handover. Alternate your turn and Mum’s turn so both production and reception are required.",
+    use: "Lead a one-minute turn-taking activity in which no instruction begins before visual attention and Mum always knows whose turn is active.",
+    review: "Check that the attention method was respectful and agreed, waiting time was real, turn boundaries did not overlap and STOP was treated as an immediate boundary.",
+    mastery: "Complete four clear handovers with no premature instruction; Mum correctly identifies the active turn every time.",
+  },
+  9: {
+    drill: "Give three familiar classroom actions one at a time using verified models, visible context and a full pause after each. Mum acts only after the signed or visual instruction has ended.",
+    use: "Teach a short transition such as stand, move and sit, regaining attention before the sequence and repairing only the step Mum misses.",
+    review: "Check face-and-hand visibility, one instruction per boundary, adequate processing time and whether the response demonstrated understanding rather than merely agreement.",
+    mastery: "Mum completes three intended actions from the signed or visual sequence; if one fails, remodel that part and make the second attempt visibly different.",
+  },
+  10: {
+    drill: "Arrange four real classroom objects. Use verified object and question models plus stable pointing to ask Mum to find, show or locate one item, changing the layout between rounds.",
+    use: "Run a realistic equipment routine: identify what is needed, locate it, offer or receive it and show where it belongs, without relying on spoken English.",
+    review: "Check that the exact object sense was clear, location anchors stayed fixed, hands did not obscure the object and each action had a visible completion point.",
+    mastery: "Mum identifies or places four of five prompted objects correctly, and one changed layout is handled without repeating a memorised spatial pattern.",
+  },
+  11: {
+    drill: "Use low-stakes scenario cards for help, finished, break, drink, toilet and different. Receive the request, acknowledge it and show the appropriate next safe action.",
+    use: "Respond privately to four classroom-need scenarios. For any medical, safeguarding or otherwise high-stakes scenario, stop the novice-BSL exchange and bring in the agreed qualified support.",
+    review: "Check direct address, dignity, privacy, response time, exact lexical sense and whether the action matched the request rather than merely repeating its label.",
+    mastery: "Respond appropriately to all four scenarios and identify every point where beginner communication is insufficient and school procedure or qualified support is required.",
+  },
+  12: {
+    drill: "Rehearse a miniature arrival in seven beats: doorway greeting, readiness, settling, finding equipment, attention, one routine instruction and a request or transition. Add one planned misunderstanding.",
+    use: "Run the full school-morning simulation with Mum using real equipment and a visible timetable, then repeat only the least clear transition.",
+    review: "Score greeting, organisation, instruction, response, transition and repair as separate observable abilities; do not award completion for vocabulary recall alone.",
+    mastery: "Complete the connected arrival, respond to one need, repair the planned misunderstanding and improve the selected transition on the second attempt.",
+  },
+  13: {
+    drill: "Using one selected documented regional number system, produce shuffled classroom quantities and then receive a separate shuffled set from verified video. Always attach a visible context such as pages, groups or turns.",
+    use: "Communicate a page number, group size, turn count and simple class quantity while the written numeral remains available as an additional access route.",
+    review: "Check palm orientation, selected fingers, movement, boundaries between numbers and consistency of the chosen regional system. Record production and reception separately.",
+    mastery: "Produce eight of ten selected values clearly in context and identify at least six of eight received values; weaker values enter spaced review.",
+  },
+  14: {
+    drill: "Build a four-event timetable with cards. Establish the relevant day or period, indicate each event in a stable sequence, hide the labels and reconstruct it after a short delay.",
+    use: "Show Mum today’s short classroom path and one change to it, using the visible timetable throughout rather than relying on a memorised signed list.",
+    review: "Check that time or context was established, positions remained stable, first and next boundaries were readable and no single ordering pattern was claimed as universal BSL grammar.",
+    mastery: "Mum reconstructs all four events and identifies the changed event; you can repeat the sequence after a delay without the written sentence prompt.",
+  },
+  15: {
+    drill: "Arrange contrasting real objects. Describe one observable feature and one location at a time, then ask Mum to select or position the matching object before roles reverse.",
+    use: "Guide a classroom sorting task using verified colour, shape and size forms with stable spatial anchors.",
+    review: "Check that each feature remained attached to the intended object, location was shown in space, ambiguous English senses were excluded and descriptions stayed neutral.",
+    mastery: "Mum selects or places four of five objects correctly, and you successfully interpret four of five descriptions when roles reverse.",
+  },
+  16: {
+    drill: "From verified models, rehearse one closed question and three information questions in real classroom situations. Hold the non-manual pattern across the question and wait for a genuine answer.",
+    use: "Ask Mum four useful classroom questions about a person, object, place, choice or reason, responding to her answer instead of delivering a memorised list.",
+    review: "Check that the viewer could identify what kind of answer was invited, gaze remained with the addressee and question marking was learned from the model rather than inferred from English punctuation.",
+    mastery: "Mum identifies the expected answer type for all four questions and answers at least three without needing the English prompt.",
+  },
+  17: {
+    drill: "Practise three distinct feedback functions from verified models: acknowledge a specific success, invite another attempt and mark a clear finish. After each, show the next action or response space.",
+    use: "Coach Mum through a simple task, giving one specific positive response and one calm retry prompt that leads to a visibly changed attempt.",
+    review: "Check that facial tone matched the function, praise referred to an observable action, correction showed what to do next and no unverified English phrase was assembled sign by sign.",
+    mastery: "Mum correctly classifies all three feedback functions and changes the intended action after the retry prompt.",
+  },
+  18: {
+    drill: "Teach one three-step primary task: gain attention, state the small outcome, model the whole task, pause, ask one question, invite action, check by demonstration, give feedback and close.",
+    use: "Deliver the complete mini-lesson to Mum with real materials. Introduce one controlled misunderstanding and repair only the missing step.",
+    review: "Check attention, model visibility, separation of watching and doing, thinking time, evidence of understanding, focused repair and a clear end boundary.",
+    mastery: "Mum completes the task without spoken narration carrying it, answers the question, and changes the misunderstood step after one focused repair.",
+  },
+  19: {
+    drill: "Practise three model-backed feeling responses, then alternate asking and answering. Hide the models before each attempt and leave visible processing time.",
+    use: "Mum selects a private classroom situation. Ask about wellbeing using the verified model, respond calmly to one feeling, and preserve the pupil’s choice not to answer.",
+    review: "Compare language form with the verified models. Mum rates whether the interaction was visible, private and non-pressuring—not whether the BSL was formally correct.",
+    mastery: "Complete three private check-in role-plays: gain attention, ask once, allow five quiet seconds, accept either a response or a refusal, and close without pressing for detail.",
+  },
+  20: {
+    drill: "Rehearse responses to three everyday needs and two uncertainty cases. After each attempt, state whether the meaning is clear enough to act or requires repair and qualified confirmation.",
+    use: "Role-play one routine physical need and one unclear health concern. Address the pupil directly, use a simple model-backed response, then follow school procedures or involve appropriate support.",
+    review: "Check the response against the verified model, then check direct address, privacy and escalation. Mum must not rate medical meaning as confirmed merely because the response looked fluent.",
+    mastery: "Respond safely to four scenarios by acknowledging what is understood and choosing continue, repair or qualified help appropriately. Never diagnose or rely on beginner BSL for urgent or complex medical communication.",
+  },
+  21: {
+    drill: "Practise four short model-backed exchanges around joining, playing and turns. Alternate roles and remove the written cue before the final round.",
+    use: "Invite a partner to join a classroom or playground activity, make two turns visible and accept either participation or refusal without pressure.",
+    review: "Check the signed forms against their models. Mum rates whether the invitation, turn changes, waiting time and acceptance of the response were clear.",
+    mastery: "Complete two four-turn interactions containing an invitation, a response, visible turn-taking and a respectful close; recover once if a form is forgotten.",
+  },
+  22: {
+    drill: "Sort six prompts into routine repair, immediate support or safeguarding procedure. Rehearse only the brief model-backed acknowledgement needed before involving the correct adult.",
+    use: "Respond to a neutral prompt in which a pupil indicates a boundary, worry or need for help. Acknowledge directly, do not investigate through novice BSL, and move promptly to the school’s safeguarding route.",
+    review: "Check that the response was calm, direct and non-leading, with no promise of secrecy or pretence of understanding. Mum assesses the route taken, not the accuracy of a disclosure.",
+    mastery: "Choose the safe professional action in four boundary or support scenarios and demonstrate one brief acknowledgement plus repair. Any safeguarding concern leads to school procedure and appropriate qualified support.",
+  },
+  23: {
+    drill: "Rehearse a small choosing-and-sharing task from each seating position. Practise gaining attention, allocating a turn, asking to see an idea and responding to a different choice using verified models.",
+    use: "Guide the task while addressing the pupil directly, keeping materials below the signing space, allowing one speaker at a time and including the pupil’s contribution.",
+    review: "Check sightlines, direct address, turn separation, processing time and whether the contribution changed the interaction. Compare language form with the models.",
+    mastery: "Run a two-minute three-person task in which every participant can see the speaker, each turn is visibly allocated and a differing idea is acknowledged.",
+  },
+  24: {
+    drill: "Practise each playground-to-class beat separately with its verified models, join them in pairs, then perform the full sequence after removing the written prompts.",
+    use: "Perform a connected playground-to-class scenario and distinguish a routine disagreement from a concern that requires staff or safeguarding support.",
+    review: "Check that turns and transitions were readable, the boundary was respected and repair succeeded. Confirm that any serious concern was escalated rather than handled through beginner BSL.",
+    mastery: "Complete six linked beats—invitation, joining, turn, small disagreement, help or repair, and return transition—without losing the pupil’s visual access.",
+  },
+  25: {
+    drill: "Watch each Deaf-signed or qualified-teacher model once for overall meaning and again for one organising feature. Hide it, reproduce the meaning, then compare that feature before repeating.",
+    use: "Communicate three short meanings from pictures and classroom context, using only structures demonstrated by verified models rather than assembling English words into a sign sequence.",
+    review: "Compare organisation and non-manual features with the verified model; Mum may rate whether the intended situation was understandable but cannot certify grammatical accuracy.",
+    mastery: "For three verified models, identify how context, time, reference, space or non-manual features organise meaning, then reproduce the model-backed meanings after English wording is removed.",
+  },
+  26: {
+    drill: "Set up two objects or fictional referents in distinct locations, reset, and repeat in reversed locations. Add one demonstrated feature or movement only after the reference remains stable.",
+    use: "Establish two objects or fictional people, describe one using respectful non-sensitive features, and show where it is or how it moves.",
+    review: "Check reference location, movement path and relevant non-manual features against the models. Remove vague, stereotyped or unnecessarily personal description.",
+    mastery: "A partner identifies three of four classroom objects or fictional referents from model-backed descriptions, with location and reference remaining stable.",
+  },
+  27: {
+    drill: "Practise the stages of a familiar classroom process separately using verified sequencing models, then connect them without reading an English sentence. Repeat once while keeping face and hands visible.",
+    use: "Teach one real classroom routine with objects: gain attention, show the outcome, present each stage with clear visual boundaries, then check by asking the partner to demonstrate.",
+    review: "Check sequence boundaries, pace, sightlines and whether understanding was demonstrated rather than merely claimed. Compare each signed form with its source model.",
+    mastery: "A partner follows a familiar three-stage classroom process twice from the visual demonstration and signed sequence; the second attempt includes a successful clarification.",
+  },
+  28: {
+    drill: "Use real objects to practise one choice, one same-or-different comparison and one reason prompt. Watch the verified models, hide them, respond, then compare.",
+    use: "Ask a partner to choose between two classroom objects, compare them and show their thinking. Allow adequate time and do not demand a complex signed explanation from a beginner pupil.",
+    review: "Check question-related non-manual features and reasoning language against the models, plus processing time and whether the task itself made the comparison clear.",
+    mastery: "Complete three short exchanges covering choice, comparison and a visible reason; the partner can identify the choice and relationship in at least two.",
+  },
+  29: {
+    drill: "Run four breakdowns: missed message, unfamiliar sign, fast fingerspelling and unclear reference. Use a different model-backed repair strategy each time.",
+    use: "During a planned misunderstanding, indicate that meaning is unclear, request repetition, slower signing, fingerspelling or showing, then confirm the recovered meaning without labelling a variant wrong.",
+    review: "Check that you did not pretend to understand or abandon the exchange. Record a school-used variant only after support-team confirmation and without pupil-identifying data.",
+    mastery: "Repair three different breakdowns, confirm the intended meaning and remain in the interaction. State how an unfamiliar school or regional variant would be confirmed respectfully.",
+  },
+  30: {
+    drill: "Rehearse attention, model, pause, question or check, repair, feedback and transition as separate beats; then join them without looking away while communicating.",
+    use: "Teach a short primary task using verified signs, real objects and visual demonstration. Address the pupil directly and involve existing support when the message exceeds beginner competence.",
+    review: "Check visibility, processing time, direct address and whether understanding was shown in action rather than through a yes-or-no answer. Compare signed forms with verified models.",
+    mastery: "A partner completes a three-stage task after you gain attention, model it, wait, check through demonstration and repair one deliberate misunderstanding.",
+  },
+  31: {
+    drill: "Practise addressing the pupil while Mum represents only the support adult’s position: gain attention, communicate directly, pause according to agreed practice and seek clarification without transferring the relationship.",
+    use: "Rehearse a planning conversation with the support team covering communication preferences, three upcoming terms, role boundaries, processing time and when the teacher should defer.",
+    review: "Check direct address, agreed roles, preparation and appropriate deferral. Do not assume every support adult interprets, and do not store the child’s name, needs or plan in the app.",
+    mastery: "Choose an appropriate response in four support-role scenarios and complete one direct teacher-pupil interaction with an agreed pause and repair.",
+  },
+  32: {
+    drill: "From the pupil’s likely viewing position, test face-and-hand visibility while standing, using the board and handling materials. Repeat after correcting each obstruction.",
+    use: "Improve one real teaching area for sightlines, lighting, seating, board visibility and transitions, then rehearse gaining attention before giving an instruction.",
+    review: "Check that communication never continues while facing away or walking off, one speaker is visible at a time and visual transitions are clear. Do not claim these changes replace individual access arrangements.",
+    mastery: "Complete an empty-classroom access audit, make three concrete changes and deliver one two-minute segment that remains visible from the pupil’s viewing position.",
+  },
+  33: {
+    drill: "Practise showing a page, restoring eye contact, signing one model-backed story meaning and waiting for a response. Repeat with stable character reference across three pages.",
+    use: "Use a real picture book to establish a character, sequence three events and invite one prediction, keeping the book and signer visible in turn.",
+    review: "Check book placement, character reference, event boundaries, question features and response time against the models. Do not communicate while looking down at the page.",
+    mastery: "A partner reconstructs three story events and recognises the prediction prompt after a short model-backed book interaction; one misunderstanding is repaired.",
+  },
+  34: {
+    drill: "For each selected subject meaning, inspect its verified model, note one observable feature, reproduce it from memory and use it with the actual object or visual task.",
+    use: "Choose one upcoming subject and rehearse four repeatedly useful meanings within a real task. Confirm local or school-specific forms with the support team before classroom use.",
+    review: "Check source status, consistency, visual demonstration and repair. Do not invent a technical sign, treat an English subject label as a translation or record identifying school information.",
+    mastery: "Mark every core form as verified or awaiting school confirmation, then deliver a three-minute visual task using only the verified set.",
+  },
+  35: {
+    drill: "Practise each school-day station once without help, reveal its verified models, rate recognition, production, classroom use and repair separately, then repeat only the weakest stations.",
+    use: "Run a connected simulation covering door greeting, timetable or transition, a learning task, group participation, break-time wellbeing, misunderstanding and end-of-day close.",
+    review: "Mum rates observable communication and interaction, not certification-level accuracy. Check professional boundaries separately and retain every fragile item for Day 36.",
+    mastery: "Attempt all six school-day stations, follow the safe professional route in the high-stakes boundary check and improve at least three initially fragile performances; no perfect score is required.",
+  },
+  36: {
+    drill: "Repeat the Day 1 baseline under the same conditions, complete final scenarios before revealing models, compare evidence and repeat two fragile moments after focused correction.",
+    use: "Deliver a readiness showcase containing a greeting, routine instruction, question, understanding check, feedback, repair and respectful use of existing support, then choose three first-week classroom actions.",
+    review: "Compare Day 1 and Day 36 evidence without claiming fluency or interpreting competence. Mum’s ratings guide practice; verified models and qualified Deaf-led teaching remain the standard.",
+    mastery: "Complete cumulative retrieval, connected scenarios and Mum review; identify secure and fragile communication; state high-stakes boundaries; and create a first-week plan plus a dated 30-day continuation plan.",
+  },
+};
+
+const READINESS_CONTEXT = {
+  4: {
+    culture: "Politeness and everyday responses belong to interaction, facial tone and context; they are not a list of English equivalents. This remains beginner classroom connection, not interpreting or a replacement for agreed support.",
+    errors: ["Reciting responses with no situation", "Using one form for several different English senses", "Continuing before the other person can respond"],
+    stuck: "Choose two situations only: a readiness answer and a polite acknowledgement. Watch the exact models, close them and respond to Mum’s situation rather than the written word.",
+    school: "Use one already-modelled response in a familiar routine and keep the child’s established communication choices available.",
+    reflect: "Which response was selected by meaning rather than by the English label?",
+  },
+  7: {
+    culture: "People, places, pointing and signing space depend on shared context. Never store a pupil’s name or treat a school-used variant as universal. This remains beginner classroom connection, not interpreting.",
+    errors: ["Moving a person or place after establishing it", "Using vague centre-space pointing for every referent", "Entering identifiable pupil or school information"],
+    stuck: "Use one person card and one place card. Establish each in a different location, point back to both, then add only one question.",
+    school: "Rehearse with a non-identifying classroom map and confirm any local place signs with the support team.",
+    reflect: "Could Mum reconstruct both the person and place without hearing a name?",
+  },
+  11: {
+    culture: "Routine requests deserve direct, private and dignified responses. A familiar sign never authorises a novice to handle medical, safeguarding or complex pastoral communication alone.",
+    errors: ["Repeating the request without acting", "Making a private need public", "Treating a guessed meaning as safe confirmation"],
+    stuck: "Use HELP and one low-stakes request. Acknowledge it, show the next action, then decide whether qualified support is needed before adding another scenario.",
+    school: "Agree a small set of routine request signs and response routes with the child’s support team before classroom use.",
+    reflect: "Did your response protect dignity and lead to a safe next action?",
+  },
+  12: {
+    culture: "A welcoming routine should build the teacher-child relationship directly while working with—not around—the child’s existing support and access arrangements.",
+    errors: ["Greeting the support adult instead of the child", "Giving instructions before the child is settled and watching", "Treating a vocabulary list as a school-morning interaction"],
+    stuck: "Reduce the simulation to greeting, READY, one object and one instruction. Make those four beats visible before restoring the need and transition.",
+    school: "Privately rehearse the arrival route with real classroom objects and the school’s visual timetable.",
+    reflect: "Where did the routine become a connected interaction rather than a sequence of commands?",
+  },
+  15: {
+    culture: "Visual description attaches selected features to an established object or place. Regional colour forms and individual descriptions may vary; difference is not automatic error.",
+    errors: ["Listing colours or shapes without a referent", "Moving the object’s location during the description", "Combining undocumented variants"],
+    stuck: "Use one red circle and one blue square. Establish both objects, describe only one feature, then ask Mum to choose before adding size.",
+    school: "Use real classroom objects and preserve pointing or visual choices alongside the signed description.",
+    reflect: "Which single feature helped Mum identify the object most reliably?",
+  },
+  20: {
+    culture: "Health and pain communication is high stakes. Use beginner forms only to acknowledge and begin repair; follow school procedure and involve appropriate qualified support for reliable understanding.",
+    errors: ["Diagnosing from one recognised sign", "Asking leading or public questions", "Letting apparent fluency replace qualified confirmation"],
+    stuck: "Use one low-stakes need and one unclear concern. Practise saying what you understood, what remains unclear and who must now be involved.",
+    school: "Review the school’s medical and emergency communication procedures; do not record pupil health information in this app.",
+    reflect: "At what exact point did beginner communication need to stop and qualified support begin?",
+  },
+  21: {
+    culture: "An invitation must leave room for a genuine yes, no or alternative. The child is not responsible for rewarding the teacher’s BSL effort by joining in.",
+    errors: ["Treating an invitation as a command", "Overlapping the other person’s turn", "Ignoring a refusal or alternative"],
+    stuck: "Practise JOIN and one turn marker with two objects. Invite once, wait, accept the response and close before adding more language.",
+    school: "Use one familiar invitation in a real paired activity while preserving all established communication support.",
+    reflect: "Was the other person genuinely free to respond or refuse?",
+  },
+  22: {
+    culture: "A basic boundary sign can alert a beginner, but it cannot carry a safeguarding disclosure safely. Respond, make the situation safe, follow procedure and bring in appropriate qualified support.",
+    errors: ["Investigating a disclosure through novice BSL", "Promising secrecy", "Pretending to understand because the situation feels urgent"],
+    stuck: "Separate the task into three decisions: make safe, acknowledge directly, involve the correct adult. Rehearse only the model-backed acknowledgement.",
+    school: "Know the school’s safeguarding route and the communication support required before a concern occurs.",
+    reflect: "Did you choose the safe professional route without asking the child to repeat or teach you?",
+  },
+  23: {
+    culture: "Group access depends on sightlines, one visible speaker, processing time and meaningful participation—not simply placing a Deaf child inside a group.",
+    errors: ["Materials blocking faces or hands", "Several people speaking or signing at once", "Addressing the support adult instead of the pupil"],
+    stuck: "Use a two-choice task with only Mum. Establish MY-TURN and YOUR-TURN, share one object, then add a different idea after the turn boundary is reliable.",
+    school: "Arrange one group position so every participant can see the current speaker and the shared materials.",
+    reflect: "Could the child’s contribution visibly change the group’s next action?",
+  },
+  24: {
+    culture: "Playground communication can shift quickly from ordinary negotiation to wellbeing or safeguarding concern. A beginner must recognise that boundary and seek the right support.",
+    errors: ["Joining every beat into one monologue", "Ignoring STOP or HELP", "Handling a serious concern as a language-practice opportunity"],
+    stuck: "Rehearse invitation, one turn and return-to-class first. Add the disagreement only when each transition has its own visible attention boundary.",
+    school: "Observe sightlines and agreed attention methods in the actual playground before relying on any practised sign.",
+    reflect: "Which transition needed fresh attention, and which concern required another adult?",
+  },
+  26: {
+    culture: "Describe only relevant, respectful and observable features. People choose their own identity language, and classroom objects are safer early referents for spatial practice.",
+    errors: ["Using appearance as judgement", "Changing a referent’s location", "Describing more detail than the task requires"],
+    stuck: "Use a book and table as the first two referents. Establish both, show one location or movement, then add a fictional person only if the anchors remain stable.",
+    school: "Practise with objects or fictional examples; do not invite public description of pupils’ bodies.",
+    reflect: "Was the referent identifiable through stable space rather than a long English description?",
+  },
+  27: {
+    culture: "A visual routine supports access only when the stages, demonstration and response points are genuinely visible and understood.",
+    errors: ["Translating a written English instruction word by word", "No boundary between stages", "Checking understanding only by asking yes or no"],
+    stuck: "Use FIRST, NEXT and FINISH with a real two-step object task. Demonstrate the whole outcome, then rebuild one stage at a time.",
+    school: "Rehearse one familiar classroom process with the real materials and written visual sequence still present.",
+    reflect: "Could Mum demonstrate the sequence without relying on your spoken narration?",
+  },
+  28: {
+    culture: "Reasoning questions need visual context and adequate processing time. A beginner pupil should not be pressured to produce a complex signed explanation for the teacher’s practice.",
+    errors: ["Asking WHY before the choice is clear", "Removing the objects that carry the comparison", "Treating delayed response as lack of understanding"],
+    stuck: "Use two real objects. Ask only CHOOSE, then SAME or DIFFERENT. Add WHY after Mum can see the comparison and has had time to respond.",
+    school: "Use one visual choice or comparison in a familiar task and preserve alternative response methods.",
+    reflect: "Did the task make the thinking visible before language demand increased?",
+  },
+  31: {
+    culture: "Support roles vary and should not be collapsed into ‘interpreter’. The teacher addresses the child directly, plans collaboratively and defers when communication exceeds beginner competence.",
+    errors: ["Speaking only to the support adult", "Assuming every support role interprets", "Storing a child’s name or support information in the app"],
+    stuck: "Use one three-person scenario. Keep body and gaze directed to the pupil position, pause for the agreed support process, then complete one focused repair.",
+    school: "Confirm communication preferences, roles, processing time and three upcoming terms with the actual support team.",
+    reflect: "Did support enable the teacher-child relationship or accidentally replace it?",
+  },
+  35: {
+    culture: "A successful simulation is evidence of beginner readiness, not fluency. High-stakes communication still follows school procedure and qualified support routes.",
+    errors: ["Letting one fluent station hide a weak scenario", "Losing visual attention during transitions", "Using novice BSL beyond the professional boundary"],
+    stuck: "Run the route in three sections: arrival, learning and break-to-close. Repair one section before reconnecting the whole school day.",
+    school: "Choose only genuinely secure forms for first-week use and keep fragile forms in private practice.",
+    reflect: "Which ability remained available under scenario pressure, and which collapsed outside isolated practice?",
+  },
+  36: {
+    culture: "Thirty-six guided days create a useful beginner foundation, not fluency or interpreting competence. The responsible next step is sustained Deaf-led or qualified learning and real interaction.",
+    stuck: "Repeat only the Day 1 baseline and one classroom repair. Compare them honestly, then schedule one qualified-feedback action before adding the full showcase.",
+  },
+};
+
+const rebuiltCourse = READINESS_PLAN.map((plan, index) => {
+  const { source, sources, ...readiness } = plan;
+  const base = LEGACY_COURSE[source - 1];
+  const phaseIndex = Math.floor(index / 6);
+  return {
+    ...base,
+    ...readiness,
+    ...READINESS_PERFORMANCE[index + 1],
+    ...(READINESS_CONTEXT[index + 1] || {}),
+    id: `classroom-readiness-${String(index + 1).padStart(2, "0")}`,
+    day: index + 1,
+    phaseIndex: phaseIndex + 1,
+    phase: `Phase ${phaseIndex + 1} · ${READINESS_PHASES[phaseIndex]}`,
+    time: "180 min",
+    sessionMinutes: 180,
+    knowledgeSource: source,
+    legacySources: sources || [source],
+    focus: readiness.purpose,
+    culture: (READINESS_CONTEXT[index + 1] || {}).culture || `${String(base.culture).replace(/35-day/gi, "36-day").replace(/thirty-five/gi, "thirty-six")} This is beginner connection and classroom readiness, not interpreting or a replacement for the child’s agreed support.`,
+    resources: [...base.resources],
+  };
+});
+
+rebuiltCourse.forEach((lesson, index) => {
+  lesson.preview =
+    index < rebuiltCourse.length - 1
+      ? `Next: Day ${index + 2}, ${rebuiltCourse[index + 1].title}.`
+      : "Next: begin the 30-day continuation plan with Deaf-led or Signature-approved teaching and regular real interaction.";
+});
+
+COURSE.splice(0, COURSE.length, ...rebuiltCourse);
