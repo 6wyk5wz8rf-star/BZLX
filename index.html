@@ -9,10 +9,10 @@
     <meta name="theme-color" content="#343a70" />
     <meta
       name="description"
-      content="A calm, guided 36-day British Sign Language classroom-readiness companion."
+      content="A calm 36-day classroom-access and beginner BSL practice companion."
     />
     <title>BSL Learner Companion</title>
-    <link rel="stylesheet" href="style.css?v=10" />
+    <link rel="stylesheet" href="style.css?v=11" />
   </head>
   <body>
     <a class="skipLink" href="#main">Skip to learning</a>
@@ -20,12 +20,15 @@
       <div class="brand">
         <span class="brandMark" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="brandWords">
-          <small>Guided British Sign Language</small>
+          <small>Classroom access + beginner BSL practice</small>
           <h1>BSL Learner Companion</h1>
         </span>
       </div>
       <details class="courseMenu">
-        <summary><span aria-hidden="true">•••</span> Options</summary>
+        <summary aria-label="Options">
+          <span class="menuDots" aria-hidden="true">•••</span>
+          <span class="optionsLabel">Options</span>
+        </summary>
         <div class="menuPanel">
           <button class="btn secondary" id="moveDayBtn" type="button">
             Move today’s lesson forward
@@ -34,7 +37,7 @@
             Undo last date shift
           </button>
           <button class="btn ghost" id="printBtn" type="button">
-            Print current lesson
+            Print lesson practice guide
           </button>
           <button class="btn danger" id="resetBtn" type="button">
             Reset all progress
@@ -49,6 +52,10 @@
         <button class="primaryNavButton" type="button" data-view="course">Course</button>
         <button class="primaryNavButton" type="button" data-view="progress">Progress</button>
       </nav>
+      <section class="storageWarning" id="storageWarning" role="status" hidden>
+        <strong>Progress is not saving in this browser.</strong>
+        <span>Keep this tab open while learning, then allow site storage before closing it.</span>
+      </section>
       <div class="home" id="home">
         <section class="appView active" id="todayView" data-view-panel="today">
           <section class="next card" aria-labelledby="homeTitle">
@@ -58,7 +65,7 @@
                   <span class="phase" id="homePhase"></span><span id="homeDay"></span
                   ><span id="homeDate"></span>
                 </div>
-                <p class="heroKicker">YOUR NEXT GUIDED LESSON</p>
+                <p class="heroKicker">YOUR NEXT PRACTICE DAY</p>
                 <h2 id="homeTitle"></h2>
                 <p class="homePurpose" id="homeFocus"></p>
                 <div class="homeMeta">
@@ -68,21 +75,27 @@
                   Start lesson
                 </button>
               </div>
-              <aside class="lessonCompass" aria-label="Today’s learning destination">
+              <div class="lessonCompass" aria-label="Today’s learning destination">
                 <div class="compassMark" aria-hidden="true">
                   <span></span><span></span><span></span>
                 </div>
                 <p class="eyebrow">BY THE END</p>
                 <p id="homeOutcome"></p>
-                <small>The companion will lead each action. You do not need to manage the three-hour session.</small>
-              </aside>
+                <small>The companion will lead each action while keeping linguistic limits and professional boundaries visible.</small>
+              </div>
             </div>
+          </section>
+
+          <section class="scopeNotice" aria-label="Practice scope">
+            <strong>Classroom-access and beginner-practice companion</strong>
+            <span>Recorded examples are external and provisional. No clip, connected BSL sequence or learner performance is linguistically certified by this app.</span>
+            <small>BSL linguistic accuracy and classroom-use review: pending qualified Deaf/BSL educator sign-off.</small>
           </section>
 
           <section class="contentUpdate" id="contentUpdate" hidden aria-live="polite">
             <div>
               <strong>Your earlier evidence is safe.</strong>
-              <span>Earlier completion dates, notes, ratings and review evidence remain in the migration archive. Rebuilt lessons restart at Arrive so new three-hour classroom-readiness teaching is not falsely marked complete.</span>
+              <span>Completion dates and notes remain. Pre-review partner observations and retired item records are preserved in the migration archive, not attached to rewritten prompts. Any unfinished lesson restarts at Arrive.</span>
             </div>
             <button class="miniBtn" id="dismissUpdate" type="button">Understood</button>
           </section>
@@ -112,7 +125,7 @@
             <div class="sectionHead">
               <div>
                 <p class="eyebrow">THE WIDER JOURNEY</p>
-                <h2 id="courseHeading">36 calm, cumulative days</h2>
+                <h2 id="courseHeading">36 calm, cumulative practice days</h2>
                 <p>Six phases of six days. Every sixth day retrieves, integrates and simulates the phase.</p>
               </div>
             </div>
@@ -124,7 +137,7 @@
           <header class="viewHeader">
             <p class="eyebrow">MEANINGFUL EVIDENCE</p>
             <h2>Progress without false precision</h2>
-            <p>Recognition, production, classroom use, repair and Mum’s observation stay separate.</p>
+            <p>Recorded-example attempts, classroom access, repair and Mum’s observation stay separate. None is a linguistic accuracy score.</p>
           </header>
           <section class="progressLayout">
             <article class="card progressCard">
@@ -188,14 +201,15 @@
           <article
             class="card stageCard"
             id="stageCard"
-            aria-live="polite"
+            tabindex="-1"
           ></article>
         </div>
       </div>
     </main>
+    <section class="printLesson" id="printLesson"></section>
     <div class="toast" id="toast" aria-live="polite"></div>
-    <script src="course.js?v=10"></script>
-    <script src="knowledge.js?v=10"></script>
-    <script src="app.js?v=10"></script>
+    <script src="course.js?v=11"></script>
+    <script src="knowledge.js?v=11"></script>
+    <script src="app.js?v=11"></script>
   </body>
 </html>

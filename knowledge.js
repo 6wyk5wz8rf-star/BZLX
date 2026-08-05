@@ -4,7 +4,7 @@
  * This file deliberately separates:
  *   - knowledge about BSL and Deaf communication;
  *   - a contextual meaning to express;
- *   - the external signed model needed to learn an exact form.
+ *   - the external comparison page available for further observation.
  *
  * Written English labels are never presented as if they were BSL. Glosses are
  * planning aids only and are explicitly labelled as such in the interface.
@@ -100,7 +100,6 @@ const SIGN_OVERRIDES = {
   "don't understand": { slug: "dont-understand", sense: "saying that you have not understood" },
   "show me": { slug: "show", sense: "asking someone to show or demonstrate" },
   "well done": { slug: "well-done", sense: "giving positive feedback" },
-  "try again": { slug: "try", sense: "asking for another attempt; combine TRY with the separately learnt AGAIN sign" },
   "go home": { slug: "go-home", sense: "going home" },
   "wake up": { slug: "wake-up", sense: "waking from sleep" },
   "not like": { slug: "dislike", sense: "expressing dislike" },
@@ -116,12 +115,11 @@ const SIGN_OVERRIDES = {
   "BSL": { slug: "british-sign-language", sense: "British Sign Language, not another signed language or fingerspelled English" },
 };
 
-/* Canonical lexical-model routes for the released 36-day course. Core model
- * URLs are never assembled from an arbitrary English label. Every route below
- * was selected for the stated classroom sense and is checked again during QA.
- * SignBSL is a comparison dictionary, so the learner must still select the
- * matching sense/variant shown on the entry and never treat it as a connected
- * utterance model. */
+/* Checked external comparison-page routes for the 36-day course. URLs are not
+ * assembled from arbitrary English labels, but a route does not select a clip,
+ * verify a regional variant or certify that the page matches the intended
+ * classroom sense. SignBSL remains a comparison dictionary, not a connected
+ * utterance model or a substitute for qualified linguistic review. */
 const EXACT_MODEL_ROUTES = {
   "hello": "hello",
   "look": "look",
@@ -154,7 +152,6 @@ const EXACT_MODEL_ROUTES = {
   "toilet": "toilet",
   "park": "park",
   "lunch": "lunch",
-  "your turn": "your-turn",
   "my turn": "my-turn",
   "stop": "stop",
   "finished": "finished",
@@ -198,7 +195,6 @@ const EXACT_MODEL_ROUTES = {
   "good": "good",
   "well done": "well-done",
   "try": "try",
-  "try again": "try",
   "correct": "correct",
   "question": "question",
   "answer": "answer",
@@ -345,7 +341,6 @@ const TERM_MEANINGS = {
   break: "a school break or rest period",
   good: "a positive evaluation tied to a clear action or object",
   "well done": "positive praise for a completed effort or action",
-  "try again": "an instruction to make another attempt",
   try: "the action of making an attempt",
   careful: "a calm warning to act carefully",
   kind: "kindness as behaviour or description",
@@ -469,7 +464,7 @@ const REPAIR_TERMS = new Set(["again", "slower", "not understand", "don't unders
 function signSlug(term) {
   const exact = EXACT_MODEL_ROUTES[term] || EXACT_MODEL_ROUTES[term.toLowerCase()];
   if (!exact)
-    throw new Error(`No audited lexical model route for core item “${term}”`);
+    throw new Error(`No checked comparison-page route for core item “${term}”`);
   return exact;
 }
 
@@ -515,7 +510,7 @@ function itemGuidance(term, lesson) {
       use: "Use the number with a visible context such as age, quantity, time, price or score so it is not an unexplained handshape.",
       watch: "Compare palm orientation, selected fingers and any movement. Notice regional alternatives without mixing versions inside one practice round.",
       clue: `Show the quantity ${term} with ordinary fingers first, then retrieve the BSL form you selected.`,
-      contrast: "A different regional version is not automatically an error. Keep one model consistent today and learn to recognise alternatives.",
+      contrast: "A different regional version is not automatically an error. Observe one documented regional system consistently today; qualified feedback is still required.",
       url: LEARNING_SOURCES.numbers.url,
       source: "UCL BSL SignBank number signs",
     };
@@ -524,9 +519,9 @@ function itemGuidance(term, lesson) {
   let clue = `Put “${term}” into today’s smallest meaning block before trying to recall the sign.`;
   let contrast = "Choose the entry that matches today’s meaning; an English word can lead to several unrelated BSL signs.";
   if (QUESTION_TERMS.has(lower)) {
-    watch = "Watch the manual sign and the whole question span: eyebrows, head position, eye gaze and the pause that invites an answer all contribute.";
-    clue = `Imagine genuinely asking somebody “${term} …?” and set your face before retrieving the manual sign.`;
-    contrast = "A question is not created by the manual question sign alone. The non-manual pattern must cover the relevant part of the question.";
+    watch = "Observe the recorded manual examples and visible variation. The external page does not supply a reviewed connected-question span or certify its non-manual features.";
+    clue = `Identify the information gap associated with “${term}”, then mark connected ordering and facial scope as pending qualified review.`;
+    contrast = "A manual question item is not a complete BSL question. Do not infer connected ordering or non-manual scope from the English label or citation page.";
   } else if (FEELING_TERMS.has(lower)) {
     watch = "Watch the face and body from the first frame. The non-manual expression is part of the meaning, not decoration added after the hand movement.";
     clue = `Adopt the feeling or attitude first, then retrieve “${term}” without mouthing a full English sentence.`;
@@ -536,9 +531,9 @@ function itemGuidance(term, lesson) {
     clue = `Place the time “${term}” before the event in your mental plan, then retrieve its sign.`;
     contrast = "Time-first is a useful beginner planning frame, not a rule that every BSL sentence must follow identically.";
   } else if (DIRECTIONAL_TERMS.has(lower)) {
-    watch = "Watch where the movement begins and ends. With indicating verbs, that path may show who acts on whom rather than merely decorate the citation form.";
-    clue = `Place two people in space, then decide who is acting towards whom before retrieving “${term}”.`;
-    contrast = "Do not practise only a neutral dictionary form if today’s task requires a clear source and destination in signing space.";
+    watch = "Observe the citation examples and their start and end points. The page does not verify a classroom-specific directional construction.";
+    clue = `Identify who would act towards whom for “${term}”, then record that a fluent connected model is still required.`;
+    contrast = "Do not turn a neutral comparison-page example into a directional construction without a qualified model and feedback.";
   } else if (REPAIR_TERMS.has(lower)) {
     watch = "Notice the pause, eye contact and facial signal that hold the turn while the signer requests clarification or confirms understanding.";
     clue = `Picture a real communication breakdown, keep eye contact, and retrieve the repair meaning “${term}”.`;
@@ -554,12 +549,12 @@ function itemGuidance(term, lesson) {
       TERM_MEANINGS[term] ||
       TERM_MEANINGS[lower] ||
       `the intended “${term}” sense inside today’s communication task`,
-    use: `Use it inside today’s communication task: ${lesson.use}`,
+    use: `Rehearse this individual intended meaning for self-comparison only. The classroom goal is: ${lesson.use}`,
     watch,
     clue,
     contrast,
     url: `https://www.signbsl.com/sign/${signSlug(term)}`,
-    source: "SignBSL video dictionary",
+    source: "SignBSL comparison dictionary",
   };
 }
 
@@ -911,7 +906,7 @@ const KNOWLEDGE_PACKS = [
     source: ["ndcs", "signatureNotes"],
     terms: ["good", "well done", "try", "again", "careful", "kind", "share", "quiet"],
     teach: [
-      { title: "Feedback needs a referent", body: "Make clear which action or person the feedback relates to. GOOD or TRY-AGAIN alone can be ambiguous in a busy room.", example: "YOUR WORK GOOD · WELL-DONE.", avoid: "Do not sign praise while looking at somebody else." },
+      { title: "Feedback needs a referent", body: "Make clear which action or person the feedback relates to. GOOD or an uncontextualised request for another attempt can be ambiguous in a busy room.", example: "Point to the specific work or action before offering feedback.", avoid: "Do not sign praise while looking at somebody else." },
       { title: "Tone is visible", body: "Face, movement quality and body posture communicate warmth, urgency or correction. Match the non-manual tone to the classroom purpose without exaggeration.", example: "CAREFUL can be calm and protective rather than angry.", avoid: "Do not use the same sharp movement for praise and correction." },
       { title: "Correction includes the next action", body: "A useful correction says what to do, not only that something is wrong. Give one clear retry instruction and then visibly yield the turn.", example: "TRY · AGAIN · SLOW [pause and offer response space].", avoid: "Do not stack several corrections before the pupil can respond." },
     ],
@@ -921,9 +916,9 @@ const KNOWLEDGE_PACKS = [
     ],
     phrases: [
       { meaning: "Your work is good. Well done.", gloss: "WORK YOUR GOOD · WELL-DONE", build: "Refer to work/person → judgement → social praise.", focus: "Coordinate warm facial tone and direct gaze." },
-      { meaning: "Try again slowly; I’m giving you the turn.", gloss: "TRY · AGAIN · SLOW · YOU [yield-turn]", build: "Retry → manner → point/reference → visible turn handover.", focus: "Stop signing, shift into receptive gaze and allow the attempt." },
+      { meaning: "After showing the specific part, invite another attempt and hand the task over visibly.", gloss: "[FEEDBACK REHEARSAL — TRY AND AGAIN ARE SEPARATE ITEMS]", build: "Identify the part → use only separately observed individual items → stop → offer the task and response space.", focus: "Do not treat TRY+AGAIN as one exact dictionary model or grade the learner’s BSL from this rehearsal." },
     ],
-    reception: { title: "Read the feedback tone", setup: "Record GOOD, CAREFUL and TRY-AGAIN with their appropriate classroom purpose.", passes: ["Watch the face only and label warm/urgent/corrective.", "Watch the hands and identify the message.", "Check whether both channels agree."], evidence: "Repair one version where tone and message conflict." },
+    reception: { title: "Compare the feedback attempt", setup: "Record one observed feedback item, then rehearse TRY and AGAIN as separately sourced items in a visible task context.", passes: ["Name the action the feedback refers to.", "Compare only the observable feature selected from each external example.", "Mark timing, connected delivery and non-manual scope for qualified review."], evidence: "Record one visible self-comparison change; this is not a linguistic accuracy or receptive-skill score." },
   },
   {
     enquiry: "How do food choices become a real question-and-answer exchange?",
@@ -1255,7 +1250,7 @@ const READINESS_KNOWLEDGE = {
     teach: [
       { title: "BSL is a visual language", body: "Meaning can be carried by handshape, orientation, location, movement, signing space, face, mouth pattern, body and gaze. These elements work together; BSL is not English transferred onto the hands.", example: "Watch a whole sign once for meaning, then replay for only its starting location and movement.", avoid: "Do not stare only at the hands or arrange English words into a guessed signed sentence." },
       { title: "Attention begins the interaction", body: "Before any sign can be received, both people need a shared visual-attention boundary and a clear view of face, shoulders and hands. Positioning, light and pauses are part of communication access.", example: "Settle your gaze, allow the other person to look up, then begin the greeting.", avoid: "Do not begin signing while the other person is reading, turning away or unable to see you." },
-      { title: "Accuracy starts with observation", body: "Choose a consistent dominant hand, keep the signing window comfortable and compare one or two features at a time. Regional and personal variation exists; select a reliable model for today and confirm school-used variants with the support team.", example: "First compare handshape and location; only then compare movement and face.", avoid: "Do not treat a different documented variant as automatically wrong or invent a blended version." },
+      { title: "Observation precedes qualified feedback", body: "Choose a consistent dominant hand, keep the signing window comfortable and compare one or two visible features at a time. External pages may contain several variants and no clip is selected; confirm intended and school-used forms through qualified or existing support.", example: "First compare handshape and location in one recorded example; record all accuracy questions for review.", avoid: "Do not treat a different documented variant as automatically wrong or invent a blended version." },
     ],
     checks: [
       { q: "Which can carry grammatical or lexical meaning in BSL?", options: ["Hands only", "Hands, face, body, gaze and space", "Spoken English word order"], answer: 1, explain: "BSL distributes meaning across the visible articulators and interaction space." },
@@ -1265,7 +1260,7 @@ const READINESS_KNOWLEDGE = {
       { meaning: "Establish attention, then offer one clear greeting.", gloss: "[ATTENTION] · HELLO", build: "Settle position → wait for shared gaze → greet → leave response space.", focus: "The hands begin only after attention is available." },
       { meaning: "If attention is lost, pause, regain it respectfully and offer the greeting again.", gloss: "[PAUSE / REGAIN ATTENTION] · HELLO", build: "Stop the message → use the agreed attention method → wait for shared gaze → greet again.", focus: "Do not continue signing while the other person is looking away." },
     ],
-    reception: { title: "Observe before copying", setup: "Open one verified greeting model and watch once without moving.", passes: ["First pass: notice the complete meaning and interaction boundary.", "Second pass: track starting location and movement only.", "Third pass: notice face, gaze and the point where a reply could begin."], evidence: "Name two visible features accurately, then reproduce one greeting after closing the model." },
+    reception: { title: "Observe before copying", setup: "Open the external greeting comparison page and choose one recorded example for observation only; no clip is selected or certified.", passes: ["First pass: note the intended English sense and overall visible form.", "Second pass: track starting location and movement only.", "Third pass: record face, gaze or interaction features that still need qualified interpretation."], evidence: "Name two visible features, attempt one self-comparison and mark linguistic accuracy pending qualified review." },
   },
   3: {
     enquiry: "What makes a fingerspelled name readable rather than merely fast?",
@@ -1273,7 +1268,7 @@ const READINESS_KNOWLEDGE = {
     teach: [
       { title: "Fingerspell selectively", body: "Use the BSL manual alphabet for names, place names, brands or an unfamiliar word—not instead of an established sign. Fingerspelling your own name is useful; inventing a name sign is not.", example: "Use NAME, then fingerspell your own name as one whole word.", avoid: "Do not spell ordinary words such as BOOK or SCHOOL when a known sign is appropriate." },
       { title: "The whole word has rhythm", body: "Keep a consistent dominant hand and a stable signing window. Form the first letter clearly, move through direct transitions and mouth the whole name naturally rather than saying each letter aloud.", example: "Practise A–B, J–M and S–W as transitions before spelling a complete sample name.", avoid: "Do not bounce the hands back to neutral after every letter or chase speed before clarity." },
-      { title: "Reception and repair are separate skills", body: "Recognising a fingerspelled name requires watching the pattern and recovering partial information. If it is missed, ask for repetition or a slower fingerspelling pace instead of guessing.", example: "Identify the first and last letter, then use the verified AGAIN or SLOWER model for the missing centre.", avoid: "Do not pretend a guessed name was understood." },
+      { title: "Reception and repair are separate skills", body: "Recognising a fingerspelled name requires watching the pattern and recovering partial information. If it is missed, ask for repetition or a slower fingerspelling pace instead of guessing.", example: "Identify the first and last letter, then choose a separately observed AGAIN or SLOWER item for the missing centre.", avoid: "Do not pretend a guessed name was understood." },
     ],
     checks: [
       { q: "When is fingerspelling most appropriate here?", options: ["For every English word", "For a name or unfamiliar term", "Instead of learning signs"], answer: 1, explain: "Fingerspelling supports names and unknown terms; it does not replace vocabulary." },
@@ -1281,7 +1276,7 @@ const READINESS_KNOWLEDGE = {
     ],
     phrases: [
       { meaning: "My name is …", gloss: "ME · NAME · [FINGERSPELL OWN NAME]", build: "Point to self → establish NAME → fingerspell your own name as one rhythmic unit.", focus: "Return gaze to the other person after the final letter." },
-      { meaning: "I missed the name. Again, more slowly.", gloss: "NAME MISS / NOT-UNDERSTAND · AGAIN · SLOWER", build: "State exactly what was missed → request repetition and pace change → watch without copying.", focus: "Use only the verified repair forms before guessing." },
+      { meaning: "I missed the name; choose a separately studied repetition or pace-repair item.", gloss: "[REPAIR INTENTION — NO CONNECTED BSL MODEL]", build: "Show what was missed → use one individually observed repair item → watch without copying.", focus: "Do not guess, combine the labels into an app-authored sentence or treat a comparison page as certification." },
     ],
     reception: { title: "Recognise a name pattern", setup: "Use UCL’s receptive fingerspelling practice or ask Mum to copy two short non-identifying sample names from the alphabet model.", passes: ["Watch the whole word without moving.", "Record the first and last letters you saw.", "Replay once for the missing middle, then ask for repetition if needed."], evidence: "Recover two short sample names or accurately state which letters remain uncertain." },
   },
@@ -1301,14 +1296,14 @@ const READINESS_KNOWLEDGE = {
       { meaning: "Hello. My name is … What is your name?", gloss: "HELLO · ME NAME [OWN NAME] · YOU NAME WHAT?", build: "Attention → greeting → own introduction → clear question → wait.", focus: "The introduction ends before the question begins." },
       { meaning: "I did not understand. Again, please. Thank you—goodbye.", gloss: "ME NOT-UNDERSTAND · AGAIN PLEASE · THANK-YOU · GOODBYE", build: "State breakdown → request repair → confirm → separate close.", focus: "Do not close until the repaired meaning has been received." },
     ],
-    reception: { title: "Complete the first encounter", setup: "Ask Mum to choose one simple response and one deliberate misunderstanding from the app prompts.", passes: ["Track the greeting and question boundary.", "Receive the simple choice or name pattern.", "Use one specific repair, confirm, then close."], evidence: "Complete the connected encounter without spoken English carrying the sequence." },
+    reception: { title: "Rehearse the first encounter", setup: "Ask Mum to choose one simple response and one deliberate low-stakes misunderstanding from the app prompts.", passes: ["Check the attention and greeting boundary.", "Receive the visible choice or name pattern.", "Use one separately observed repair item, confirm meaning, then close."], evidence: "Complete the access rehearsal and list every connected-language feature requiring qualified review." },
   },
   7: {
     enquiry: "How can a small school map keep people and places visually clear?",
     source: ["signatureLevel1", "signatureNotes", "ndcs"],
     teach: [
       { title: "Choose only what supports interaction", body: "Begin with the people and places that are likely to matter repeatedly: teacher, friend, school, classroom and toilet. Use real context or a simple map rather than learning an unbounded school glossary.", example: "Show the classroom on a map, sign CLASSROOM, then keep that location available.", avoid: "Do not collect room labels that never enter a real interaction." },
-      { title: "Establish before pointing back", body: "Name a person or place with its verified sign, assign a clear location, and preserve that location. Later pointing and gaze can return to the referent only after the other person knows what is there.", example: "TEACHER [place-left] · FRIEND [place-right] · point left to return to the teacher.", avoid: "Do not move every referent to the centre when the next prompt appears." },
+      { title: "Establish before pointing back", body: "Establish a person or place with a real card, object or individually observed item, assign a clear location, and preserve it. Later pointing and gaze can return only after the referent is shared.", example: "Place a TEACHER card left and a FRIEND card right, then point back to the same location.", avoid: "Do not move every referent to the centre when the next prompt appears." },
       { title: "Local language needs confirmation", body: "School names, role titles and place conventions may be fingerspelled, signed or handled through an agreed local form. Confirm with the support team and record only a non-identifying variant note.", example: "Write ‘school version confirmed’ without entering the child’s or school’s name.", avoid: "Do not invent a sign for a school, person or room." },
     ],
     checks: [
@@ -1319,7 +1314,7 @@ const READINESS_KNOWLEDGE = {
       { meaning: "This person is the teacher; that person is a friend.", gloss: "[PERSON-left] TEACHER · [PERSON-right] FRIEND", build: "Place first person → identify role → place second person → identify relationship.", focus: "Keep the two person locations unchanged." },
       { meaning: "The school has a classroom and a toilet; show both on the map.", gloss: "SCHOOL [map] · CLASSROOM [place] · TOILET [place]", build: "Establish map → place classroom → place toilet → point back to both.", focus: "Let the map carry location rather than adding guessed signs." },
     ],
-    reception: { title: "Reconstruct a small school map", setup: "Place five non-identifying person or place cards, then use the verified signs and pointing in a hidden order.", passes: ["Identify the broad person or place sign.", "Mark its established location.", "Replay only to check whether later points return to the same anchor."], evidence: "Reconstruct at least four of five relationships and identify any uncertain sign for support-team confirmation." },
+    reception: { title: "Reconstruct a small school map", setup: "Place five non-identifying person or place cards, then use pointing and individually observed items in a hidden order.", passes: ["Identify the visible person or place referent.", "Mark its established location.", "Replay only to check whether later points return to the same anchor."], evidence: "Reconstruct the relationships and mark every uncertain linguistic form for support-team or qualified confirmation." },
   },
   8: {
     enquiry: "How do attention, readiness and turns become respectful classroom routines?",
@@ -1327,7 +1322,7 @@ const READINESS_KNOWLEDGE = {
     teach: [
       { title: "Gain attention without demanding it", body: "Use the school-agreed visual signal, a small wave within peripheral vision, a light shoulder tap where appropriate or a shared environmental cue. Wait for gaze before signing.", example: "Signal → wait → LOOK/WATCH target → instruction.", avoid: "Do not grab, shout from behind or continue while the child is looking elsewhere." },
       { title: "Readiness is a real check", body: "READY must allow WAIT or NOT-YET as a valid answer. Show what is about to happen and give processing time before moving into the task.", example: "[show material] · YOU READY? → wait for response.", avoid: "Do not ask READY while already starting the next instruction." },
-      { title: "Turns need visible handover", body: "Use gaze, body orientation, YOUR-TURN or MY-TURN and a pause to show who acts next. One speaker or signer at a time protects visual access.", example: "MY-TURN [demonstrate] · FINISHED · YOUR-TURN [gaze].", avoid: "Do not overlap the handover with another spoken or signed instruction." },
+      { title: "Turns need visible handover", body: "Use gaze, body orientation, an agreed visible handover signal and a pause to show who acts next. One speaker or signer at a time protects visual access; no single lexical ‘your turn’ form is assumed here.", example: "Demonstrate → mark the action finished → orient to the next person and offer the object or working space.", avoid: "Do not overlap the handover with another spoken or signed instruction." },
     ],
     checks: [
       { q: "When should the instruction begin?", options: ["Before gaze arrives", "After attention is established", "While walking away"], answer: 1, explain: "Attention is part of the message, not an optional preface." },
@@ -1335,7 +1330,7 @@ const READINESS_KNOWLEDGE = {
     ],
     phrases: [
       { meaning: "Look here. Wait. Are you ready?", gloss: "LOOK [target] · WAIT · YOU READY?", build: "Gain gaze → place target → pause → readiness question.", focus: "Do not move the target while the child is answering." },
-      { meaning: "My turn is finished. It is your turn.", gloss: "MY-TURN · FINISHED · YOUR-TURN", build: "Mark current actor → completion boundary → gaze and handover.", focus: "The next turn begins only after the handover is visible." },
+      { meaning: "Finish your own turn, then hand the activity over visibly.", gloss: "[ACCESS REHEARSAL — NO CONNECTED BSL MODEL]", build: "Mark the action finished → stop moving → orient to the next person → offer the object or working space.", focus: "The next turn begins only after the handover is visible; confirm the school-used sign separately." },
     ],
     reception: { title: "Follow the turn, not the word list", setup: "Use a simple object task with Mum and alternate three turns.", passes: ["Identify when attention becomes shared.", "Act only after the readiness boundary.", "Track three visible turn handovers without speech."], evidence: "Complete all three turns and repair one intentionally unclear handover." },
   },
@@ -1355,7 +1350,7 @@ const READINESS_KNOWLEDGE = {
       { meaning: "Show me the pencil. Where does it go?", gloss: "PENCIL SHOW-ME · GO WHERE?", build: "Establish visible choices → request object → establish storage locations → WHERE question.", focus: "Keep item and destination anchors unchanged." },
       { meaning: "Choose the book or scissors, then put it on the table.", gloss: "BOOK / SCISSORS CHOOSE WHICH? · TABLE [place]", build: "Place two choices → wait for selection → show table location → act.", focus: "Watch first, then handle the item." },
     ],
-    reception: { title: "Organise from signed input", setup: "Place four real items and two destinations in view; ask Mum to select three app models in a hidden order.", passes: ["Identify the item from signed input.", "Move it only after the sign finishes.", "Point to or ask about the destination before placing it."], evidence: "Organise three items correctly or use repair rather than guessing." },
+    reception: { title: "Organise a visible object routine", setup: "Place four real items and two destinations in view; Mum selects object cards in a hidden order.", passes: ["Identify the visible item or card.", "Move it only after the demonstration finishes.", "Point to the destination before placing it."], evidence: "Organise the items or use repair rather than guessing; no signed-input capability is inferred." },
   },
   11: {
     enquiry: "How can common needs be recognised without sacrificing privacy or safety?",
@@ -1373,7 +1368,7 @@ const READINESS_KNOWLEDGE = {
       { meaning: "Do you need help, a drink or a break?", gloss: "YOU NEED WHICH · HELP / DRINK / BREAK?", build: "Private attention → show a small visible choice → wait for selection → confirm.", focus: "Do not crowd the child with several repeated questions." },
       { meaning: "Finished, or do you need more or something different?", gloss: "FINISHED? · MORE / DIFFERENT WHICH?", build: "Check completion → establish alternatives → receive one answer.", focus: "The response changes what happens next." },
     ],
-    reception: { title: "Respond to a need safely", setup: "Use four signed routine-need models in a hidden order and one scenario that must be escalated.", passes: ["Identify the broad request.", "Confirm the context without demanding detail.", "Choose direct response, repair or the qualified-support route."], evidence: "Respond appropriately to all five situations and identify the high-stakes boundary." },
+    reception: { title: "Respond to a need safely", setup: "Use four written or pictured routine-need scenarios and one scenario that must be escalated.", passes: ["Identify the broad request from the scenario.", "Confirm the context without demanding detail.", "Choose direct response, repair or the qualified-support route."], evidence: "Choose an appropriate route in all five situations and identify the high-stakes boundary; no receptive BSL is assessed." },
   },
   15: {
     enquiry: "How do description and signing space identify the right classroom object?",
@@ -1381,7 +1376,7 @@ const READINESS_KNOWLEDGE = {
     teach: [
       { title: "Establish before describing", body: "Place or point to the object first, then add colour, shape or size. The receiver should always know which referent the description belongs to.", example: "BOOK [left] · BLUE · SQUARE picture.", avoid: "Do not recite RED, BLUE, CIRCLE, SQUARE without visible objects." },
       { title: "Space shows position", body: "Use real locations and stable anchors for WHERE, SAME and DIFFERENT. Show the relationship rather than translating a written list of English prepositions.", example: "CIRCLE [left] · SQUARE [right] · SAME colour / DIFFERENT shape.", avoid: "Do not move the anchors during the comparison." },
-      { title: "Variants need a clear source", body: "Colour and descriptive signs can vary. Select one reliable model for today, record a non-identifying school-confirmed variant if needed and learn to recognise alternatives.", example: "Use one RED model consistently across the object hunt.", avoid: "Do not combine variants into an invented form." },
+      { title: "Variants need a clear source", body: "Colour and descriptive signs can vary. Observe one documented example at a time, record a non-identifying school-confirmed variant if needed and seek qualified review before classroom reliance.", example: "Note which RED example you observed; do not label it the selected course model.", avoid: "Do not combine variants into an invented form." },
     ],
     checks: [
       { q: "What should happen before a colour or shape description?", options: ["Establish the object", "List every adjective", "Hide the referent"], answer: 0, explain: "A description needs a stable referent." },
@@ -1406,10 +1401,34 @@ const READINESS_KNOWLEDGE = {
       { q: "What should follow a readiness question?", options: ["Immediate instruction", "Visible response space", "Looking back at the board"], answer: 1, explain: "The other person needs time and visual space to answer honestly." },
     ],
     phrases: [
-      { meaning: "Are you ready? Not yet—wait, please.", gloss: "YOU READY? · NOT-YET / WAIT PLEASE", build: "Gain attention → establish the task → READY question with response space → receive WAIT without rushing.", focus: "Keep the question visible until the response begins." },
-      { meaning: "Okay. Thank you. Goodbye.", gloss: "OKAY · THANK-YOU · GOODBYE", build: "Confirm the shared outcome → direct thanks → separate closing boundary.", focus: "Each social function has its own gaze and pause rather than becoming one blurred sequence." },
+      { meaning: "Use the visible task and one individually studied response to show whether you are ready; accept a pause or refusal.", gloss: "[ACCESS REHEARSAL — NO CONNECTED BSL MODEL]", build: "Show the task → establish attention → use one separately studied response → pause and receive the other person’s choice.", focus: "Do not assemble a readiness exchange from this English prompt or rush past a NO or pause." },
+      { meaning: "Close a low-stakes interaction with one separately studied polite item after the shared outcome is clear.", gloss: "[ACCESS REHEARSAL — NO CONNECTED BSL MODEL]", build: "Confirm the outcome visibly → choose one reviewed polite item → create a separate closing boundary.", focus: "The external pages provide comparison examples for individual items, not a connected closing sequence." },
     ],
-    reception: { title: "Read the response from the situation", setup: "Record or ask Mum to copy three short responses after three visibly different prompts.", passes: ["Watch once for the situation and response boundary.", "Replay for face, gaze and timing.", "Identify what the response refers back to before copying it."], evidence: "Correctly link all three responses to their prompt and explain one case where the hand movement alone was insufficient." },
+    reception: { title: "Rehearse response choices", setup: "Mum presents three low-stakes visible situations. Choose one individually studied response for each, then compare the relevant external page without treating any clip as selected or certified.", passes: ["Name the situation before choosing a response.", "Use one item only and leave genuine response space.", "Mark uncertain sense, form or variation for qualified review."], evidence: "Record which response was attempted and why; this is informal partner rehearsal, not evidence of receptive BSL competence." },
+  },
+  5: {
+    source: ["signatureFrontline", "signatureNotes", "ndcs"],
+    phrases: [
+      { meaning: "When an ordinary classroom message is missed, signal non-understanding and choose one separately studied repair item.", gloss: "[REPAIR CHOICE — NO CONNECTED BSL MODEL]", build: "Keep visual attention → identify what was missed → choose AGAIN, SLOWER or SHOW-ME only if its individual form has been reviewed.", focus: "Do not guess, pretend to understand or turn the English instruction into a signed sentence." },
+      { meaning: "After a repeated or slower example, indicate whether meaning is now clear; if it is not, stop and seek confirmation.", gloss: "[REPAIR LOOP — NO CONNECTED BSL MODEL]", build: "Receive the retry → check the intended meaning → confirm or repeat the repair → use the agreed support route when needed.", focus: "A successful repair is shared understanding, not a fluent-looking sequence." },
+    ],
+    reception: { title: "Choose the smallest safe repair", setup: "Mum reads three ordinary breakdown scenarios; no BSL interpretation or connected model is being assessed.", passes: ["Identify whether the gap is meaning, pace or a missed visual form.", "Select one separately studied repair item or a non-linguistic show/point strategy.", "State when the situation instead requires qualified support or school procedure."], evidence: "Choose an appropriate route in all three scenarios and label every form uncertainty for qualified review." },
+  },
+  14: {
+    source: ["signatureNotes", "signbank", "ndcs"],
+    phrases: [
+      { meaning: "Use a visible timetable to identify today and the first activity; do not infer a connected BSL sentence from the labels.", gloss: "[VISIBLE TIMETABLE PLAN — NO CONNECTED BSL MODEL]", build: "Place the day card → place the first activity card → point between the real cards → pause before the activity begins.", focus: "The cards carry the sequence; individual time signs remain pending qualified review for this context." },
+      { meaning: "Show one timetable change by moving a card and making the old and new positions clear.", gloss: "[ACCESS REHEARSAL — NO CONNECTED BSL MODEL]", build: "Regain attention → show the original position → move one card → show the replacement position → allow processing time.", focus: "Do not claim one written order or spatial timeline as universal BSL grammar." },
+    ],
+    reception: { title: "Check a visible timetable change", setup: "Build a four-card timetable with Mum; this lab tests whether the visual plan is followable, not signed-language reception.", passes: ["Mum identifies the first card from the visible layout.", "Move one card and allow time to compare old and new positions.", "Ask Mum to reconstruct the changed order without relying on a connected signed message."], evidence: "The changed timetable is reconstructed accurately; individual BSL forms remain practice evidence only until qualified review." },
+  },
+  16: {
+    source: ["signatureNotes", "signatureLevel1", "corpus"],
+    phrases: [
+      { meaning: "Given a classroom situation, decide whether the missing information is a person, thing, place, option, reason or method.", gloss: "[QUESTION-INTENTION SORT — NO CONNECTED BSL MODEL]", build: "Establish the visible situation → identify the information gap → select the relevant individually studied question item → leave response space.", focus: "Do not construct a BSL question by rearranging the English prompt." },
+      { meaning: "Establish one visible choice or referent, then invite a response without supplying an app-authored question sequence.", gloss: "[ACCESS REHEARSAL — NO CONNECTED BSL MODEL]", build: "Place the referent or choices → direct gaze to the addressee → use only a reviewed individual item if appropriate → wait.", focus: "Question scope, ordering and non-manual features require a fluent signed model and qualified feedback." },
+    ],
+    reception: { title: "Observe question items without claiming a question model", setup: "Open external comparison pages for two individual question items. No clip is selected and the pages do not model a connected classroom question.", passes: ["Identify the stated English sense and check that the recorded example appears to match it.", "Notice visible variation without choosing one form as authoritative.", "Record the connected question you would need a Deaf or qualified BSL teacher to model."], evidence: "Distinguish the communicative intentions and list the unresolved linguistic features; do not score receptive-question competence." },
   },
   12: {
     enquiry: "What makes a classroom arrival feel like one connected interaction?",
@@ -1442,17 +1461,17 @@ const READINESS_KNOWLEDGE = {
       { q: "What makes PAIN more interpretable?", options: ["Signing faster", "A clearly established body location", "Mouthing a long English explanation"], answer: 1, explain: "Location is essential visual information." },
     ],
     phrases: [
-      { meaning: "Are you ill or tired? Show me where.", gloss: "YOU ILL / TIRED WHICH? · WHERE SHOW-ME", build: "Private attention → small visible choice → WHERE/SHOW-ME → wait.", focus: "Ask only what you can responsibly understand and act on." },
-      { meaning: "I do not understand. Wait—I will get help.", gloss: "ME NOT-UNDERSTAND · WAIT · HELP GET", build: "State the breakdown honestly → pause the interaction → follow the agreed support route.", focus: "Keep addressing the child directly while support joins." },
+      { meaning: "Acknowledge an everyday physical need privately and bring in the agreed support whenever meaning or risk is unclear.", gloss: "[PROFESSIONAL DECISION — NO MEDICAL BSL SCRIPT]", build: "Pause the activity → face the child directly → acknowledge the visible need → follow the school’s agreed response route.", focus: "Do not diagnose, ask a chain of novice questions or use these individual pages as a medical conversation model." },
+      { meaning: "For a clearly indicated pain location, respond to the location only; if anything is uncertain, state non-understanding and seek qualified support.", gloss: "[SAFE RESPONSE PLAN — NO CONNECTED BSL MODEL]", build: "Notice the indicated location → keep the child in the interaction → stop at the limit of understanding → involve the appropriate adult or procedure.", focus: "The learner’s job is safe recognition and escalation, not interpretation or clinical assessment." },
     ],
-    reception: { title: "Distinguish the need, not the diagnosis", setup: "Use signed models for TIRED, HUNGRY, THIRSTY and PAIN in a shuffled four-item round.", passes: ["Identify the broad need before copying.", "Replay for location and facial information.", "Choose the safe next action: respond directly, clarify once or seek support."], evidence: "Identify at least three needs and state the safe professional response for each." },
+    reception: { title: "Choose the safe response boundary", setup: "Use four written or pictured low- and high-stakes scenarios. This is a professional-decision exercise, not a test of receiving medical BSL.", passes: ["Identify the immediate access or safety need without diagnosing.", "Decide whether a routine school response is enough.", "For ambiguity, medical risk, emergency or safeguarding content, follow procedure and involve appropriate qualified support."], evidence: "Choose the safe route for all four scenarios and explain where beginner competence ends; do not record a receptive BSL score." },
   },
   21: {
     enquiry: "How do you invite participation without putting a child on display?",
     source: ["ndcsPlay", "ndcs", "ndcsPrimary"],
     teach: [
       { title: "Invitation leaves room for choice", body: "JOIN, PLAY and TOGETHER should open an opportunity, not pressure a public performance. Establish the activity, invite, then leave visible time for YES, NO, WAIT or a different choice.", example: "PLAY [point-activity] · YOU JOIN? → wait.", avoid: "Do not repeat the invitation more loudly or theatrically when the answer is not immediate." },
-      { title: "Turns need visible boundaries", body: "In play and paired work, YOUR-TURN and MY-TURN work best when the object, action and next person are already visible. Eye gaze and a pause transfer the turn.", example: "MY-TURN [act] · FINISH · YOUR-TURN [gaze to partner].", avoid: "Do not sign the next instruction while the child is still watching the previous action." },
+      { title: "Turns need visible boundaries", body: "In play and paired work, make the object, action and next person visible. Eye gaze, orientation, a pause and an agreed handover signal can transfer the turn without assuming one universal lexical ‘your turn’ form.", example: "Complete the action → stop → look to the partner → offer the object or space.", avoid: "Do not sign the next instruction while the child is still watching the previous action." },
       { title: "Access belongs to the group", body: "Arrange positions so faces and hands are visible, reduce competing distraction and address the child directly. The support adult can facilitate access without becoming the social partner in place of peers.", example: "Move the circle before starting rather than asking the child to keep repositioning.", avoid: "Do not make the child teach everyone signs or explain deafness to earn inclusion." },
     ],
     checks: [
@@ -1461,7 +1480,7 @@ const READINESS_KNOWLEDGE = {
     ],
     phrases: [
       { meaning: "We are playing together. Would you like to join?", gloss: "WE PLAY TOGETHER · YOU JOIN?", build: "Establish the group/activity → invite the child directly → wait for the answer.", focus: "Gaze and body position include the child before the invitation is signed." },
-      { meaning: "My turn, then your turn. Do you need help?", gloss: "MY-TURN · NEXT YOUR-TURN · YOU HELP NEED?", build: "Demonstrate one turn → visible handover → private help check.", focus: "Do not overlap the handover with the child’s attempt." },
+      { meaning: "Demonstrate one turn, then hand the object or activity over visibly and leave room for a help request.", gloss: "[VISIBLE HANDOVER — NO CONNECTED BSL MODEL]", build: "Demonstrate → stop fully → orient to the next person → offer the object or working space → wait.", focus: "Do not overlap the handover with the child’s attempt; confirm any school-used turn sign separately." },
     ],
     reception: { title: "Find the invitation and handover", setup: "Record a three-turn activity with Mum or two placed objects representing partners.", passes: ["Identify the invitation boundary.", "Track whose turn is active.", "Find where a person can refuse, wait or request help."], evidence: "All three turn changes and one genuine choice point remain visible without speech." },
   },
@@ -1487,7 +1506,7 @@ const READINESS_KNOWLEDGE = {
     enquiry: "How can group work make every contribution visually available?",
     source: ["ndcs", "ndcsEnvironment", "signatureNotes"],
     teach: [
-      { title: "Arrange access before the discussion", body: "A circle or open horseshoe allows people to see faces, hands and turn changes. Move materials out of the sightline and agree one visible turn signal before ideas begin.", example: "Place the shared object centrally; use gaze plus YOUR-TURN to transfer the floor.", avoid: "Do not ask the child to track several speakers hidden behind one another." },
+      { title: "Arrange access before the discussion", body: "A circle or open horseshoe allows people to see faces, hands and turn changes. Move materials out of the sightline and agree one visible turn signal before ideas begin.", example: "Place the shared object centrally; use gaze, a pause and the agreed signal to transfer the floor.", avoid: "Do not ask the child to track several speakers hidden behind one another." },
       { title: "Establish the choices in space", body: "CHOICE, SAME, DIFFERENT and AGREE become clearer when the two ideas or objects have stable locations. Point back to those locations instead of repeating long labels.", example: "IDEA-A [left] · IDEA-B [right] · YOU CHOOSE WHICH?", avoid: "Do not move the options while people are comparing them." },
       { title: "Contribution needs response", body: "After a child SHOWS or SHARES an idea, pause, acknowledge the actual meaning and connect it to the group’s next action. Inclusion is not achieved by merely offering a turn.", example: "SHOW-ME → receive → GOOD/DIFFERENT → NEXT person or action.", avoid: "Do not praise automatically without showing what part of the contribution was understood." },
     ],
@@ -1506,7 +1525,7 @@ const READINESS_KNOWLEDGE = {
     source: ["ndcsPlay", "ndcs", "ndcsSafeguarding"],
     teach: [
       { title: "Establish the activity before the invitation", body: "Show what is being played, who is involved and where a new participant can join. A clear activity map reduces the language needed for the first invitation.", example: "PLAY [centre] · WE [group] · YOU JOIN?", avoid: "Do not point vaguely across a noisy playground and expect the invitation to be obvious." },
-      { title: "A small disagreement needs turn structure", body: "Use STOP or WAIT to pause, establish whose turn or object is disputed and offer a visible next step. Keep the pace slow enough for every person to follow.", example: "STOP · MY-TURN / YOUR-TURN WHICH? · NEXT YOU.", avoid: "Do not sign over several children speaking or moving at once." },
+      { title: "A small disagreement needs turn structure", body: "Use STOP or WAIT to pause, make the disputed object or action visible and offer an agreed next step. Keep the pace slow enough for every person to follow.", example: "Pause → show the object and current turn marker → place the next marker beside the next person.", avoid: "Do not sign over several children speaking or moving at once." },
       { title: "Return to class is a new visual event", body: "Gain attention again, mark FINISHED, establish GO/CLASSROOM and check readiness. Do not assume the child saw a distant bell, shouted instruction or group movement.", example: "PLAY FINISHED · CLASSROOM GO · YOU READY?", avoid: "Do not give the transition while facing away and beginning to walk." },
     ],
     checks: [
@@ -1514,16 +1533,24 @@ const READINESS_KNOWLEDGE = {
       { q: "What begins the return-to-class transition?", options: ["Walking away", "Regaining attention and marking the activity finished", "Assuming everyone saw others move"], answer: 1, explain: "A new visual attention boundary is required." },
     ],
     phrases: [
-      { meaning: "Would you like to join? It is your turn next.", gloss: "YOU JOIN? · NEXT YOUR-TURN", build: "Map activity → invite → receive answer → place the child’s turn visibly in the sequence.", focus: "The invitation remains a choice, not a command." },
+      { meaning: "Offer a choice to join, then show the next turn with an object, place or agreed visual marker.", gloss: "[INVITATION AND HANDOVER — NO CONNECTED BSL MODEL]", build: "Map the activity → offer a visible choice → receive the answer → place the next turn marker visibly.", focus: "The invitation remains a choice, not a command; no unreviewed ‘your turn’ sign is supplied." },
       { meaning: "Stop. Do you need help? Play is finished; we are going back.", gloss: "STOP · YOU HELP NEED? · PLAY FINISHED · WE GO", build: "Pause disagreement → private help check → close activity → regain group attention for transition.", focus: "Separate the wellbeing check from the public group instruction." },
     ],
     reception: { title: "Follow the complete social episode", setup: "Perform the scenario with Mum: invitation, two turns, a deliberate disputed turn, help check and return transition.", passes: ["Track the active turn.", "Identify the moment the disagreement is paused.", "Identify when attention is regained for the return transition."], evidence: "Mum can reconstruct the six events in order without hearing the English plan." },
+  },
+  25: {
+    source: ["signatureNotes", "corpus", "signbank"],
+    phrases: [
+      { meaning: "Mark the shared time, topic or referent that a fluent signer would need to establish before adding new information.", gloss: "[ANALYSIS TASK — NO BSL ORDER IS SUPPLIED]", build: "Identify the intended meaning → mark the shared context on a card or diagram → list what a qualified model must demonstrate.", focus: "Do not convert ‘topic–comment’ into a mechanical English-to-BSL ordering rule." },
+      { meaning: "Identify which parts of one classroom message require a fluent signed model before the message can be used.", gloss: "[LINGUISTIC REVIEW REQUIRED]", build: "Separate lexical items, reference in space, non-manual scope and turn boundary → mark each as reviewed or pending.", focus: "External lexical pages cannot verify connected ordering, direction, facial grammar or naturalness." },
+    ],
+    reception: { title: "Challenge a grammar claim", setup: "Review three written claims about BSL structure, including one rigid word-order claim. This is a professional-decision exercise, not a connected signing test.", passes: ["Identify what the claim says is universal.", "Compare it with the guidance that BSL organisation depends on construction and discourse.", "Write the exact fluent model or qualified feedback still needed before teaching it."], evidence: "Reject the rigid claim and produce a bounded review question; do not award a BSL grammar capability rating." },
   },
   26: {
     enquiry: "How do stable referents let a beginner describe who, what and where?",
     source: ["signatureNotes", "signatureLevel1", "ndcs"],
     teach: [
-      { title: "Place the referent before describing it", body: "Establish a person or object with a verified sign, point or real item, then assign a stable location. Description becomes followable only when the receiver knows what the feature belongs to.", example: "BOOK [place-left] · TABLE [place-right] · point left before adding a feature or movement.", avoid: "Do not begin with TALL or GO before the referent is visible." },
+      { title: "Place the referent before describing it", body: "Establish a person or object with a real item, card, point or individually observed sign, then assign a stable location. Description becomes followable only when the receiver knows what the feature belongs to.", example: "Place a BOOK card left and a TABLE card right; point left before adding a feature or movement.", avoid: "Do not begin with TALL or GO before the referent is visible." },
       { title: "Movement connects locations", body: "An action such as GO needs an established start, path and destination. Keep the path consistent with the people or objects already placed; do not use movement as decoration.", example: "PERSON [left] · TABLE [right] · GO left-to-right.", avoid: "Do not reverse the path while keeping the same intended meaning." },
       { title: "Describe respectfully and only as needed", body: "Use neutral, task-relevant features and fictional people while practising. People choose how they describe themselves, and public comparison of pupils’ bodies is not an appropriate class exercise.", example: "Use a fictional tall character or a tall classroom object in a locating task.", avoid: "Do not turn appearance into judgement or identity into a guessing game." },
     ],
@@ -1553,7 +1580,7 @@ const READINESS_KNOWLEDGE = {
       { meaning: "First look; next show me; then finish.", gloss: "FIRST LOOK [demo] · NEXT YOU SHOW-ME · FINISH", build: "Mark observation turn → hand over action → close the process.", focus: "Keep watching and doing as separate visual turns." },
       { meaning: "Show what happens before this and what happens after.", gloss: "THIS [event] · BEFORE SHOW-ME · AFTER SHOW-ME", build: "Establish target event → request earlier stage → return → request later stage.", focus: "Keep the central event anchored while comparing both sides." },
     ],
-    reception: { title: "Follow before repeating", setup: "Ask Mum to demonstrate a familiar three-stage object task while using the selected sequence models.", passes: ["Watch once for the complete outcome.", "Record only the three event boundaries.", "Repeat the task, using SHOW-ME or one repair if a stage is unclear."], evidence: "Complete the three-stage process twice and improve the repaired stage on the second attempt." },
+    reception: { title: "Follow a visible sequence", setup: "Ask Mum to demonstrate a familiar three-stage object task using real materials and sequence cards; no signed sequence model is supplied.", passes: ["Watch once for the complete outcome.", "Record only the three visible event boundaries.", "Repeat the task, using a show/point strategy or one separately observed repair item if a stage is unclear."], evidence: "Complete the visual process twice and improve one repaired stage; connected BSL sequencing remains pending qualified review." },
   },
   28: {
     enquiry: "How can a beginner make comparison and reasoning visible?",
@@ -1589,22 +1616,22 @@ const READINESS_KNOWLEDGE = {
       { meaning: "I understood the book, but which action? Show me again, slowly.", gloss: "BOOK UNDERSTAND · ACTION WHICH? · AGAIN SLOWER SHOW-ME", build: "Confirm known topic → isolate missing detail → request the appropriate repair.", focus: "Keep the original referent and interaction open." },
       { meaning: "That sign is different. Does it mean the same thing?", gloss: "SIGN DIFFERENT · MEANING SAME?", build: "Point to or reproduce the unfamiliar form → mark contrast → ask one meaning question.", focus: "Curiosity replaces correction." },
     ],
-    reception: { title: "Repair unfamiliar input", setup: "Use two different documented variants on one exact lexical-model page and one deliberately fast familiar model.", passes: ["First pass: identify all meaning that remains available.", "Second pass: choose AGAIN, SLOWER, WHICH or SHOW-ME for the exact gap.", "Third pass: compare and confirm rather than deciding that one variant is wrong."], evidence: "Complete three focused repair loops and record one non-identifying variant note for qualified confirmation." },
+    reception: { title: "Observe variation and choose repair", setup: "Use two recorded examples on one external comparison page and one deliberately fast familiar partner rehearsal. The app does not select or certify either example.", passes: ["First pass: identify any meaning or visible feature that remains available.", "Second pass: choose AGAIN, SLOWER, WHICH or SHOW-ME for the specific gap only if that item has been separately observed.", "Third pass: compare without deciding that one documented variant is wrong."], evidence: "Complete three focused repair decisions and record one non-identifying variant note for qualified confirmation; do not award receptive competence." },
   },
   30: {
     enquiry: "What evidence shows that a classroom task was understood?",
     source: ["ndcs", "ndcsEnvironment", "signatureNotes", "signatureFrontline"],
     teach: [
-      { title: "Separate watching from doing", body: "Gain attention, state the small outcome and model the whole task while materials remain still. Pause, then hand over the materials or invite the learner to act.", example: "LOOK → SHOW complete example → FINISHED model → YOUR-TURN.", avoid: "Do not ask the child to manipulate materials while the essential signed model is still happening." },
+      { title: "Separate watching from doing", body: "Gain attention, state the small outcome and model the whole task while materials remain still. Pause, then hand over the materials or invite the learner to act.", example: "Gain gaze → show the complete example → stop → offer the materials and working space.", avoid: "Do not ask the child to manipulate materials while the essential signed model is still happening." },
       { title: "Check by visible action", body: "A nod or YES may reflect politeness, partial understanding or a wish to continue. Ask the learner to show, point, choose, order or complete the first step so understanding is evidenced without embarrassment.", example: "UNDERSTAND? is followed by SHOW-ME / CHOOSE / first action.", avoid: "Do not ask ‘understand?’ repeatedly and treat the answer as proof." },
-      { title: "Repair one missing part", body: "If the action does not match the task, pause without public blame, identify the missing step, remodel only that part and give fresh processing time. Then offer specific feedback and transition clearly.", example: "STOP → NOT-UNDERSTAND WHICH? → SHOW one step → YOUR-TURN → GOOD/TRY-AGAIN → FINISHED/NEXT.", avoid: "Do not restart a long explanation when only one visible detail was missed." },
+      { title: "Repair one missing part", body: "If the action does not match the task, pause without public blame, identify the missing step, remodel only that part and give fresh processing time. Then offer specific feedback and transition clearly.", example: "Pause → show one step → stop fully → offer the task again → acknowledge the observable change.", avoid: "Do not restart a long explanation when only one visible detail was missed." },
     ],
     checks: [
       { q: "Which is the strongest beginner check of understanding?", options: ["A quick nod", "Showing or completing the first step", "Repeating the English instruction"], answer: 1, explain: "Visible action provides evidence tied to the actual task." },
       { q: "What should happen after one step is unclear?", options: ["Repeat everything faster", "Remodel the missing part and recheck", "Mark the lesson failed"], answer: 1, explain: "Focused repair reduces load and preserves dignity." },
     ],
     phrases: [
-      { meaning: "Look. I will show the example, then it is your turn.", gloss: "LOOK · ME SHOW EXAMPLE · FINISHED · NEXT YOUR-TURN", build: "Attention → complete model → clear boundary → handover.", focus: "Materials move only after the signed model finishes." },
+      { meaning: "Gain attention, show the complete example, then make the handover to the learner unmistakable.", gloss: "[TEACHING ROUTINE — NO CONNECTED BSL MODEL]", build: "Attention → complete visual model → full stop → offer materials and working space.", focus: "Materials move only after the model finishes; confirm any language for the handover with qualified support." },
       { meaning: "Show me the first step. Not yet—watch this part again, then try.", gloss: "FIRST SHOW-ME · NOT-YET · THIS PART AGAIN LOOK · TRY", build: "Visible check → calm mismatch signal → one-part remodel → fresh attempt.", focus: "Feedback identifies the next action rather than praising or correcting vaguely." },
     ],
     reception: { title: "Teach, check and repair one real task", setup: "Choose a simple three-step primary task with visible materials and record one complete teaching sequence.", passes: ["First pass: identify attention, model, handover and processing time.", "Second pass: complete the task from the signed/visual sequence.", "Third pass: introduce one controlled misunderstanding and repair only the missing step."], evidence: "The partner completes the sequence, and the repair changes one observable action without spoken English carrying the task." },
@@ -1643,20 +1670,25 @@ const READINESS_KNOWLEDGE = {
       { q: "Why keep character locations stable?", options: ["Decoration", "So later reference remains followable", "To avoid facial grammar"], answer: 1, explain: "Space carries reference across the story interaction." },
     ],
     phrases: [
-      { meaning: "Who is this character? What happened at the beginning?", gloss: "CHARACTER THIS WHO? · BEGINNING HAPPEN WHAT?", build: "Show page → regain attention → establish character locus → ask one WH-question at a time.", focus: "Hold the question face and wait before looking back at the book." },
-      { meaning: "What do you predict will happen next? Why?", gloss: "NEXT PREDICT WHAT? · WHY?", build: "Re-establish current event → mark NEXT → ask prediction → follow with WHY only after the first response.", focus: "Do not compress two questions into one unreadable span." },
+      { meaning: "Set up an accessible story interaction: show the page, allow viewing time, regain attention and establish one character visibly.", gloss: "[STORY ACCESS PLAN — NO CONNECTED BSL MODEL]", build: "Show page → pause for viewing → regain gaze → point to or place the character → leave response space.", focus: "Do not invent a connected character question from the English prompt." },
+      { meaning: "Use three picture cards to make beginning, middle and end visible; reserve any prediction question for a fluent model.", gloss: "[VISUAL SEQUENCE — CONNECTED QUESTION PENDING REVIEW]", build: "Lay out three events → confirm the current event visually → invite a response through an agreed classroom method.", focus: "Question ordering, non-manual scope and character reference require qualified linguistic review." },
     ],
-    reception: { title: "Reconstruct a three-part story", setup: "Use three picture cards or three pages and record a beginning, centre and end with one stable character locus.", passes: ["Put the three events in order.", "Track the character through space.", "Identify where the prediction question begins and response space opens."], evidence: "Reconstruct the sequence and character without listening to spoken narration." },
+    reception: { title: "Audit story access", setup: "Use three picture cards or pages to test sightlines, attention shifts and response space. No connected signed story is supplied or assessed.", passes: ["Check that page viewing and watching the signer are separated.", "Check that one character or event remains visually stable.", "Identify the point where a fluent signed question or qualified support would be required."], evidence: "Document two access strengths and one language gap for qualified review; do not claim story-level BSL reception." },
   },
   34: {
     source: ["sscCurriculum", "ndcs", "signatureNotes"],
+    phrases: [
+      { meaning: "Prepare a visible subject timetable and indicate the current and next slots; use only individual subject forms confirmed for the school context.", gloss: "[CURRICULUM ACCESS PLAN — NO CONNECTED BSL MODEL]", build: "Place subject cards → mark current and next positions visually → note which individual forms are confirmed or pending.", focus: "The curriculum glossary and dictionary pages support further checking; they do not verify a classroom sentence or school-used variant." },
+      { meaning: "Before a subject lesson, identify three repeated terms and agree how each will be communicated with the support team.", gloss: "[PRE-TEACHING DECISION — LINGUISTIC REVIEW REQUIRED]", build: "Choose three high-value terms → attach visuals or real objects → confirm the source and local form → rehearse access timing.", focus: "Do not improvise technical signs, build an enormous dictionary or make the child certify the teacher’s vocabulary." },
+    ],
+    reception: { title: "Prepare subject access without improvising", setup: "Use subject cards and the school’s existing support route. External pages are comparison or glossary resources; no clip is selected by this app.", passes: ["Choose three terms that will recur in one real lesson.", "Mark each term confirmed, pending support-team confirmation or unnecessary.", "Plan the visual, object or written support that remains available even when a sign is uncertain."], evidence: "Produce a three-term preparation note with no identifying pupil data and no claim that the app verified a connected BSL sequence." },
   },
   35: {
-    enquiry: "Can useful classroom communication remain available across a connected school day?",
+    enquiry: "Can visual-access habits and safe professional decisions remain available across a full school-day rehearsal?",
     source: ["ndcs", "ndcsEnvironment", "signatureLevel1", "signatureNotes"],
     teach: [
       { title: "Transitions need new attention", body: "Door greeting, timetable, teaching, group work, break and goodbye are separate visual events. Regain attention and establish the new context instead of carrying one continuous stream of signing across movement.", example: "FINISH learning → pause → NEXT group → regain gaze before the new instruction.", avoid: "Do not sign a transition while turning, walking or rearranging materials." },
-      { title: "Assess four different abilities", body: "Recognition, production, classroom use and repair are separate. A sign that looks fluent in isolation may still disappear during a real interaction; record the evidence honestly.", example: "Recognise HELP; produce HELP; respond to HELP in context; repair when HELP is unclear.", avoid: "Do not reduce the day to one mastery percentage." },
+      { title: "Separate four kinds of practice evidence", body: "Model observation, self-comparison, classroom rehearsal and repair decisions are different. None is a qualified linguistic assessment, and a smooth isolated attempt may still disappear in a real interaction.", example: "Observe HELP; self-compare one feature; rehearse a low-stakes response; choose repair when meaning is unclear.", avoid: "Do not reduce the day to one mastery percentage or label it receptive competence." },
       { title: "Boundaries travel through the whole day", body: "The teacher can connect, clarify and make access better, but safeguarding, medical, emergency and complex pastoral communication still require the agreed qualified support and school procedure.", example: "State NOT-UNDERSTAND, keep addressing the child, bring in the right person and seek confirmation.", avoid: "Do not let a successful rehearsal create false interpreting confidence." },
     ],
     checks: [
@@ -1667,31 +1699,82 @@ const READINESS_KNOWLEDGE = {
       { meaning: "Good morning. Today: reading, maths, break. Are you ready?", gloss: "GOOD-MORNING · TODAY READING MATHS BREAK [timeline] · YOU READY?", build: "Greeting → three-point visible timetable → readiness question and response space.", focus: "Point to the visual timetable rather than delivering a memorised list." },
       { meaning: "I did not understand. Show me again. Thank you—goodbye.", gloss: "ME NOT-UNDERSTAND · AGAIN SHOW-ME · THANK-YOU · GOODBYE", build: "Honest breakdown → repair request → confirm meaning → separate end-of-day close.", focus: "Do not close until the repaired meaning has been checked." },
     ],
-    reception: { title: "Full school-day route", setup: "Perform twelve short linked events from greeting to goodbye, including one deliberate misunderstanding and one help request.", passes: ["First pass: identify each event boundary.", "Second pass: score recognition, production, use and repair separately.", "Third pass: repeat only the two weakest events after one precise model or cue."], evidence: "Complete every event, document four separate evidence types and name exactly what still needs qualified feedback." },
+    reception: { title: "Full school-day access route", setup: "Perform twelve short access or professional-decision events from greeting to goodbye, including one deliberate low-stakes misunderstanding and one help scenario.", passes: ["First pass: identify each attention and event boundary.", "Second pass: record observation, self-comparison, partner rehearsal and professional decisions separately.", "Third pass: repeat only two weak access moments; do not reveal an app-authored connected model."], evidence: "Complete every event, document the practice type and name exactly what still needs qualified linguistic feedback." },
   },
   36: {
     enquiry: "What is genuinely secure, what remains fragile and how will responsible learning continue?",
     source: ["signatureLevel1", "signatureNotes", "corpus", "ndcs"],
     teach: [
-      { title: "Compare evidence, not memory of effort", body: "Repeat selected Day 1 tasks under the same conditions and compare visible attention, signing space, form, reception and repair. Improvement must be observable, not inferred from completing 36 pages.", example: "Keep both greeting recordings and compare gaze, timing, hand consistency and response space.", avoid: "Do not use elapsed hours as proof that a form is secure." },
-      { title: "Secure and fragile can coexist", body: "Name what you can recognise, produce and use in context, then identify forms that still need a model or collapse under scenario pressure. Honest fragility is useful planning information.", example: "HELLO secure in context; WHY recognisable but production hesitant; medical communication always deferred.", avoid: "Do not compress mixed evidence into one mastery score." },
-      { title: "Completion is a beginning", body: "Around 108 hours can establish a useful beginner foundation, but fluency and professional interpreting competence require sustained Deaf-led teaching, feedback and real interaction. Choose a specific next 30-day route.", example: "Book a Signature-approved or Deaf-led course and protect two weekly retrieval sessions plus one real feedback opportunity.", avoid: "Do not describe yourself as fluent or use uncertain BSL as the child’s access provision." },
+      { title: "Compare evidence, not memory of effort", body: "Repeat selected Day 1 tasks under the same conditions and compare visible attention, signing space, pausing and repair choices. Improvement must be observable, not inferred from completing 36 pages.", example: "Keep both greeting rehearsals and compare gaze, timing, visibility and response space.", avoid: "Do not use elapsed hours or Mum’s rating as proof of linguistic competence." },
+      { title: "Useful habits and language gaps can coexist", body: "Name the access habits that improved, then identify every individual or connected form still needing a selected model and qualified feedback. Honest uncertainty is useful planning information.", example: "Attention-before-message is consistent; WHY form and question scope remain pending review; medical communication is always deferred.", avoid: "Do not compress mixed evidence into one mastery score or claim receptive competence." },
+      { title: "Completion is a beginning", body: "Around 108 guided hours can establish study habits and access awareness, but this unreviewed app cannot establish or certify a BSL foundation. Linguistic competence requires sustained Deaf-led or qualified teaching, feedback and real interaction. Choose a specific next 30-day route.", example: "Book a Signature-approved or Deaf-led course and protect two weekly retrieval sessions plus one real feedback opportunity.", avoid: "Do not describe yourself as fluent, classroom-ready in BSL or qualified to interpret; never use uncertain BSL as the child’s access provision." },
     ],
     checks: [
       { q: "What proves improvement from Day 1?", options: ["Completing every page", "A visible change under comparable conditions", "A high confidence rating"], answer: 1, explain: "Comparable performance evidence makes progress honest." },
       { q: "What is the responsible next step?", options: ["Stop because the course is complete", "Continue through Deaf-led or qualified teaching and real interaction", "Interpret complex conversations"], answer: 1, explain: "This course is a foundation, not fluency or certification." },
     ],
     phrases: [
-      { meaning: "Hello. I am your teacher. I am learning BSL. Are you ready?", gloss: "HELLO · ME TEACHER · ME LEARN BSL · YOU READY?", build: "Direct welcome → clear identity → honest learner status → readiness question.", focus: "The interaction invites a response instead of becoming a performance speech." },
-      { meaning: "I do not understand. Please show me again. Thank you.", gloss: "ME NOT-UNDERSTAND · AGAIN SHOW-ME PLEASE · THANK-YOU", build: "Hold the interaction → state the breakdown → request repair → confirm and thank.", focus: "Repair remains available without pretending understanding." },
+      { meaning: "Rehearse a direct welcome using only individually observed items, then pause for a real response; send the connected sequence for qualified feedback.", gloss: "[FINAL REHEARSAL — NO CERTIFIED CONNECTED BSL]", build: "Establish access → use one observed greeting or identity item at a time → pause → record every uncertain transition.", focus: "Completion does not certify ordering, fluency or classroom-ready connected BSL." },
+      { meaning: "In a planned low-stakes misunderstanding, use one separately studied repair item; for medical, safeguarding, emergency or complex communication, stop and follow procedure.", gloss: "[BOUNDARY REHEARSAL — NO INTERPRETING CLAIM]", build: "Name the low-stakes gap → choose one observed repair route → confirm meaning or defer → keep addressing the child directly.", focus: "The final task must preserve professional limits rather than reward a fluent-looking script." },
     ],
-    reception: { title: "Baseline, school scenario and continuation", setup: "Repeat the Day 1 greeting, complete one unfamiliar mixed classroom scenario, then review the saved Mum evidence across all phases.", passes: ["Compare Day 1 and Day 36 under the same viewing conditions.", "Separate recognition, production, contextual use and repair.", "Choose three secure abilities, three fragile abilities and three scheduled continuation actions."], evidence: "Produce a realistic readiness summary, a first-week classroom plan and a dated 30-day continuation plan without claiming fluency." },
+    reception: { title: "Baseline, access scenario and continuation", setup: "Repeat the Day 1 access-and-greeting setup, complete one professional classroom decision scenario and review saved Mum rehearsal evidence. No qualified linguistic assessment is supplied.", passes: ["Compare observable attention, visibility, pausing and repair behaviour under the same conditions.", "Separate self-reported recall, form comparison, classroom rehearsal and professional decisions; do not relabel them as receptive competence.", "Choose three useful habits, three language items pending qualified review and three dated continuation actions."], evidence: "Produce a realistic first-week access plan and dated 30-day continuation plan that explicitly states: beginner, not fluent, not an interpreter, linguistic release pending qualified review." },
   },
 };
+
+const READINESS_LAB_KINDS = {
+  1: "model-observation",
+  2: "partner-rehearsal",
+  3: "model-observation",
+  4: "partner-rehearsal",
+  5: "partner-rehearsal",
+  6: "partner-rehearsal",
+  7: "partner-rehearsal",
+  8: "partner-rehearsal",
+  9: "partner-rehearsal",
+  10: "partner-rehearsal",
+  11: "professional-decision",
+  12: "partner-rehearsal",
+  13: "model-observation",
+  14: "self-comparison",
+  15: "partner-rehearsal",
+  16: "model-observation",
+  17: "self-comparison",
+  18: "partner-rehearsal",
+  19: "self-comparison",
+  20: "professional-decision",
+  21: "partner-rehearsal",
+  22: "professional-decision",
+  23: "partner-rehearsal",
+  24: "partner-rehearsal",
+  25: "professional-decision",
+  26: "self-comparison",
+  27: "self-comparison",
+  28: "self-comparison",
+  29: "model-observation",
+  30: "partner-rehearsal",
+  31: "professional-decision",
+  32: "professional-decision",
+  33: "professional-decision",
+  34: "professional-decision",
+  35: "partner-rehearsal",
+  36: "self-comparison",
+};
+
+const LAB_SCOPE_COPY = {
+  "model-observation": "Observe external recorded examples only. No clip is selected or linguistically certified by this app.",
+  "self-comparison": "Compare only the named visible features in your own attempts; do not grade linguistic accuracy.",
+  "partner-rehearsal": "Treat this as informal partner rehearsal, not receptive-skill assessment or formal BSL evidence.",
+  "professional-decision": "Judge the safe professional or access response, not the accuracy of a BSL performance.",
+};
+
+const GUIDANCE_SOURCE_SCOPE = "Guidance and further study only. These sources do not verify app-authored connected phrases, select a dictionary clip or certify learner performance.";
 
 const rebuiltKnowledge = COURSE.map((lesson) => {
   const base = LEGACY_KNOWLEDGE_PACKS[lesson.knowledgeSource - 1];
   const replacement = READINESS_KNOWLEDGE[lesson.day] || {};
+  const reception = replacement.reception || base.reception;
+  const labKind = reception.kind || READINESS_LAB_KINDS[lesson.day];
+  if (!labKind) throw new Error(`Missing honest lab kind for Day ${lesson.day}`);
   return {
     ...base,
     ...replacement,
@@ -1700,10 +1783,20 @@ const rebuiltKnowledge = COURSE.map((lesson) => {
     terms: [...lesson.vocab],
     teach: (replacement.teach || base.teach).map((item) => ({ ...item })),
     checks: (replacement.checks || base.checks).map((item) => ({ ...item, options: [...item.options] })),
-    phrases: (replacement.phrases || base.phrases).map((item) => ({ ...item })),
+    phrases: (replacement.phrases || base.phrases).map((item) => ({
+      ...item,
+      kind: item.kind || "access-rehearsal",
+      connectedModel: null,
+      linguisticReview: "pending-qualified-review",
+    })),
     reception: {
-      ...(replacement.reception || base.reception),
-      passes: [...(replacement.reception || base.reception).passes],
+      ...reception,
+      kind: labKind,
+      setup: `${LAB_SCOPE_COPY[labKind]} ${reception.setup}`,
+      passes: [...reception.passes],
+      evidence: `${reception.evidence} Record this as practice evidence only; it does not certify receptive BSL, connected production or classroom competence.`,
+      assessmentStatus: "practice-only",
+      linguisticReview: "pending-qualified-review",
     },
   };
 });
@@ -1720,7 +1813,13 @@ COURSE.forEach((lesson, index) => {
   lesson.knowledgeChecks = pack.checks;
   lesson.phrases = pack.phrases;
   lesson.receptionLab = pack.reception;
-  lesson.evidenceSources = pack.source.map((key) => LEARNING_SOURCES[key]);
+  lesson.sourceScope = GUIDANCE_SOURCE_SCOPE;
+  lesson.linguisticReview = "pending-qualified-review";
+  lesson.connectedLanguageStatus = "not-certified";
+  lesson.evidenceSources = pack.source.map((key) => ({
+    ...LEARNING_SOURCES[key],
+    scope: GUIDANCE_SOURCE_SCOPE,
+  }));
   lesson.vocab = pack.terms;
   lesson.items = pack.terms.map((term) => {
     const guide = itemGuidance(term, lesson);
@@ -1733,39 +1832,47 @@ COURSE.forEach((lesson, index) => {
       ? "fingerspelling-system"
       : term === "numbers 0–10" || /^\d+$/.test(term)
         ? "regional-number-system"
-        : "lexical-dictionary-entry";
+        : "external-comparison-page";
     return {
       id: itemId,
       term,
       ...guide,
       communicativeIntention: guide.meaning,
       classroomContext: lesson.purpose,
+      sourcePageType: modelType,
+      linkCheckedOn: "2026-08-04",
+      selectedClip: null,
+      linguisticReview: "pending-qualified-review",
       regionalVariation: "A documented regional, personal or school-used variant may also be valid. Confirm the child’s or school’s preferred form with the support team.",
       model: {
-        id: `${modelType}:${modelType === "lexical-dictionary-entry" ? signSlug(term) : String(term).toLowerCase()}`,
+        id: `${modelType}:${modelType === "external-comparison-page" ? signSlug(term) : String(term).toLowerCase()}`,
         type: modelType,
         url: guide.url,
         source: guide.source,
         intendedSense: guide.meaning,
-        verifiedOn: "2026-08-04",
-        verification: modelType === "lexical-dictionary-entry"
-          ? "Exact entry selected and release-checked for at least one signed model. The page may contain variants or other senses; it is not a connected-utterance model."
-          : "Exact official system page selected for the fingerspelling or regional-number learning task.",
+        linkCheckedOn: "2026-08-04",
+        selectedClip: null,
+        linguisticReview: "pending-qualified-review",
+        verification: modelType === "external-comparison-page"
+          ? "Link availability only. The page may contain multiple senses or variants; no clip is selected and no form is linguistically certified."
+          : "Official system page linked for observation. No learner attempt or selected example is linguistically certified.",
         licence: "External link only; third-party media is not copied, cached or redistributed.",
       },
       resource: {
-        label: `Watch the signed model for “${term}”`,
+        label: `Compare recorded examples for “${term}”`,
         url: guide.url,
         source: guide.source,
         modelType,
-        verifiedOn: "4 August 2026",
-        limitation: modelType === "lexical-dictionary-entry"
-          ? "Lexical entry only: choose the clip matching this stated sense. It does not verify a full BSL sentence."
-          : "System resource: use it for the specified letter or number task and notice documented variation.",
+        linkCheckedOn: "2026-08-04",
+        selectedClip: null,
+        linguisticReview: "pending-qualified-review",
+        limitation: modelType === "external-comparison-page"
+          ? "External comparison page only: the app has not selected or certified a clip. Confirm the intended sense and form through qualified Deaf/BSL review before classroom reliance."
+          : "System resource for observation only: use it for the specified letter or number task and notice documented variation; performance remains unassessed.",
         variation: "Another regional or school-confirmed form may be valid.",
-        purpose: `Learn ${guide.meaning}; the English label is only a route to a signed model.`,
+        purpose: `Compare recorded examples associated with ${guide.meaning}; the English label is only a route to the page and does not certify a BSL form.`,
         watch: guide.watch,
-        returnCue: `Close the model, wait five seconds, then use “${term}” in the lesson context before rating it.`,
+        returnCue: `Close the page, wait five seconds, then attempt “${term}” for self-comparison only. Record uncertainty instead of treating the page as certification.`,
       },
     };
   });

@@ -1,11 +1,11 @@
-const CACHE = "bsl-classroom-readiness-v10";
+const CACHE = "bsl-classroom-readiness-v11";
 const SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=10",
-  "./course.js?v=10",
-  "./knowledge.js?v=10",
-  "./app.js?v=10",
+  "./style.css?v=11",
+  "./course.js?v=11",
+  "./knowledge.js?v=11",
+  "./app.js?v=11",
 ];
 
 self.addEventListener("install", (event) => {
@@ -38,9 +38,12 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
+          if (!response.ok) return response;
           const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put("./index.html", copy));
-          return response;
+          return caches
+            .open(CACHE)
+            .then((cache) => cache.put("./index.html", copy))
+            .then(() => response);
         })
         .catch(() => caches.match("./index.html")),
     );
