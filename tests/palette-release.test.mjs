@@ -7,28 +7,72 @@ const read = (path) => readFile(new URL(path, root), 'utf8');
 
 const PALETTE = ['#AF2E1B', '#CC6324', '#3B4B59', '#BFA07A', '#D9C3B0'];
 
-test('the canonical Blue Bridge palette drives the BSL surface', async () => {
+test('the light Blue Bridge hierarchy drives the BSL surface', async () => {
   const css = await read('style.css');
   for (const colour of PALETTE) assert.match(css, new RegExp(colour, 'i'));
   assert.match(css, /--indigo:\s*#18243D/i);
   assert.match(css, /--canvas:\s*#F5F1E8/i);
-  assert.match(css, /--ink:\s*var\(--indigo\)/);
+  assert.match(css, /--ink:\s*var\(--palette-slate\)/);
   assert.match(css, /--deep:\s*var\(--indigo\)/);
-  assert.match(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--indigo\)/s);
+  assert.match(css, /--guide:\s*#A84A22/i);
+  assert.match(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--guide\)/s);
   assert.doesNotMatch(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--palette-red\)/s);
-  assert.match(css, /\.btn\.warn\s*\{[^}]*background:\s*var\(--palette-orange\)[^}]*color:\s*#111/s);
+  assert.match(css, /\.btn\.warn\s*\{[^}]*background:\s*var\(--guide-soft\)/s);
+  assert.match(css, /\.primaryNavButton\.active\s*\{[^}]*background:\s*color-mix\(in srgb, var\(--indigo\) 7%, var\(--paper\)\)[^}]*color:\s*var\(--palette-slate\)[^}]*box-shadow:\s*inset 3px 0 0 var\(--palette-orange\)/s);
+  assert.match(css, /\.conceptChecks,[\s\S]*border-left:\s*3px solid var\(--guide\)/);
+  assert.doesNotMatch(css, /\.conceptChecks,[\s\S]{0,220}background:\s*var\(--indigo\)/);
   assert.match(css, /@media print[\s\S]*border-bottom:\s*1\.2pt solid #3B4B59/i);
+});
+
+test('the effective active-navigation cascade stays pale and orange-guided', async () => {
+  const css = await read('style.css');
+  const effective = {};
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = match[1].split(',').map((selector) => selector.trim());
+    if (!selectors.includes('.primaryNavButton.active')) continue;
+    for (const declaration of match[2].split(';')) {
+      const separator = declaration.indexOf(':');
+      if (separator < 0) continue;
+      const property = declaration.slice(0, separator).trim();
+      const value = declaration.slice(separator + 1).trim();
+      if (property && value) effective[property] = value;
+    }
+  }
+
+  assert.equal(effective.background, 'color-mix(in srgb, var(--indigo) 7%, var(--paper))');
+  assert.equal(effective.color, 'var(--palette-slate)');
+  assert.equal(effective['box-shadow'], 'inset 3px 0 0 var(--palette-orange)');
+  assert.notEqual(effective.background, 'var(--deep)');
+  assert.notEqual(effective.background, 'var(--indigo)');
+});
+
+test('the effective Options target remains at least 44px at every viewport', async () => {
+  const css = await read('style.css');
+  const effective = {};
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = match[1].split(',').map((selector) => selector.trim());
+    if (!selectors.includes('.courseMenu > summary')) continue;
+    for (const declaration of match[2].split(';')) {
+      const separator = declaration.indexOf(':');
+      if (separator < 0) continue;
+      const property = declaration.slice(0, separator).trim();
+      const value = declaration.slice(separator + 1).trim();
+      if (property && value) effective[property] = value;
+    }
+  }
+
+  assert.equal(effective['min-height'], '44px');
 });
 
 test('the palette release advances the complete offline shell together', async () => {
   const [html, worker] = await Promise.all([read('index.html'), read('service-worker.js')]);
-  assert.match(html, /theme-color" content="#18243D"/i);
+  assert.match(html, /theme-color" content="#F5F1E8"/i);
   for (const asset of ['style.css', 'course.js', 'knowledge.js', 'app.js']) {
-    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=13`));
-    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=13`));
+    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=15`));
+    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=15`));
   }
-  assert.match(worker, /bsl-classroom-readiness-v13/);
-  assert.doesNotMatch(html + worker, /\?v=12|readiness-v12/);
+  assert.match(worker, /bsl-classroom-readiness-v15/);
+  assert.doesNotMatch(html + worker, /\?v=13|\?v=14|readiness-v13|readiness-v14/);
 });
 
 test('key text pairs retain WCAG AA contrast', () => {
@@ -42,6 +86,7 @@ test('key text pairs retain WCAG AA contrast', () => {
     return (lighter + 0.05) / (darker + 0.05);
   };
   assert.ok(contrast('FFFFFF', 'AF2E1B') >= 4.5);
+  assert.ok(contrast('FFFFFF', 'A84A22') >= 4.5);
   assert.ok(contrast('F5F1E8', '18243D') >= 4.5);
   assert.ok(contrast('FFFFFF', '3B4B59') >= 4.5);
   assert.ok(contrast('111111', 'CC6324') >= 4.5);
