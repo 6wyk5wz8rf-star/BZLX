@@ -46,15 +46,33 @@ test('the effective active-navigation cascade stays pale and orange-guided', asy
   assert.notEqual(effective.background, 'var(--indigo)');
 });
 
+test('the effective Options target remains at least 44px at every viewport', async () => {
+  const css = await read('style.css');
+  const effective = {};
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = match[1].split(',').map((selector) => selector.trim());
+    if (!selectors.includes('.courseMenu > summary')) continue;
+    for (const declaration of match[2].split(';')) {
+      const separator = declaration.indexOf(':');
+      if (separator < 0) continue;
+      const property = declaration.slice(0, separator).trim();
+      const value = declaration.slice(separator + 1).trim();
+      if (property && value) effective[property] = value;
+    }
+  }
+
+  assert.equal(effective['min-height'], '44px');
+});
+
 test('the palette release advances the complete offline shell together', async () => {
   const [html, worker] = await Promise.all([read('index.html'), read('service-worker.js')]);
   assert.match(html, /theme-color" content="#F5F1E8"/i);
   for (const asset of ['style.css', 'course.js', 'knowledge.js', 'app.js']) {
-    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=14`));
-    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=14`));
+    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=15`));
+    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=15`));
   }
-  assert.match(worker, /bsl-classroom-readiness-v14/);
-  assert.doesNotMatch(html + worker, /\?v=13|readiness-v13/);
+  assert.match(worker, /bsl-classroom-readiness-v15/);
+  assert.doesNotMatch(html + worker, /\?v=13|\?v=14|readiness-v13|readiness-v14/);
 });
 
 test('key text pairs retain WCAG AA contrast', () => {

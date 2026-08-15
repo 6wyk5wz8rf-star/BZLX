@@ -2670,6 +2670,9 @@ body {
 .brandMark {
   background: var(--indigo);
 }
+.courseMenu > summary {
+  min-height: 44px;
+}
 .primaryNavButton.active {
   border-color: color-mix(in srgb, var(--indigo) 14%, var(--paper));
   background: color-mix(in srgb, var(--indigo) 7%, var(--paper));
