@@ -10,22 +10,25 @@ const PALETTE = ['#AF2E1B', '#CC6324', '#3B4B59', '#BFA07A', '#D9C3B0'];
 test('the canonical Blue Bridge palette drives the BSL surface', async () => {
   const css = await read('style.css');
   for (const colour of PALETTE) assert.match(css, new RegExp(colour, 'i'));
-  assert.match(css, /--ink:\s*var\(--palette-slate\)/);
-  assert.match(css, /--deep:\s*var\(--palette-slate\)/);
-  assert.match(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--palette-red\)/s);
+  assert.match(css, /--indigo:\s*#18243D/i);
+  assert.match(css, /--canvas:\s*#F5F1E8/i);
+  assert.match(css, /--ink:\s*var\(--indigo\)/);
+  assert.match(css, /--deep:\s*var\(--indigo\)/);
+  assert.match(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--indigo\)/s);
+  assert.doesNotMatch(css, /\.primaryAction\s*\{[^}]*background:\s*var\(--palette-red\)/s);
   assert.match(css, /\.btn\.warn\s*\{[^}]*background:\s*var\(--palette-orange\)[^}]*color:\s*#111/s);
   assert.match(css, /@media print[\s\S]*border-bottom:\s*1\.2pt solid #3B4B59/i);
 });
 
 test('the palette release advances the complete offline shell together', async () => {
   const [html, worker] = await Promise.all([read('index.html'), read('service-worker.js')]);
-  assert.match(html, /theme-color" content="#3B4B59"/i);
+  assert.match(html, /theme-color" content="#18243D"/i);
   for (const asset of ['style.css', 'course.js', 'knowledge.js', 'app.js']) {
-    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=12`));
-    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=12`));
+    assert.match(html, new RegExp(`${asset.replace('.', '\\.') }\\?v=13`));
+    assert.match(worker, new RegExp(`${asset.replace('.', '\\.') }\\?v=13`));
   }
-  assert.match(worker, /bsl-classroom-readiness-v12/);
-  assert.doesNotMatch(html + worker, /\?v=11|readiness-v11/);
+  assert.match(worker, /bsl-classroom-readiness-v13/);
+  assert.doesNotMatch(html + worker, /\?v=12|readiness-v12/);
 });
 
 test('key text pairs retain WCAG AA contrast', () => {
@@ -39,6 +42,7 @@ test('key text pairs retain WCAG AA contrast', () => {
     return (lighter + 0.05) / (darker + 0.05);
   };
   assert.ok(contrast('FFFFFF', 'AF2E1B') >= 4.5);
+  assert.ok(contrast('F5F1E8', '18243D') >= 4.5);
   assert.ok(contrast('FFFFFF', '3B4B59') >= 4.5);
   assert.ok(contrast('111111', 'CC6324') >= 4.5);
   assert.ok(contrast('3B4B59', 'D9C3B0') >= 4.5);

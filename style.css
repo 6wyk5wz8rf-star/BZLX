@@ -1,15 +1,18 @@
 :root {
+  --indigo: #18243D;
+  --indigo-deep: #111A2D;
+  --canvas: #F5F1E8;
   --palette-red: #AF2E1B;
   --palette-orange: #CC6324;
   --palette-slate: #3B4B59;
   --palette-sand: #BFA07A;
   --palette-blush: #D9C3B0;
-  --ink: var(--palette-slate);
+  --ink: var(--indigo);
   --muted: color-mix(in srgb, var(--palette-slate) 82%, white);
-  --paper: color-mix(in srgb, var(--palette-blush) 18%, white);
-  --wash: color-mix(in srgb, var(--palette-blush) 42%, white);
-  --line: color-mix(in srgb, var(--palette-sand) 62%, white);
-  --deep: var(--palette-slate);
+  --paper: #FBF9F4;
+  --wash: color-mix(in srgb, var(--canvas) 88%, var(--palette-blush));
+  --line: color-mix(in srgb, var(--palette-sand) 36%, white);
+  --deep: var(--indigo);
   --teal: var(--palette-slate);
   --mint: color-mix(in srgb, var(--palette-blush) 50%, white);
   --warm: color-mix(in srgb, var(--palette-sand) 38%, white);
@@ -35,9 +38,7 @@ html {
 }
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 84% 0%, rgba(222, 219, 242, 0.72), transparent 34rem),
-    linear-gradient(180deg, #fbfaf7, #f1f1f7 72%);
+  background: var(--canvas);
   color: var(--ink);
   min-height: 100vh;
 }
@@ -2661,9 +2662,7 @@ body {
 
 /* Blue Bridge canonical palette · colour-only release */
 body {
-  background:
-    radial-gradient(circle at 84% 0%, color-mix(in srgb, var(--palette-blush) 48%, white), transparent 34rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--palette-blush) 12%, white), color-mix(in srgb, var(--palette-blush) 34%, white) 72%);
+  background: var(--canvas);
 }
 .brandMark,
 .conceptChecks,
@@ -2671,7 +2670,7 @@ body {
 .mumPrompt,
 .communicationReply,
 .phraseCard details {
-  background: var(--palette-slate);
+  background: var(--indigo);
 }
 .brandMark {
   box-shadow: 0 12px 28px rgba(59, 75, 89, 0.18);
@@ -2697,11 +2696,11 @@ body {
   border-color: color-mix(in srgb, var(--palette-sand) 58%, white);
 }
 .primaryAction {
-  background: var(--palette-red);
-  box-shadow: 0 13px 30px rgba(175, 46, 27, 0.2);
+  background: var(--indigo);
+  box-shadow: 0 13px 30px rgba(24, 36, 61, 0.16);
 }
 .primaryAction:hover {
-  background: color-mix(in srgb, var(--palette-red) 90%, black);
+  background: var(--indigo-deep);
 }
 .btn.warn {
   background: var(--palette-orange);
@@ -2798,8 +2797,8 @@ textarea:focus-visible,
 select:focus-visible,
 summary:focus-visible,
 [tabindex]:not([tabindex="-1"]):focus-visible {
-  outline-color: white;
-  box-shadow: 0 0 0 6px var(--palette-slate) !important;
+  outline-color: var(--palette-orange);
+  box-shadow: 0 0 0 3px white, 0 0 0 6px var(--indigo) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
