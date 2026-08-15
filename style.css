@@ -2670,6 +2670,12 @@ body {
 .brandMark {
   background: var(--indigo);
 }
+.primaryNavButton.active {
+  border-color: color-mix(in srgb, var(--indigo) 14%, var(--paper));
+  background: color-mix(in srgb, var(--indigo) 7%, var(--paper));
+  color: var(--palette-slate);
+  box-shadow: inset 3px 0 0 var(--palette-orange);
+}
 .conceptChecks,
 .starterCard,
 .mumPrompt,
