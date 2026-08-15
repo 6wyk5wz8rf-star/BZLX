@@ -1,11 +1,11 @@
-const CACHE = "bsl-classroom-readiness-v13";
+const CACHE = "bsl-classroom-readiness-v14";
 const SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=13",
-  "./course.js?v=13",
-  "./knowledge.js?v=13",
-  "./app.js?v=13",
+  "./style.css?v=14",
+  "./course.js?v=14",
+  "./knowledge.js?v=14",
+  "./app.js?v=14",
 ];
 
 self.addEventListener("install", (event) => {
