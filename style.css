@@ -1,18 +1,23 @@
 :root {
-  --ink: #252943;
-  --muted: #565c73;
-  --paper: #fffdf8;
-  --wash: #f2f1f8;
-  --line: #dcddea;
-  --deep: #343a70;
-  --teal: #59619a;
-  --mint: #e9eaf5;
-  --warm: #f5e9ca;
-  --warm-line: #d8bd75;
-  --ok: #426851;
-  --warn: #8a642d;
-  --danger: #873f4a;
-  --shadow: 0 18px 56px rgba(48, 52, 103, 0.09);
+  --palette-red: #AF2E1B;
+  --palette-orange: #CC6324;
+  --palette-slate: #3B4B59;
+  --palette-sand: #BFA07A;
+  --palette-blush: #D9C3B0;
+  --ink: var(--palette-slate);
+  --muted: color-mix(in srgb, var(--palette-slate) 82%, white);
+  --paper: color-mix(in srgb, var(--palette-blush) 18%, white);
+  --wash: color-mix(in srgb, var(--palette-blush) 42%, white);
+  --line: color-mix(in srgb, var(--palette-sand) 62%, white);
+  --deep: var(--palette-slate);
+  --teal: var(--palette-slate);
+  --mint: color-mix(in srgb, var(--palette-blush) 50%, white);
+  --warm: color-mix(in srgb, var(--palette-sand) 38%, white);
+  --warm-line: var(--palette-sand);
+  --ok: var(--palette-slate);
+  --warn: var(--palette-orange);
+  --danger: var(--palette-red);
+  --shadow: 0 18px 56px rgba(59, 75, 89, 0.09);
   font-family:
     ui-sans-serif,
     system-ui,
@@ -2653,6 +2658,150 @@ body {
     flex-direction: column;
   }
 }
+
+/* Blue Bridge canonical palette · colour-only release */
+body {
+  background:
+    radial-gradient(circle at 84% 0%, color-mix(in srgb, var(--palette-blush) 48%, white), transparent 34rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--palette-blush) 12%, white), color-mix(in srgb, var(--palette-blush) 34%, white) 72%);
+}
+.brandMark,
+.conceptChecks,
+.starterCard,
+.mumPrompt,
+.communicationReply,
+.phraseCard details {
+  background: var(--palette-slate);
+}
+.brandMark {
+  box-shadow: 0 12px 28px rgba(59, 75, 89, 0.18);
+}
+.brandMark i,
+.progressIcon {
+  background: var(--palette-orange);
+  color: #111;
+}
+.next {
+  border-color: color-mix(in srgb, var(--palette-sand) 58%, white);
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.98) 0 59%, color-mix(in srgb, var(--palette-blush) 54%, white) 59% 100%);
+}
+.next::after,
+.lessonCompass,
+.sessionTop,
+.lessonGuide,
+.closeEvidence span,
+.mumHandoff,
+.mumSummary,
+.lessonQuestion,
+.receptionLab {
+  border-color: color-mix(in srgb, var(--palette-sand) 58%, white);
+}
+.primaryAction {
+  background: var(--palette-red);
+  box-shadow: 0 13px 30px rgba(175, 46, 27, 0.2);
+}
+.primaryAction:hover {
+  background: color-mix(in srgb, var(--palette-red) 90%, black);
+}
+.btn.warn {
+  background: var(--palette-orange);
+  color: #111;
+}
+.btn.danger {
+  border-color: color-mix(in srgb, var(--palette-red) 42%, white);
+  background: color-mix(in srgb, var(--palette-blush) 50%, white);
+  color: var(--palette-red);
+}
+.storageWarning,
+.transitionWarning,
+.modelConfirmation,
+.receptionTruth,
+.glossNotice,
+.evidenceLimit {
+  border-color: var(--palette-sand);
+  background: color-mix(in srgb, var(--palette-sand) 34%, white);
+  color: var(--palette-slate);
+}
+.storageWarning span,
+.transitionWarning span,
+.receptionTruth {
+  color: var(--palette-slate);
+}
+.breakSurface,
+.mumHandoff,
+.mumSummary,
+.lessonQuestion,
+.receptionLab,
+.contentUpdate,
+.check.checked,
+.modelReturn {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--palette-blush) 42%, white), color-mix(in srgb, var(--palette-sand) 24%, white));
+}
+.bar,
+.blockClock.running,
+.day:hover,
+.schoolBox,
+.nextTeaching {
+  background: color-mix(in srgb, var(--palette-blush) 44%, white);
+}
+.masteryBox,
+.retrievalClue,
+.transitionWarning,
+.modelConfirmation,
+.glossNotice,
+.evidenceLimit,
+.receptionTruth {
+  border-color: var(--palette-sand);
+  background: color-mix(in srgb, var(--palette-sand) 34%, white);
+  color: var(--palette-slate) !important;
+}
+.status.current,
+.reasonGrid p,
+.knowledgeCard .misconception,
+.blockClock .eyebrow,
+.lessonGuide .stageDot small {
+  color: var(--palette-slate);
+}
+.answerOption.correct,
+.answerFeedback.correct {
+  border-color: var(--palette-sand);
+  background: color-mix(in srgb, var(--palette-blush) 56%, white);
+  color: var(--palette-slate);
+}
+.answerOption.wrong,
+.answerFeedback.wrong {
+  border-color: color-mix(in srgb, var(--palette-red) 44%, white);
+  background: color-mix(in srgb, var(--palette-blush) 42%, white);
+  color: var(--palette-red);
+}
+.contentUpdate,
+.check.checked,
+.modelReturn,
+.receptionLab {
+  border-color: color-mix(in srgb, var(--palette-sand) 68%, white);
+}
+.conceptChecks .eyebrow,
+.mumPrompt .eyebrow,
+.communicationReply .eyebrow,
+.timerBox .eyebrow,
+.sectionIntro > p:last-child,
+.starterMeta,
+.starterTerm,
+.phraseCard code,
+.communicationReply p:last-child {
+  color: var(--palette-blush);
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline-color: white;
+  box-shadow: 0 0 0 6px var(--palette-slate) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;
@@ -2711,7 +2860,7 @@ body {
   .printLesson h2 {
     margin: 6mm 0 2.5mm;
     padding-bottom: 1.5mm;
-    border-bottom: 0.6pt solid #858999;
+    border-bottom: 0.6pt solid #BFA07A;
     font-size: 15pt;
   }
   .printLesson h3 {
@@ -2750,22 +2899,22 @@ body {
   }
   .printLesson .printHeader {
     padding-bottom: 4mm;
-    border-bottom: 1.2pt solid #343a70;
+    border-bottom: 1.2pt solid #3B4B59;
   }
   .printLesson .printLimit {
     padding: 3mm;
-    border: 0.8pt solid #777b8e;
+    border: 0.8pt solid #BFA07A;
   }
   .printLesson .printCard,
   .printLesson .printModel,
   .printLesson .printQuestion {
     padding: 0 0 3mm;
-    border-bottom: 0.5pt solid #c2c4cc;
+    border-bottom: 0.5pt solid #D9C3B0;
   }
   .printLesson footer {
     margin-top: 6mm;
     padding-top: 2mm;
-    border-top: 0.6pt solid #858999;
+    border-top: 0.6pt solid #BFA07A;
     font-size: 9pt;
   }
   .printLesson table {
@@ -2778,7 +2927,7 @@ body {
   .printLesson th,
   .printLesson td {
     padding: 1.5mm 2mm;
-    border: 0.6pt solid #9a9da9;
+    border: 0.6pt solid #BFA07A;
     color: #11131d !important;
     text-align: left;
     vertical-align: top;
